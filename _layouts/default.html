@@ -61,6 +61,7 @@
 
 </div>
 <script>
+    /* 返回顶部函数 */
     $(function () {
         var $backToTopEle = $('.toTop'), $backToTopFun = function () {
             var st = $(document).scrollTop(), winh = $(window).height();
@@ -71,7 +72,7 @@
             }
         };
         $('.toTop').click(function () {
-            $("html, body").animate({scrollTop: 0}, 1200);
+            $("html, body").animate({scrollTop: 0}, 700); // 700毫秒
         });
         $backToTopEle.hide();
         $backToTopFun();
