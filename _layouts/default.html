@@ -81,19 +81,16 @@
             $("#catalog").slideToggle(600);
         })
     });
-</script>
-<script>
+
     /* 选中标签填充背景色 */
     $(function () {
         var last_url = window.location.pathname;
-        var all_url = ['categories', 'tags', 'guestbook', 'about'];
+        var all_class = ['index', 'categories', 'tags', 'guestbook', 'about'];
+        var all_url = ['/', '/categories/', '/tags/', '/guestbook/', '/about/'];
         $.each(all_url, function (index, value) {
-            if (!last_url){
-                $(".tag-index").css("background-color", "yellow"); // #f5f5f5
-            }
-            else if (last_url == value){
-                var tag_class = ".tag-" + last_url;
-                $(tag_class).css("background-color", "yellow"); // #f5f5f5
+            if (last_url == value) {
+                var tag_class = ".tag-" + all_class[index];
+                $(tag_class).css("background-color", "#ddd"); // #f5f5f5
             }
         });
 

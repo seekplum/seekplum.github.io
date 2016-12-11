@@ -208,7 +208,7 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #ddd;
+    background-color: #f5f5f5; /* 导航鼠标悬停颜色 */
     text-decoration: none;
     color: #f9f9f9;
     -webkit-transition: color .2s linear;
