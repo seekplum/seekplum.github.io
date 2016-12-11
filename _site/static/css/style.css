@@ -427,12 +427,20 @@ footer a:hover {
     margin-left: 5px;
 }
 
-#sideBarContents dd, dt {
+#sideBarContents dt, dd{
     cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 155px;
+}
+
+#sideBarContents dt {
+    margin-left: 10px;
 }
 
 #sideBarContents dd:hover, dt:hover {
-    color: #A7995A;
+    color: #00bb00;
 }
 
 /* 生成目录 end */
