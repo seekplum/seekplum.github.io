@@ -207,6 +207,8 @@ layout: default
 
             // 目录导航显示/隐藏
             var btn = document.getElementById('sideBarTab');
+            var last_url = window.location.pathname;
+            var now_url = last_url.slice(1, last_url.length -1);
             var cookie_name = 'directory' + now_url;
             btn.addEventListener('click', function () {
                 if (divSideBarContents.style.display == "block") {
@@ -242,6 +244,8 @@ layout: default
     }
 
     function checkCookie() {
+        var last_url = window.location.pathname;
+        var now_url = last_url.slice(1, last_url.length -1);
         var cookie_name = 'directory' + now_url;
         var directory = getCookie(cookie_name);
         // 判断cookie中是否记录了导航的状态
