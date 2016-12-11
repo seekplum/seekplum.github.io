@@ -125,8 +125,11 @@
                     //获取标题文本
                     var nodetext = nodes[i].innerHTML.replace(/<\/?[^>]+>/g, "");//innerHTML里面的内容可能有HTML标签，所以用正则表达式去除HTML的标签
                     nodetext = nodetext.replace(/&nbsp;/ig, "");//替换掉所有的&nbsp;
-                    nodetext = nodetext.slice(0, 24);
-                    nodetext = nodetext + '...';
+                    len = 10;
+                    if (nodetext.length > len){
+                        nodetext = nodetext.slice(0, len);
+                        nodetext = nodetext + '...';
+                    }
                     nodetext = BlogDirectory.htmlDecode(nodetext);
                     //插入锚
                     nodes[i].setAttribute("id", "blogTitle" + num);
