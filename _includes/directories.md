@@ -110,7 +110,8 @@
             var txt = document.createTextNode('目录导航');
             h2.appendChild(txt);
             var divSideBarContents = document.createElement('DIV');
-            divSideBarContents.style.display = 'none';
+            //目录导航初始 显示
+            divSideBarContents.style.display = 'block';
             divSideBarContents.setAttribute('id', 'sideBarContents');
             divSideBar.appendChild(divSideBarContents);
             //创建自定义列表
@@ -160,15 +161,28 @@
 
             if (num == 0) return false;
             /*鼠标进入时的事件处理*/
-            divSideBarTab.onmouseenter = function () {
-                divSideBarContents.style.display = 'block';
-            };
+            // divSideBarTab.onmouseenter = function () {
+            //     divSideBarContents.style.display = 'block';
+            // };
             /*鼠标离开时的事件处理*/
-            divSideBar.onmouseleave = function () {
-                divSideBarContents.style.display = 'none';
-            };
+            // divSideBar.onmouseleave = function () {
+            //     divSideBarContents.style.display = 'none';
+            // };
 
             document.body.appendChild(divSideBar);
+
+
+            // 目录导航显示隐藏
+            var btn = document.getElementById('sideBarTab');
+
+            btn.addEventListener('click', function(){
+                if(divSideBarContents.style.display=="block"){
+                    divSideBarContents.style.display='none';
+                 }
+                 else{
+                    divSideBarContents.style.display='block';
+                 }
+            }, false);
         }
 
     };
