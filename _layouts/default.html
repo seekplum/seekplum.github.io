@@ -88,14 +88,12 @@
     /* 选中标签填充背景色 */
     $(function () {
         var last_url = window.location.pathname;
-        var all_class = ['index', 'categories', 'tags', 'guestbook', 'about'];
-        var all_url = ['/', '/categories/', '/tags/', '/guestbook/', '/about/'];
-        $.each(all_url, function (index, value) {
-            if (last_url == value) {
-                var tag_class = ".tag-" + all_class[index];
-                $(tag_class).css("background-color", "#ddd"); // #f5f5f5
-            }
-        });
+        var tag_class = ".tag-" + 'index';
+        if (last_url != '/'){
+            var now_url = last_url.slice(1, last_url.length -1);
+            tag_class = ".tag-" + now_url;
+        }
+        $(tag_class).css("background-color", "#ddd"); // #f5f5f5
 
     });
 </script>

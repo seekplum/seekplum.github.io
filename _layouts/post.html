@@ -205,18 +205,17 @@ layout: default
 
             document.body.appendChild(divSideBar);
 
-
-            // 目录导航显示隐藏
+            // 目录导航显示/隐藏
             var btn = document.getElementById('sideBarTab');
-
+            var cookie_name = 'directory' + now_url;
             btn.addEventListener('click', function () {
                 if (divSideBarContents.style.display == "block") {
-                    setCookie('directory', 'none', 365);
                     divSideBarContents.style.display = 'none';
+                    setCookie(cookie_name, 'none', 365);
                 }
                 else {
-                    setCookie('directory', 'block', 365);
                     divSideBarContents.style.display = 'block';
+                    setCookie(cookie_name, 'block', 365);
                 }
             }, false);
         }
@@ -224,10 +223,10 @@ layout: default
     };
     function getCookie(c_name) {
         if (document.cookie.length > 0) {
-            var c_start = document.cookie.indexOf(c_name + "=");
+            c_start = document.cookie.indexOf(c_name + "=");
             if (c_start != -1) {
                 c_start = c_start + c_name.length + 1;
-                var c_end = document.cookie.indexOf(";", c_start);
+                c_end = document.cookie.indexOf(";", c_start);
                 if (c_end == -1) c_end = document.cookie.length;
                 return unescape(document.cookie.substring(c_start, c_end))
             }
@@ -243,15 +242,15 @@ layout: default
     }
 
     function checkCookie() {
-        var directory = getCookie('directory');
+        var cookie_name = 'directory' + now_url;
+        var directory = getCookie(cookie_name);
         // 判断cookie中是否记录了导航的状态
         if (directory != null && directory != "") {
-            alert("初始：" + directory + typeof directory);
             //目录导航初始 显示
             document.createElement('DIV').style.display = directory;
         }
         else {
-            setCookie('directory', 'block', 365);
+            setCookie(cookie_name, 'block', 365);
             //目录导航初始 显示
             document.createElement('DIV').style.display = 'block';
         }
