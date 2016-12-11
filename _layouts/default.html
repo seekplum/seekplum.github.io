@@ -1,86 +1,124 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <meta name="author" content="{{ site.author }}"/>
-    <title>{% if page.path == 'index.html' %}{{ site.name }}{% else %}{% unless page.id %}{{ site.name }} - {% endunless
-        %}{{ page.title }}{% endif %}</title>
-    <link rel="shortcut icon" href="/favicon.ico"/>
-    <link href="/feed/" rel="alternate" title="{{ site.author }}" type="application/atom+xml"/>
-    <link rel="stylesheet" href="/static/css/style.css"/>
-    <link rel="stylesheet" href="/static/css/highlight.css" media="all"/>
-    <script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+<html lang="en">
+  
+  <head>
+    <meta name="baidu-site-verification" content="HvuxptDcq6" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ page.title }} - {{ site.title }} - {{ site.author }}({{ site.email }})">
+    <title>
+      {{ page.title }} - {{ site.title }}
+    </title>
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS 
+    <link href="/css/blog.css" rel="stylesheet">-->
+    <!-- index css -->
+    <link href="/css/index.css" rel="stylesheet">
+	<!-- pagments CSS-->
+	<link href="/css/pygments.css" rel="stylesheet">
+        <!-- jQuery Version 1.11.0 -->
+    <script src="/js/jquery-1.11.0.js"> </script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+   <!-- 回到顶部js-->
+    <script src="/js/index.js"></script>
 
-        ga('create', 'UA-72892124-1', 'auto');
-        ga('send', 'pageview');
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?085fc257cb1e774f7764a2cf527c393d";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
 
-    </script>
-</head>
-<body>
-<div id="container">
-    <div id="main" role="main">
-        <header>
-            <h1>{{ page.title }}</h1>
-        </header>
-        <nav>
-            <span><a title="首页" class="" href="/">首页</a></span>
-            <span><a title="分类" class="" href="/categories/">分类</a></span>
-            <span><a title="标签" class="" href="/tags/">标签</a></span>
-            <span><a title="留言" class="" href="/guestbook/">留言</a></span>
-            <span><a title="关于" class="" href="/about/">关于</a></span>
-        </nav>
-        <article class="content">
-            {{ content }}
-        </article>
+	<script>
+    (function(){
+     var bp = document.createElement('script');
+	 bp.src = '//push.zhanzhang.baidu.com/push.js';
+	 var s = document.getElementsByTagName("script")[0];
+	 s.parentNode.insertBefore(bp, s);
+	 })();
+	</script>
+
+  </head>
+  
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">
+              Toggle navigation
+            </span>
+            <span class="icon-bar">
+            </span>
+            <span class="icon-bar">
+            </span>
+            <span class="icon-bar">
+            </span>
+          </button>
+          <a class="navbar-brand" href="/index.html">
+            {{ site.title }}
+          </a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          {% include navigation.html %} 
+        </div>
+        <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container -->
+    </nav>
+    <!-- Page Content -->
+    <div class="container">
+      <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
+          {{ content }}
+        </div>
+
+	 <div id="top" data-toggle="tooltip" data-placement="left" title="回到顶部">
+	      <a href="javascript:;">
+		<div class="arrow"></div>
+		<div class="stick"></div>
+	      </a>
+	    </div>
+
+        <!-- Blog Sidebar Widgets Column -->
+        <div class="col-md-4">
+          <!-- Blog Search Well -->  
+	
+            {% include search.html %}
+          <!-- Blog Categories Well -->
+              {% include categories.html %} 
+         
+              {% include hot.html %} 
+       
+            {% include links.html %} 
+
+          <!-- Side Widget Well -->
+           
+        </div>
+      </div>
+
+
+
+      <!-- /.row -->
+      <hr>
+      <!-- Footer -->
+      <footer>
+           {% include copyright.html %} 
+              {% include analytics.html %} 
+
+      </footer>
     </div>
-    <div class='toTop' style="opacity: 1;" title="返回顶部">
-        <div class="arrow"></div>
-        <div class="stick"></div>
-    </div>
+    <!-- /.container -->
+  </body>
 
-    <footer>
-        <p>
-            <small>
-                <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank"
-                   title="许可协议">©</a>{{site.time | date:"%Y"}} <a href="/about/">{{ site.author }}</a>
-            </small>
-        </p>
-    </footer>
-
-</div>
-<script>
-    /* 返回顶部函数 */
-    $(function () {
-        var $backToTopEle = $('.toTop'), $backToTopFun = function () {
-            var st = $(document).scrollTop(), winh = $(window).height();
-            (st > 200) ? $backToTopEle.fadeIn('slow') : $backToTopEle.fadeOut('slow');
-            //IE6下的定位
-            if (!window.XMLHttpRequest) {
-                $backToTopEle.css("top", st + winh - 166);
-            }
-        };
-        $('.toTop').click(function () {
-            $("html, body").animate({scrollTop: 0}, 700); // 700毫秒
-        });
-        $backToTopEle.hide();
-        $backToTopFun();
-        $(window).bind("scroll", $backToTopFun);
-        $('#catalogWord').click(function () {
-            $("#catalog").slideToggle(600);
-        })
-    });
-</script>
-</body>
 </html>
