@@ -2,11 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <meta name="author" content="{{ site.author }}"/>
-    <title>{% if page.path == 'index.html' %}{{ site.name }}{% else %}{% unless page.id %}{{ site.name }} - {% endunless
-        %}{{ page.title }}{% endif %}</title>
+    <meta name="author" content="HJD"/>
+    <title>踏雪寻梅 - 标签</title>
     <link rel="shortcut icon" href="/favicon.ico"/>
-    <link href="/feed/" rel="alternate" title="{{ site.author }}" type="application/atom+xml"/>
+    <link href="/feed/" rel="alternate" title="HJD" type="application/atom+xml"/>
     <link rel="stylesheet" href="/static/css/style.css"/>
     <!--<link rel="stylesheet" href="/static/css/home.css"/>-->
     <link rel="stylesheet" href="/static/css/pygments.css"/>
@@ -35,7 +34,7 @@
 <div id="container">
     <div id="main" role="main">
         <header>
-            <h1>{{ page.title }}</h1>
+            <h1>标签</h1>
         </header>
         <nav>
             <span><a title="首页" class="tag-index" href="/">首页</a></span>
@@ -45,7 +44,78 @@
             <span><a title="关于" class="tag-about" href="/about/">关于</a></span>
         </nav>
         <article class="content">
-            {{ content }}
+            <section class="post">
+  <div id="tag_cloud">
+
+<a href="#git操作" title="git操作" rel="1">git操作</a>
+
+<a href="#开博客啦" title="开博客啦" rel="1">开博客啦</a>
+
+<a href="#鸟哥的Linux私房菜" title="鸟哥的Linux私房菜" rel="1">鸟哥的Linux私房菜</a>
+
+<a href="#util" title="util" rel="2">util</a>
+
+</div>
+
+<ul class="listing2">
+
+  <li class="listing-seperator" id="git操作">git操作</li>
+
+  <li class="listing-item">
+  <time datetime="2016-12-10">2016-12-10</time>
+  <a href="/git/" title="git操作">git操作</a>
+  </li>
+
+
+  <li class="listing-seperator" id="开博客啦">开博客啦</li>
+
+  <li class="listing-item">
+  <time datetime="2016-12-10">2016-12-10</time>
+  <a href="/hello-world/" title="Hello World">Hello World</a>
+  </li>
+
+
+  <li class="listing-seperator" id="鸟哥的Linux私房菜">鸟哥的Linux私房菜</li>
+
+  <li class="listing-item">
+  <time datetime="2016-12-10">2016-12-10</time>
+  <a href="/linux-knowledge/" title="《鸟哥的 Linux 私房菜》">《鸟哥的 Linux 私房菜》</a>
+  </li>
+
+
+  <li class="listing-seperator" id="util">util</li>
+
+  <li class="listing-item">
+  <time datetime="2016-12-11">2016-12-11</time>
+  <a href="/schema/" title="数据校验">数据校验</a>
+  </li>
+
+  <li class="listing-item">
+  <time datetime="2016-12-10">2016-12-10</time>
+  <a href="/tempfile/" title="tempfile操作">tempfile操作</a>
+  </li>
+
+
+</ul>
+
+<script src="/static/js/jquery.tagcloud.js" type="text/javascript" charset="utf-8"></script>
+
+<script language="javascript">
+$.fn.tagcloud.defaults = {
+    size: {start: 1, end: 1, unit: 'em'},
+      color: {start: '#f8e0e6', end: '#ff3333'}
+};
+
+$(function () {
+    $('#tag_cloud a').tagcloud();
+});
+</script>
+
+
+</section>
+
+
+
         </article>
     </div>
     <div class='toTop' style="opacity: 1;" title="返回顶部">
@@ -57,7 +127,7 @@
         <p>
             <small>
                 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank"
-                   title="许可协议">©</a>{{site.time | date:"%Y"}} <a href="/about/">{{ site.author }}</a>
+                   title="许可协议">©</a>2016 <a href="/about/">HJD</a>
             </small>
         </p>
     </footer>

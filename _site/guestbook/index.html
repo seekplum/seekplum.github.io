@@ -2,11 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <meta name="author" content="{{ site.author }}"/>
-    <title>{% if page.path == 'index.html' %}{{ site.name }}{% else %}{% unless page.id %}{{ site.name }} - {% endunless
-        %}{{ page.title }}{% endif %}</title>
+    <meta name="author" content="HJD"/>
+    <title>踏雪寻梅 - 留言</title>
     <link rel="shortcut icon" href="/favicon.ico"/>
-    <link href="/feed/" rel="alternate" title="{{ site.author }}" type="application/atom+xml"/>
+    <link href="/feed/" rel="alternate" title="HJD" type="application/atom+xml"/>
     <link rel="stylesheet" href="/static/css/style.css"/>
     <!--<link rel="stylesheet" href="/static/css/home.css"/>-->
     <link rel="stylesheet" href="/static/css/pygments.css"/>
@@ -35,7 +34,7 @@
 <div id="container">
     <div id="main" role="main">
         <header>
-            <h1>{{ page.title }}</h1>
+            <h1>留言</h1>
         </header>
         <nav>
             <span><a title="首页" class="tag-index" href="/">首页</a></span>
@@ -45,7 +44,39 @@
             <span><a title="关于" class="tag-about" href="/about/">关于</a></span>
         </nav>
         <article class="content">
-            {{ content }}
+            <section class="post">
+  <p><img src="guest.jpg" alt="come on" /></p>
+
+<p>声明：</p>
+
+<ul>
+  <li>对待技术问题，希望您能<strong>严肃认真、经过一定的思考</strong>，没有脑力活动的评论将被删除</li>
+  <li>留言最好有上下文，无论技术、生活，请尽量做到客观</li>
+  <li>有争议的事往往是因为没有了解到更多的信息，我不倾向于说服(或者开导)别人，只提供信息你自行判断，毕竟我们更多都是在看别人的经验去拼凑自己的路。</li>
+</ul>
+
+
+</section>
+
+
+	
+	<div class="ds-thread" data-thread-key="616" data-url="hmbd.github.io/guestbook/" data-title="留言" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name: "hmbd"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = '/static/js/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+
+
+
         </article>
     </div>
     <div class='toTop' style="opacity: 1;" title="返回顶部">
@@ -57,7 +88,7 @@
         <p>
             <small>
                 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank"
-                   title="许可协议">©</a>{{site.time | date:"%Y"}} <a href="/about/">{{ site.author }}</a>
+                   title="许可协议">©</a>2016 <a href="/about/">HJD</a>
             </small>
         </p>
     </footer>

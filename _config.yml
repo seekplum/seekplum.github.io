@@ -1,7 +1,5 @@
-#markdown: rdiscount
 permalink: /:title/
 url: hmbd.github.io
-#highlighter: pygments
 highlighter: rouge
 gems: [jekyll-paginate]
 paginate: 100

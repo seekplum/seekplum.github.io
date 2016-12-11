@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="HJD"/>
+    <title>git操作</title>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link href="/feed/" rel="alternate" title="HJD" type="application/atom+xml"/>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <!--<link rel="stylesheet" href="/static/css/home.css"/>-->
+    <link rel="stylesheet" href="/static/css/pygments.css"/>
+    <script type="text/javascript" src="/static/js/highlight.pack.js"></script>
+    <script> hljs.initHighlightingOnLoad(); </script>
+    <script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-72892124-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+<body>
+<div id="container">
+    <div id="main" role="main">
+        <header>
+            <h1>git操作</h1>
+        </header>
+        <nav>
+            <span><a title="首页" class="tag-index" href="/">首页</a></span>
+            <span><a title="分类" class="tag-categories" href="/categories/">分类</a></span>
+            <span><a title="标签" class="tag-tags" href="/tags/">标签</a></span>
+            <span><a title="留言" class="tag-guestbook" href="/guestbook/">留言</a></span>
+            <span><a title="关于" class="tag-about" href="/about/">关于</a></span>
+        </nav>
+        <article class="content">
+            <section class="meta">
+  <span class="time">
+    <time datetime='2016-12-10'>2016-12-10</time>
+  </span>
+    
+    |
+  <span class="categories">
+    分类
+    
+    <a href="/categories/#git" title="git">git</a>&nbsp;
+    
+  </span>
+    
+    
+    |
+  <span class="tags">
+    标签
+    
+    <a href="/tags/#git操作" title="git操作">git操作</a>&nbsp;
+    
+  </span>
+    
+</section>
+<section class="post">
+    <h1 id="git">git操作</h1>
+
+<hr />
+
+<h3 id="git-1">安装git</h3>
+
+<blockquote>
+  <p>Ubuntu:sudo apt-get install git</p>
+</blockquote>
+
+<blockquote>
+  <p>Windows:<a href="https://git-for-windows.github.io/">国外镜像</a>，或者直接搜索 <code class="highlighter-rouge">git</code></p>
+</blockquote>
+
+<h3 id="gitgitconfig">每个仓库的Git配置文件都放在.git/config文件中</h3>
+
+<h3 id="gitgitconfig-1">当前用户的Git配置文件放在用户主目录下的隐藏文件.gitconfig中</h3>
+
+<h3 id="section">专有名词：工作区、暂存区、版本库</h3>
+
+<blockquote>
+  <p><code class="highlighter-rouge">工作区</code>:当前修改的未git add的文件</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="highlighter-rouge">暂存区</code>:修改后git add操作的文件</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="highlighter-rouge">版本库</code>: 执行git commit，把暂存区文件提交到仓库</p>
+</blockquote>
+
+<h3 id="git-2">git常用设置</h3>
+
+<p>1.设置颜色</p>
+
+<blockquote>
+  <p>git config –global color.ui true</p>
+</blockquote>
+
+<p>2.设置别名</p>
+
+<blockquote>
+  <p>git config –global alias.st status # git status 用 git st替换</p>
+</blockquote>
+
+<p>3.设置用户名、邮箱</p>
+
+<blockquote>
+  <p>git config –global user.name “huangjiandong”</p>
+</blockquote>
+
+<blockquote>
+  <p>git config –global user.email 1131909224@qq.com</p>
+</blockquote>
+
+<p>4.设置忽略文件</p>
+
+<blockquote>
+  <p>touch .gitignore # 被.gitignore忽略的文件可以用git add -f 文件名强制添加</p>
+</blockquote>
+
+<blockquote>
+  <p>git check-ignore -v 文件名 # 检查规则是否写错</p>
+</blockquote>
+
+<h3 id="github1github"><a href="http://www.github.com">github</a>上新建了一个仓库，把代码提交到github上</h3>
+
+<p>1.本地初始化空的仓库
+&gt; git init</p>
+
+<p>2.添加所有项目文件到本地仓库</p>
+
+<blockquote>
+  <p>git add <code class="highlighter-rouge">.</code>  # <code class="highlighter-rouge">.</code> 代表把当前目录下所有文件添加到仓库</p>
+</blockquote>
+
+<p>3.提交文件到本地仓库</p>
+
+<blockquote>
+  <p>git commit -m “提交注释”</p>
+</blockquote>
+
+<p>4.本地生成<code class="highlighter-rouge">ssh密钥</code>，并添加到github上，不然无法把项目推送到github</p>
+
+<blockquote>
+  <p>① 终端执行：<code class="highlighter-rouge">ssh-keygen -t rsa -C "邮箱地址"</code></p>
+</blockquote>
+
+<blockquote>
+  <p>② 把 <code class="highlighter-rouge">~/.ssh/id_rsa.pub</code> 里的内容放到github, <code class="highlighter-rouge">SSH KEY</code>中</p>
+</blockquote>
+
+<p>5.推送本地项目到远程仓库</p>
+
+<blockquote>
+  <p>git push -u origin 分支名 # 第一次提交，所以加上-u参数，<code class="highlighter-rouge">-u</code>：指定上游仓库，因为原本中github上，仓库为空</p>
+</blockquote>
+
+<blockquote>
+  <p>git push -u origin gaga 相当于 git push origin gaga + git branch –set-upstream-to=origin/gaga master</p>
+</blockquote>
+
+<h3 id="section-1">把远程项目克隆到本地进行修改，提交本地，提交远程仓库</h3>
+
+<p>1.克隆项目到本地
+&gt; git clone xxxx.git # 默认主机名是origin</p>
+
+<blockquote>
+  <p>git clone -o 远程主机名 xxxx.git # 克隆时设置远程主机名</p>
+</blockquote>
+
+<p>2.修改文件前更新远程仓库，防止与他人冲突</p>
+
+<blockquote>
+  <ul>
+    <li>git fetch 进行更新</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>git fetch <远程主机名> \# 获取远程主机的更新到本地</远程主机名></p>
+</blockquote>
+
+<blockquote>
+  <p>git fetch <远程主机名> <分支名>\# 获取远程主机某个分支的更新到本地</分支名></远程主机名></p>
+</blockquote>
+
+<blockquote>
+  <p>取回的更新在本地要用 <主机名>/<分支名> 的形式读取</分支名></主机名></p>
+</blockquote>
+
+<blockquote>
+  <p>git merge abc #合并abc分支到当前分支</p>
+</blockquote>
+
+<p>-————————————————–</p>
+
+<blockquote>
+  <ul>
+    <li>git pull 进行更新</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>git pull (远程主机名) (远程分支名):(本地分支名) # 远程分支是与当前分支合并，则冒号后面的部分可以省略</p>
+</blockquote>
+
+<blockquote>
+  <p>git pull -p # 加上参数 <code class="highlighter-rouge">-p</code> 就会在本地删除远程已经删除的分支</p>
+</blockquote>
+
+<blockquote>
+  <p>git pull = git fetch + get merge</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>在实际使用中，git fetch更安全一些因为在merge前，我们可以查看更新情况，然后再决定是否合并</li>
+  </ul>
+</blockquote>
+
+<p>3.进行文件修改操作</p>
+
+<p>4.查看当前仓库状态</p>
+
+<blockquote>
+  <p>git status # 查看哪些文件修改了但是没有提交</p>
+</blockquote>
+
+<blockquote>
+  <p>git diff test.py # 查看test.py文件更改内容</p>
+</blockquote>
+
+<p>5.把文件添加仓库</p>
+
+<blockquote>
+  <p>git add test1.py test2.py test3.py # 添加3个test.py到仓库</p>
+</blockquote>
+
+<blockquote>
+  <p>git add .  # <code class="highlighter-rouge">.</code> 代表把当前目录下所有文件添加到仓库</p>
+</blockquote>
+
+<p>6.提交文件到本地仓库</p>
+
+<blockquote>
+  <p>git commit -m “提交注释”</p>
+</blockquote>
+
+<p>7.提交代码到远程仓库</p>
+
+<blockquote>
+  <p>git push origin <分支名></分支名></p>
+</blockquote>
+
+<blockquote>
+  <p>git push –force # 强制提交</p>
+</blockquote>
+
+<h3 id="section-2">修改文件后，想要丢弃修改</h3>
+
+<p><code class="highlighter-rouge">
+HEAD:当前版本
+HEAD^ :上一个版本
+HEAD^^ :上上一个版本
+HEAD~100:上100个版本
+</code></p>
+
+<blockquote>
+  <p>git reset HEAD^ # 保留修改的文件。只是清除commit信息</p>
+</blockquote>
+
+<blockquote>
+  <p>git reset –hard HEAD^ # 清除源码和commit信息</p>
+</blockquote>
+
+<blockquote>
+  <p>git reset –hard 版本号 # 版本号不用写全，可以回到未来、过去版本</p>
+</blockquote>
+
+<ul>
+  <li>暂存区的修改撤销掉，重新返回工作区</li>
+</ul>
+
+<blockquote>
+  <p>git reset HEAD test.py</p>
+</blockquote>
+
+<ul>
+  <li>丢弃工作区修改,把test.py文件在工作区的修改全部撤销(即还原到最新的版本)</li>
+</ul>
+
+<blockquote>
+  <p>git checkout – test.py</p>
+</blockquote>
+
+<blockquote>
+  <p>①自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；</p>
+</blockquote>
+
+<blockquote>
+  <p>②已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态</p>
+</blockquote>
+
+<ul>
+  <li>恢复某个指定文件到指定版本</li>
+</ul>
+
+<blockquote>
+  <p>git checkout 版本号 test.py # 恢复test.py文件到指定的版本</p>
+</blockquote>
+
+<h3 id="commit">分支提交到仓库，想修改commit注释</h3>
+
+<ul>
+  <li>未push到远程分支</li>
+</ul>
+
+<p>1.修改最后一次commit注释</p>
+
+<blockquote>
+  <p>git commit –amend # 在编辑页面直接修改注释即可</p>
+</blockquote>
+
+<p>2.修改非最后一次commit注释</p>
+
+<blockquote>
+  <p>① git rebase -i HEAD~3 # 表示要修改当前版本的倒数第三次状态把要修改的注释那行的<code class="highlighter-rouge">pick</code>改成<code class="highlighter-rouge">edit</code>，然后保存退出</p>
+</blockquote>
+
+<blockquote>
+  <p>② <code class="highlighter-rouge">git log</code> 查看刚刚发现修改的注释变成了最后一次commit</p>
+</blockquote>
+
+<blockquote>
+  <p>③ git commit –amend # 在编辑页面直接修改注释即可</p>
+</blockquote>
+
+<blockquote>
+  <p>④ git rebase –continue # 还原commit顺序</p>
+</blockquote>
+
+<h3 id="section-3">远程仓库操作</h3>
+<blockquote>
+  <p>git remote show <主机名># 查看主机的详细信息</主机名></p>
+</blockquote>
+
+<blockquote>
+  <p>git remote add <主机名> <网址>#添加远程主机</网址></主机名></p>
+</blockquote>
+
+<blockquote>
+  <p>git remote rm <主机名>#删除远程主机</主机名></p>
+</blockquote>
+
+<blockquote>
+  <p>git remote # 查看远程库的信息</p>
+</blockquote>
+
+<blockquote>
+  <p>git remote -v #显示更详细的信息</p>
+</blockquote>
+
+<h3 id="gittiggit">关于git查询信息(<code class="highlighter-rouge">tig</code>：git查询工具)</h3>
+
+<ul>
+  <li><strong>显示出来的节点顺序，不是绝对按时间顺序排列的</strong></li>
+</ul>
+
+<blockquote>
+  <p>git log # 查看提交(commit)记录</p>
+</blockquote>
+
+<blockquote>
+  <p>git log –pretty=oneline # 显示更简单信息</p>
+</blockquote>
+
+<blockquote>
+  <p>git log –oneline # 一个提交记录只显示一行</p>
+</blockquote>
+
+<blockquote>
+  <p>git log -p test.py # 查看test.py的详细提交记录，曾经都修改过哪些地方</p>
+</blockquote>
+
+<blockquote>
+  <p>git show commit_id <文件名>\# 显示具体的某次改动的修改</文件名></p>
+</blockquote>
+
+<blockquote>
+  <p>git log  –author=”username” # 只查看某人的提交记录</p>
+</blockquote>
+
+<blockquote>
+  <p>git blame <文件名> \# 查看文件每一行的改动详细信息，包括时间，作者，commit id</文件名></p>
+</blockquote>
+
+<h3 id="tagtag">tag操作，常用于发布一个版本时，先在版本库中打一个标签（tag），这样，就唯一确定了打标签时刻的版本。将来无论什么时候，取某个标签的版本，就是把那个打标签的时刻的历史版本取出来。所以，标签也是版本库的一个快照。</h3>
+
+<p><code class="highlighter-rouge">
+git tag tag名 # 打新标签
+git tag # 查看所有标签,按字母排序
+git tag tag名 commit_id # 对某个历史提交打tag
+git tag -a tag名 -m "文字说明" commit_id # 增加文字说明
+git show tag名 # 查看文字说明
+git tag -s tag名 -m "文字说明" commit_id # 用私钥签名一个标签，签名采用PGP,必须先安装gpg(GnuPG)
+git tag -d tag名 # 删除tag
+git push origin tag名 # 提交标签到远程
+git push origin --tags #一次性推送全部尚未推送到远程的本地标签
+git push origin :refs/tags/tag名 # 从远程删除tag，注意：要先删除本地的tag
+</code></p>
+
+<ul>
+  <li>已经push到远程分支</li>
+</ul>
+
+<blockquote>
+  <p>使用 <code class="highlighter-rouge">git-up</code> 软件进行修改</p>
+</blockquote>
+
+<h3 id="section-4">分支的创建、查看、切换、合并、删除</h3>
+
+<blockquote>
+  <ul>
+    <li>1.创建</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>git branch 分支名 # 创建新的分支</p>
+</blockquote>
+
+<blockquote>
+  <p>git checkout -b 分支名 # 创建并切换到新的分支</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>2.查看</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>git branch # 查看当前所在分支</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>3.切换</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>git checkout 分支名 # 切换分支</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>4.合并</li>
+  </ul>
+</blockquote>
+
+<ul>
+  <li>当前分支情况</li>
+</ul>
+
+<blockquote>
+  <p>git merge experiment # 合并experiment分支到当前分支(master)</p>
+</blockquote>
+
+<p><code class="highlighter-rouge">
+marge 特点：自动创建一个新的commit
+如果合并的时候遇到冲突，仅需要修改后重新commit
+优点：记录了真实的commit情况，包括每个分支的详情
+缺点：因为每次merge会自动产生一个merge commit，所以在使用一些git 的GUI tools，特别是commit比较频繁时，看到分支很杂乱。
+</code></p>
+
+<blockquote>
+  <p>git rebase master # 合并master分支到当前分支(experiment)</p>
+</blockquote>
+
+<p><code class="highlighter-rouge">
+rebase 特点：会合并之前的commit历史
+优点：得到更简洁的项目历史，去掉了merge commit
+缺点：如果合并出现代码问题不容易定位
+</code></p>
+
+<blockquote>
+  <p>git log –graph –pretty=oneline –abbrev-commit # 查看分支合并情况</p>
+</blockquote>
+
+<ul>
+  <li>分支合并模式</li>
+</ul>
+
+<p><code class="highlighter-rouge">Fast forward</code>:删除分支后会丢掉分支信息</p>
+
+<ul>
+  <li>禁用<code class="highlighter-rouge">Fast forward</code>: git merge –no-ff -m “禁用后会创建一个新的commit” 分支</li>
+</ul>
+
+<blockquote>
+  <ul>
+    <li>5.删除</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>git push origin –delete 分支名 # 删除远程分支</p>
+</blockquote>
+
+<blockquote>
+  <p>git branch -d 分支名 # 删除本地分支</p>
+</blockquote>
+
+<blockquote>
+  <p>git branch -D 分支名 # 删除未合并过的分支，即创建修改之后，想进行删除(强行删除)</p>
+</blockquote>
+
+<h3 id="section-5">暂存工作区内容，不添加仓库</h3>
+
+<blockquote>
+  <p>git stash # 可多次执行</p>
+</blockquote>
+
+<blockquote>
+  <p>git stash list # 查看暂存的列表</p>
+</blockquote>
+
+<blockquote>
+  <p>git stash apply:恢复暂存内容，但是stash内容并不会删除，需要使用git stash drop进行删除</p>
+</blockquote>
+
+<blockquote>
+  <p>git stash pop:恢复暂存区内容并删除stash</p>
+</blockquote>
+
+<ul>
+  <li>多个stash恢复</li>
+</ul>
+
+<blockquote>
+  <p>git stash apply stash@{0} # stash@{0}是通过git stash list查到的</p>
+</blockquote>
+
+
+</section>
+<section align="right">
+    <br/>
+  <span>
+    <a  
+       class="pageNavInvalid" >上一篇</a>
+    &nbsp;&nbsp;&nbsp;
+    <a  href="/hello-world/" class="pageNav"  >下一篇</a>
+  </span>
+</section>
+
+	
+	<div class="ds-thread" data-thread-key="git" data-url="hmbd.github.io/git/" data-title="git操作" />
+		
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name: "hmbd"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = '/static/js/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+<script type="text/javascript">
+    /*
+     功能：生成博客目录的JS工具
+     */
+    var BlogDirectory = {
+        /*
+         获取元素位置，距浏览器左边界的距离（left）和距浏览器上边界的距离（top）
+         */
+        getElementPosition: function (ele) {
+            var topPosition = 0;
+            var leftPosition = 0;
+            while (ele) {
+                topPosition += ele.offsetTop;
+                leftPosition += ele.offsetLeft;
+                ele = ele.offsetParent;
+            }
+            return {top: topPosition, left: leftPosition};
+        },
+
+        /*
+         获取滚动条当前位置
+         */
+        getScrollBarPosition: function () {
+            var scrollBarPosition = document.body.scrollTop || document.documentElement.scrollTop;
+            return scrollBarPosition;
+        },
+
+        /*
+         移动滚动条，finalPos 为目的位置，internal 为移动速度
+         */
+        moveScrollBar: function (finalpos, interval) {
+
+            //若不支持此方法，则退出
+            if (!window.scrollTo) {
+                return false;
+            }
+
+            //窗体滚动时，禁用鼠标滚轮
+            window.onmousewheel = function () {
+                return false;
+            };
+
+            //清除计时
+            if (document.body.movement) {
+                clearTimeout(document.body.movement);
+            }
+
+            var currentpos = BlogDirectory.getScrollBarPosition();//获取滚动条当前位置
+
+            var dist = 0;
+            if (currentpos == finalpos) {//到达预定位置，则解禁鼠标滚轮，并退出
+                window.onmousewheel = function () {
+                    return true;
+                };
+                return true;
+            }
+            if (currentpos < finalpos) {//未到达，则计算下一步所要移动的距离
+                dist = Math.ceil((finalpos - currentpos) / 10);
+                currentpos += dist;
+            }
+            if (currentpos > finalpos) {
+                dist = Math.ceil((currentpos - finalpos) / 10);
+                currentpos -= dist;
+            }
+
+            var scrTop = BlogDirectory.getScrollBarPosition();//获取滚动条当前位置
+            window.scrollTo(0, currentpos);//移动窗口
+            if (BlogDirectory.getScrollBarPosition() == scrTop)//若已到底部，则解禁鼠标滚轮，并退出
+            {
+                window.onmousewheel = function () {
+                    return true;
+                };
+                return true;
+            }
+
+            //进行下一步移动
+            var repeat = "BlogDirectory.moveScrollBar(" + finalpos + "," + interval + ")";
+            document.body.movement = setTimeout(repeat, interval);
+        },
+
+        htmlDecode: function (text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        },
+
+        /*
+         创建博客目录，
+         id表示包含博文正文的 div 容器的 id，
+         mt 和 st 分别表示主标题和次级标题的标签名称（如 H2、H3，大写或小写都可以！），
+         interval 表示移动的速度
+         */
+        createBlogDirectory: function (id, mt, st, interval) {
+            //获取博文正文div容器
+            var elem = document.getElementById(id);
+            if (!elem) return false;
+            //获取div中所有元素结点
+            var nodes = elem.getElementsByTagName("*");
+            //创建博客目录的div容器
+            var divSideBar = document.createElement('DIV');
+            divSideBar.className = 'sideBar';
+            divSideBar.setAttribute('id', 'sideBar');
+            var divSideBarTab = document.createElement('DIV');
+            divSideBarTab.setAttribute('id', 'sideBarTab');
+            divSideBar.appendChild(divSideBarTab);
+            var h2 = document.createElement('H2');
+            divSideBarTab.appendChild(h2);
+            var txt = document.createTextNode('目录导航');
+            h2.appendChild(txt);
+            var divSideBarContents = document.createElement('DIV');
+            //目录导航初始 显示
+            divSideBarContents.style.display = 'block';
+            divSideBarContents.setAttribute('id', 'sideBarContents');
+            divSideBar.appendChild(divSideBarContents);
+            //创建自定义列表
+            var dlist = document.createElement("dl");
+            divSideBarContents.appendChild(dlist);
+            var num = 0;//统计找到的mt和st
+            mt = mt.toUpperCase();//转化成大写
+            st = st.toUpperCase();//转化成大写
+            //遍历所有元素结点
+            for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].nodeName == mt || nodes[i].nodeName == st) {
+                    //获取标题文本
+                    var nodetext = nodes[i].innerHTML.replace(/<\/?[^>]+>/g, "");//innerHTML里面的内容可能有HTML标签，所以用正则表达式去除HTML的标签
+                    nodetext = nodetext.replace(/&nbsp;/ig, "");//替换掉所有的&nbsp;
+                    var len = 13; // 目录显示字数
+                    if (nodetext.length > len) {
+                        nodetext = nodetext.slice(0, len);
+                        nodetext = nodetext + '...';
+                    }
+                    nodetext = BlogDirectory.htmlDecode(nodetext);
+                    //插入锚
+                    nodes[i].setAttribute("id", "blogTitle" + num);
+                    var item;
+                    switch (nodes[i].nodeName) {
+                        case mt:    //若为主标题
+                            item = document.createElement("dt");
+                            break;
+                        case st:    //若为子标题
+                            item = document.createElement("dd");
+                            break;
+                    }
+
+                    //创建锚链接
+                    var itemtext = document.createTextNode(nodetext);
+                    item.appendChild(itemtext);
+                    item.setAttribute("name", num);
+                    item.onclick = function () {        //添加鼠标点击触发函数
+                        var pos = BlogDirectory.getElementPosition(document.getElementById("blogTitle" + this.getAttribute("name")));
+                        if (!BlogDirectory.moveScrollBar(pos.top, interval)) return false;
+                    };
+
+                    //将自定义表项加入自定义列表中
+                    dlist.appendChild(item);
+                    num++;
+                }
+            }
+
+            if (num == 0) return false;
+            /*鼠标进入时的事件处理*/
+            divSideBarTab.onmouseenter = function () {
+                divSideBarTab.style.background = '#00bcff';
+            };
+            /*鼠标离开时的事件处理*/
+            divSideBar.onmouseleave = function () {
+                divSideBarTab.style.background = '#ffffff';
+            };
+
+            document.body.appendChild(divSideBar);
+
+
+            // 目录导航显示隐藏
+            var btn = document.getElementById('sideBarTab');
+
+            btn.addEventListener('click', function () {
+                if (divSideBarContents.style.display == "block") {
+                    divSideBarContents.style.display = 'none';
+                }
+                else {
+                    divSideBarContents.style.display = 'block';
+                }
+            }, false);
+        }
+
+    };
+
+    window.onload = function () {
+        /*页面加载完成之后生成博客目录*/
+        BlogDirectory.createBlogDirectory("main", "h2", "h3", 20);
+    }
+</script>
+
+        </article>
+    </div>
+    <div class='toTop' style="opacity: 1;" title="返回顶部">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+    </div>
+
+    <footer>
+        <p>
+            <small>
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank"
+                   title="许可协议">©</a>2016 <a href="/about/">HJD</a>
+            </small>
+        </p>
+    </footer>
+
+</div>
+<script>
+    /* 返回顶部函数 */
+    $(function () {
+        var $backToTopEle = $('.toTop'), $backToTopFun = function () {
+            var st = $(document).scrollTop(), winh = $(window).height();
+            (st > 200) ? $backToTopEle.fadeIn('slow') : $backToTopEle.fadeOut('slow');
+            //IE6下的定位
+            if (!window.XMLHttpRequest) {
+                $backToTopEle.css("top", st + winh - 166);
+            }
+        };
+        $('.toTop').click(function () {
+            $("html, body").animate({scrollTop: 0}, 700); // 700毫秒
+        });
+        $backToTopEle.hide();
+        $backToTopFun();
+        $(window).bind("scroll", $backToTopFun);
+        $('#catalogWord').click(function () {
+            $("#catalog").slideToggle(600);
+        })
+    });
+
+    /* 选中标签填充背景色 */
+    $(function () {
+        var last_url = window.location.pathname;
+        var all_class = ['index', 'categories', 'tags', 'guestbook', 'about'];
+        var all_url = ['/', '/categories/', '/tags/', '/guestbook/', '/about/'];
+        $.each(all_url, function (index, value) {
+            if (last_url == value) {
+                var tag_class = ".tag-" + all_class[index];
+                $(tag_class).css("background-color", "#ddd"); // #f5f5f5
+            }
+        });
+
+    });
+</script>
+</body>
+</html>
