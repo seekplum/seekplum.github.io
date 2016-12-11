@@ -210,7 +210,7 @@ nav a {
 nav a:hover {
     background-color: #f5f5f5; /* 导航鼠标悬停颜色 */
     text-decoration: none;
-    color: #f9f9f9;
+    color: yellow;
     -webkit-transition: color .2s linear;
 }
 
@@ -379,4 +379,60 @@ footer a:hover {
     border: 9px solid rgba(126, 27, 27, 0);
     border-bottom-color: #aaa
 }
+
 /* 返回顶部 end */
+
+/* 生成目录 start */
+
+#sideBar {
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: left;
+    position: fixed; /*将div的位置固定到距离top:50px，right:0px的位置，这样div就会处在最右边的位置，距离顶部50px*/
+    top: 50px;
+    right: 0px;
+    width: auto;
+    height: auto;
+}
+
+#sideBarTab {
+    float: left;
+    width: 30px;
+    border: 1px solid #e5e5e5;
+    border-right: none;
+    text-align: center;
+    background: #ffffff;
+}
+
+#sideBarContents {
+    float: left;
+    overflow: auto;
+    overflow-x: hidden;
+!important;
+    width: 200px;
+    min-height: 108px;
+    max-height: 460px;
+    border: 1px solid #e5e5e5;
+    border-right: none;
+    background: #ffffff;
+}
+
+#sideBarContents dl {
+    margin: 0;
+    padding: 0;
+}
+
+#sideBarContents dt {
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+#sideBarContents dd, dt {
+    cursor: pointer;
+}
+
+#sideBarContents dd:hover, dt:hover {
+    color: #A7995A;
+}
+
+/* 生成目录 end */
