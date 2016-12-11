@@ -3,6 +3,8 @@ layout: post
 title: 《鸟哥的 Linux 私房菜》
 categories: Linux
 tags: 鸟哥的Linux私房菜
+thread: linux
+url: linux
 ---
 
 ## 前言
