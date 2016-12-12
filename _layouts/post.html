@@ -7,7 +7,7 @@ layout: default
   </span>
     {% if page.categories.size != 0 %}
     |
-  <span class="categories">
+    <span class="categories">
     分类
     {% for cat in page.categories %}
     <a href="/categories/#{{ cat }}" title="{{ cat }}">{{ cat }}</a>&nbsp;
@@ -16,7 +16,7 @@ layout: default
     {% endif %}
     {% if page.tags.size != 0 %}
     |
-  <span class="tags">
+    <span class="tags">
     标签
     {% for tag in page.tags %}
     <a href="/tags/#{{ tag }}" title="{{ tag }}">{{ tag }}</a>&nbsp;
@@ -29,7 +29,7 @@ layout: default
 </section>
 <section align="right">
     <br/>
-  <span>
+    <span>
     <a {% if page.previous %} href="{{ page.previous.url }}" class="pageNav" {% endif %} {% unless page.previous %}
        class="pageNavInvalid" {% endunless %}>上一篇</a>
     &nbsp;&nbsp;&nbsp;
@@ -150,7 +150,14 @@ layout: default
             var txt = document.createTextNode('目录导航');
             h2.appendChild(txt);
             var divSideBarContents = document.createElement('DIV');
-            checkCookie();
+            var last_url = window.location.pathname;
+            var now_url = last_url.slice(1, last_url.length - 1);
+            var cookie_name = 'directory' + now_url;
+            var directory = getCookie(cookie_name);
+            if (directory == null || directory == '') {
+                directory = 'block'
+            }
+            divSideBarContents.style.display = directory;
             divSideBarContents.setAttribute('id', 'sideBarContents');
             divSideBar.appendChild(divSideBarContents);
             //创建自定义列表
@@ -207,9 +214,6 @@ layout: default
 
             // 目录导航显示/隐藏
             var btn = document.getElementById('sideBarTab');
-            var last_url = window.location.pathname;
-            var now_url = last_url.slice(1, last_url.length -1);
-            var cookie_name = 'directory' + now_url;
             btn.addEventListener('click', function () {
                 var directory = getCookie(cookie_name);
                 if (directory == "block") {
@@ -242,23 +246,6 @@ layout: default
         exdate.setDate(exdate.getDate() + expiredays);
         document.cookie = c_name + "=" + escape(value) +
                 ((expiredays == null) ? "" : "; expires=" + exdate.toGMTString())
-    }
-
-    function checkCookie() {
-        var last_url = window.location.pathname;
-        var now_url = last_url.slice(1, last_url.length -1);
-        var cookie_name = 'directory' + now_url;
-        var directory = getCookie(cookie_name);
-        // 判断cookie中是否记录了导航的状态
-        if (directory != null && directory != "") {
-            //目录导航初始 显示
-            document.createElement('DIV').style.display = directory;
-        }
-        else {
-            setCookie(cookie_name, 'block', 365);
-            //目录导航初始 显示
-            document.createElement('DIV').style.display = 'block';
-        }
     }
     window.onload = function () {
         /*页面加载完成之后生成博客目录*/
