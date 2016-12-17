@@ -1,0 +1,72 @@
+html, body, * {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 900px;
+    margin: 0 auto;
+}
+
+.submenu {
+    float: left;
+    width: 300px;
+    background: #eee;
+    height: 100%;
+}
+
+.content {
+    float: right;
+    width: 600px;
+    height: auto;
+}
+
+.content div {
+    width: 100%;
+    height: 500px;
+    margin: 0 auto;
+}
+
+.content div h2 {
+    font-size: 36px;
+    color: #fff;
+}
+
+.subnav {
+    display: block;
+    width: 300px;
+    height: auto;
+}
+
+.subnav ul {
+    direction: rtl;
+    border: 1px solid #ccc;
+}
+
+.subnav ul li {
+    list-style: circle inside;
+    cursor: pointer;
+    text-align: right;
+    color: #333;
+    font-size: 32px;
+    line-height: 32px;
+}
+
+.subnav ul li span {
+    font-size: 14px;
+    vertical-align: middle;
+    margin-right: -10px;
+}
+
+.subnav ul li:hover {
+    color: #32c92a;
+}
+
+.subnav ul li.current {
+    list-style: disc inside;
+    color: #32c92a;
+}
+
+.subnav ul li.current span {
+    font-size: 22px;
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>jQuery实现页面滚动时菜单悬浮跟踪功能</title>
+
+    <link rel="stylesheet" type="text/css" href="css/scrolltrack.css">
+    <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/scrolltrack.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="submenu">
+        <div class="subnav"></div>
+    </div>
+
+    <div class="content">
+        <div style="height:50px; background: blue;">Page Top</div>
+        <div class="item" style="background: #00ff00">
+            <h2>1F</h2>
+            <p>Content 1</p>
+        </div>
+        <div class="item" style="background: #279756">
+            <h2>2F</h2>
+            <p>Content 2</p>
+        </div>
+        <div class="item" style="background: #2ce3e5">
+            <h2>3F</h2>
+            <p>Content 3</p>
+        </div>
+        <div class="item" style="background: #5e57e7">
+            <h2>4F</h2>
+            <p>Content 4</p>
+        </div>
+        <div class="item" style="background: #ca61ae">
+            <h2>5F</h2>
+            <p>Content 5</p>
+        </div>
+    </div>
+
+    <!--<div class="bottom" style="float:left; height:800px;width:100%; background:black;"></div>-->
+</div>
+    <script type="text/javascript">
+        $(".subnav").scrollTrack({end: ".bottom"});
+    </script>
+</body>
+</html>
