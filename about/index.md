@@ -4,12 +4,12 @@ layout: page
 comments: no
 ---
 
-### 个人说明
+## 个人说明
 
 * 踏雪寻梅，争取成为本人在网络上的唯一账号
 * 希望结交更多志同道合的朋友共同进步
 
-### 欢迎交流
+## 欢迎交流
 
 * 网站：[{{ site.name }}]({{ site.url }})
 * 邮箱：[{{ site.email }}](mailto:{{ site.email }})

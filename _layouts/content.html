@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="{{ site.author }}"/>
+    <title>{% if page.path == 'index.html' %}{{ site.name }}{% else %}{% unless page.id %}{{ site.name }} - {% endunless
+        %}{{ page.title }}{% endif %}</title>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link href="/feed/" rel="alternate" title="{{ site.author }}" type="application/atom+xml"/>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <!--<link rel="stylesheet" href="/static/css/home.css"/>-->
+    <link rel="stylesheet" href="/static/css/pygments.css"/>
+    <link rel="stylesheet" href="/static/css/jquery.tocify.css"/>
+    <link rel="stylesheet" href="/static/css/prettify.css"/>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <style type="text/css">
+        .demo {
+            width: 360px;
+            margin: 50px auto 10px auto;
+            padding: 10px;
+        }
+
+        .demo p {
+            line-height: 30px
+        }
+
+        #stat {
+            display: none
+        }
+
+        .nav-list li.active {
+            background: #08c
+        }
+
+        .nav-list li.active a {
+            color: #fff
+        }
+
+        @media (max-width: 767px) {
+            #toc {
+                position: relative;
+                width: 100%;
+                margin: 0px 0px 20px 0px;
+            }
+        }
+
+        a {
+            padding: 0;
+        !important;
+        }
+
+        .directory-navigation {
+            position: fixed;
+            top: 30px;
+            float: left;
+            right: 0;
+            width: 25px;
+            border: 1px solid #e5e5e5;
+            border-right: none;
+            text-align: center;
+            background: #ffffff;
+        }
+
+
+    </style>
+    <script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/highlight.pack.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-2">
+            <nav>
+                <span><a title="首页" class="tag-index" href="/">首页</a></span>
+                <span><a title="分类" class="tag-categories" href="/categories/">分类</a></span>
+                <span><a title="标签" class="tag-tags" href="/tags/">标签</a></span>
+                <span><a title="留言" class="tag-guestbook" href="/guestbook/">留言</a></span>
+                <span><a title="关于" class="tag-about" href="/about/">关于</a></span>
+            </nav>
+        </div>
+        <div class="col-sm-12 col-md-8">
+
+            <header>
+                <h1>{{ page.title }}</h1>
+            </header>
+            <article class="content">
+                {{ content }}
+            </article>
+        </div>
+
+        <div class="col-sm-12 col-md-2" style="bottom: 50px;">
+            <div id="directory_navigation" class="directory-navigation">
+                <span>目录导航</span>
+            </div>
+            <div id="toc" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div class='toTop' style="opacity: 1;" title="返回顶部">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+    </div>
+
+    <footer>
+        <p>
+            <small>
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cn/" target="_blank"
+                   title="许可协议">©</a>{{site.time | date:"%Y"}} <a href="/about/">{{ site.author }}</a>
+            </small>
+        </p>
+    </footer>
+
+
+</div>
+<!--<script type="text/javascript" src="/static/js/jquery.min.js"></script>-->
+<script type="text/javascript" src="http://libs.useso.com/js/jquery/1.9.0/jquery.min.js"></script>
+<script src="/static/js/jquery-ui-1.9.1.custom.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.tocify.min.js"></script>
+<script src="/static/js/prettify.js"></script>
+<script>
+    $(function () {
+
+        var toc = $("#toc").tocify({
+            selectors: "h2,h3,h4,h5"
+        }).data("toc-tocify");
+    });
+    prettyPrint();
+    $(".optionName").popover({trigger: "hover"});
+</script>
+<script>
+    /* 返回顶部函数 */
+    $(function () {
+        var $backToTopEle = $('.toTop'), $backToTopFun = function () {
+            var st = $(document).scrollTop(), winh = $(window).height();
+            (st > 200) ? $backToTopEle.fadeIn('slow') : $backToTopEle.fadeOut('slow');
+            //IE6下的定位
+            if (!window.XMLHttpRequest) {
+                $backToTopEle.css("top", st + winh - 166);
+            }
+        };
+        $('.toTop').click(function () {
+            $("html, body").animate({scrollTop: 0}, 700); // 700毫秒
+        });
+        $backToTopEle.hide();
+        $backToTopFun();
+        $(window).bind("scroll", $backToTopFun);
+        $('#catalogWord').click(function () {
+            $("#catalog").slideToggle(600);
+        })
+    });
+</script>
+</body>
+</html>

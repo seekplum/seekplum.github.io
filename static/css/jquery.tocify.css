@@ -6,13 +6,13 @@
 /* The Table of Contents container element */
 .tocify {
     width: 15%;
-    max-height: 90%;
-    overflow: hidden;
+    max-height: 85%;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     position: fixed;
 	top:30px;
     border: 1px solid #ccc;
-    webkit-border-radius: 6px;
-    moz-border-radius: 6px;
     border-radius: 6px;
     right: 0;
     cursor: pointer;
@@ -59,9 +59,4 @@
 /* Twitter Bootstrap Override Style */
 .nav-list > li > a, .nav-list .nav-header {
     margin: 0px;
-}
-
-/* Twitter Bootstrap Override Style */
-.nav-list > li > a {
-    padding: 5px;
 }
