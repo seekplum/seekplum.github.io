@@ -39,6 +39,7 @@ layout: content
 </section>
 {% include comments.md %}
 <script type="text/javascript">
+    // 读取 cookie
     function getCookie(c_name) {
         if (document.cookie.length > 0) {
             var c_start = document.cookie.indexOf(c_name + "=");
@@ -52,12 +53,45 @@ layout: content
         return ""
     }
 
+    // 设置cookie
     function setCookie(c_name, value, expiredays) {
         var exdate = new Date();
         exdate.setDate(exdate.getDate() + expiredays);
         document.cookie = c_name + "=" + escape(value) +
                 ((expiredays == null) ? "" : "; expires=" + exdate.toGMTString())
     }
+
+
+    // 设置 div的滚蛋条跟随 body 的滚动条移动
+    $(window).scroll(function () {
+        var body_scroll, div_sroll;
+        if (document.documentElement && document.documentElement.scrollTop) {
+            body_scroll = document.documentElement.scrollTop; // 滚动条距离顶部高度
+        } else if (document.body) {
+            body_scroll = document.body.scrollTop;
+        }
+        var div_height = $("#toc").height();
+        var body_height = $("body").height();
+        // div 出现了滚动条
+        if ($("#toc").scrollTop() > 0) {
+            div_sroll = body_scroll / body_height * div_height;
+            $("#toc").scrollTop(div_sroll);
+        }
+    });
+
+    // 提示没有目录
+    function dwnotify() {
+        //遮罩显示
+        var notify_html = '<span>当前页面 没有目录</span>';
+        $(".no-directory").notify({
+            message: {
+                html: notify_html
+            },
+            fadeOut: {delay: 2000}
+        }).show();
+
+    }
+    // 页面加载完成执行
     window.onload = function () {
         var last_url = window.location.pathname;
         var now_url = last_url.slice(1, last_url.length - 1);
@@ -86,10 +120,11 @@ layout: content
             else {
                 divSideBarContents.style.display = 'block';
                 setCookie(cookie_name, 'block', 365);
-                if(div_content == null || div_content == "" || div_content.length == 0){
+                if (div_content == null || div_content == "" || div_content.length == 0) {
                     btn.style.right = 0;
+                    dwnotify();
                 }
-                else{
+                else {
                     btn.style.right = "15%";
                 }
             }
