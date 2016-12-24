@@ -383,3 +383,20 @@ footer a:hover {
 }
 
 /* 返回顶部 end */
+
+/* 阅读全文 start */
+.read-all{
+    font-size: 14px;
+    color: #666;
+    background: none;
+    border: none;
+    border-bottom: 2px solid #666;
+    transition-property: border;
+    margin-top: 30px;
+}
+
+.read-all a:hover{
+    color: #666;
+    text-decoration: none;
+}
+/* 阅读全文 end */
