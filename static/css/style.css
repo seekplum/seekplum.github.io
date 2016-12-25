@@ -275,6 +275,7 @@ embed, object, iframe {
 }
 
 footer {
+    margin-left: 100px;
     text-align: center;
     display: block;
     border-top: 1px dashed #CCC;

@@ -15,4 +15,5 @@ comments: no
 * 邮箱：[{{ site.email }}](mailto:{{ site.email }})
 * GitHub : [http://github.com/{{ site.hub }}](http://github.com/{{ site.hub }})
 
+[![知乎](https://static.zhihu.com/static/favicon.ico)](https://www.zhihu.com/people/huang-jian-dong-87/activities) [![github](http://www.github.com/favicon.ico)](https://github.com/hmbd)
 [![新浪微博](http://service.t.sina.com.cn/widget/qmd/{{ site.weibo }}/f78fbcd2/1.png)](http://weibo.com/u/{{ site.weibo }})
