@@ -401,3 +401,11 @@ footer a:hover {
     text-decoration: none;
 }
 /* 阅读全文 end */
+
+/* 鼠标悬停目录 start */
+
+li:hover{
+    background: #eee;
+}
+
+/* 鼠标悬停目录 end */
