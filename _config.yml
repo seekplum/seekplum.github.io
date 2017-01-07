@@ -2,7 +2,7 @@ permalink: /:title/
 url: hmbd.github.io
 highlighter: rouge
 gems: [jekyll-paginate]
-paginate: 100
+paginate: 20 # 每页显示篇数
 paginate_path: "page:num"
 name: 踏雪寻梅
 description: 踏雪寻梅 | Stop talking, start doing.
