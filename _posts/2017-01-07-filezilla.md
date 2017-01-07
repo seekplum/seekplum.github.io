@@ -1,85 +1,16 @@
 ---
 layout: post
-title:  redis相关操作
-categories: 插件
-tags: redis
-thread: redis
+title:  filezilla服务器
+categories: 软件
+tags: ftp, 服务器
+thread: ftp
 ---
+## 安装filezilla
+> sudo apt-get install filezilla
 
-## 安装
-[下载地址](http://download.redis.io/releases/)
-```
-sudo apt-get update
-sudo apt-get install redis-server
-启动 Redis
-redis-server
-在新开终端窗口，查看 redis 是否启动？
-redis-cli
-以上命令将打开以下终端：
-redis 127.0.0.1:6379>
-127.0.0.1 是本机 IP ，6379 是 redis 服务端口。现在我们输入 PING 命令。
-redis 127.0.0.1:6379> ping
-PONG
-以上说明我们已经成功安装了redis。
-```
-## 设置密码
-## 修改配置文件
-```
-Redis的配置文件默认在/etc/redis.conf，找到如下行：
-#requirepass foobared
+> ssh 连接服务器 默认端口为 22
 
-去掉前面的注释，并修改为所需要的密码：
-requirepass myPassword
-```
-### 重启Redis
-```
-如果Redis已经配置为service服务，可以通过以下方式重启：
-service redis restart
-
-如果Redis没有配置为service服务，可以通过以下方式重启：
-/usr/local/bin/redis-cli shutdown
-/usr/local/bin/redis-server /etc/redis.conf
-```
-### 登录验证
-
-> 设置Redis认证密码后，客户端登录时需要使用-a参数输入认证密码，不添加该参数虽然也可以登录成功，但是没有任何操作权限。如下：
-```
-$ ./redis-cli -h 127.0.0.1 -p 6379
-127.0.0.1:6379> keys *
-(error) NOAUTH Authentication required.
-```
-> 使用密码认证登录，并验证操作权限：
-```
-$ ./redis-cli -h 127.0.0.1 -p 6379 -a myPassword
-127.0.0.1:6379> config get requirepass
-1) "requirepass"
-2) "myPassword"
-看到类似上面的输出，说明Reids密码认证配置成功。
-```
-> 除了按上面的方式在登录时，使用-a参数输入登录密码外。也可以不指定，在连接后进行验证：
-```
-$ ./redis-cli -h 127.0.0.1 -p 6379
-127.0.0.1:6379> auth myPassword
-OK
-127.0.0.1:6379> config get requirepass
-1) "requirepass"
-2) "myPassword"
-127.0.0.1:6379>
-```
-### 在命令行客户端配置密码
-> 前面介绍了通过redis.conf配置密码，这种配置方式需要重新启动Redis。也可以通命令行客户端配置密码，这种配置方式不用重新启动Redis。配置方式如下：
-```
-127.0.0.1:6379> config set requirepass newPassword
-OK
-127.0.0.1:6379> config get requirepass
-1) "requirepass"
-2) "newPassword"
-```
-**注意：使用命令行客户端配置密码，重启Redis后仍然会使用redis.conf配置文件中的密码。**
-
-### 在Redis集群中使用认证密码
-
-> 如果Redis服务器，使用了集群。除了在master中配置密码外，也需要在slave中进行相应配置。在slave的配置文件中找到如下行，去掉注释并修改与master相同的密码即可：
-```
-# masterauth master-password
-```
+## 装语言包
+> sudo apt-get install filezilla-locales
+> 安装完语言包就可以支持中文了
+> 安装成功后，如果出现./filezilla/filezilla.xml、./filezilla/layout.xml等文件不允许些或者说不能够读，可能是权限问题。然后，把这些文件赋予合适的权限就成功了。
