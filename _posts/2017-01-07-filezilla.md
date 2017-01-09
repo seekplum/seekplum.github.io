@@ -2,7 +2,7 @@
 layout: post
 title:  filezilla服务器
 categories: 软件
-tags: ftp, 服务器
+tags: ftp 服务器
 thread: ftp
 ---
 ## 安装filezilla

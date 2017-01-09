@@ -2,7 +2,7 @@
 layout: post
 title:  制作python虚拟环境包
 categories: virtualenv
-tags: virtualenv, env
+tags: virtualenv env
 thread: virtualenv
 ---
 ## Centos换源
