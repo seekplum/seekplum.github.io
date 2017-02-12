@@ -20,8 +20,8 @@ about: "弱菜一枚"
 #pygments: true
 
 # 2
-#highlighter: rouge
-#markdown: kramdown
-#kramdown:
-#    syntax_highlighter: rouge
-#    extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
+highlighter: rouge
+markdown: kramdown
+kramdown:
+    syntax_highlighter: rouge
+    extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
