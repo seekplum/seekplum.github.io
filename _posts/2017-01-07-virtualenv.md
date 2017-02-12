@@ -139,6 +139,6 @@ pyping==0.0.4
 
 
 ### 安装第三放模块包
-> pip install -r base.txt
-> pip instlal -r dbpool.txt
-> pip install -r qdata-web.txt
+
+> pip install -r xxx.txt
+

@@ -15,8 +15,11 @@ safe: false
 about: "弱菜一枚"
 
 # makrdown
-markdown: redcarpet
-pygments: true
+# 1
+#markdown: redcarpet
+#pygments: true
+
+# 2
 #highlighter: rouge
 #markdown: kramdown
 #kramdown:
