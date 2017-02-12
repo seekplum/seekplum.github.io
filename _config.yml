@@ -13,3 +13,9 @@ weibo: 3720825601 # 微博用户主页显示的
 hub: hmbd # github名字
 safe: false
 about: "弱菜一枚"
+
+highlighter: rouge
+markdown: kramdown
+kramdown:
+    syntax_highlighter: rouge
+    extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
