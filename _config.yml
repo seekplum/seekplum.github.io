@@ -14,8 +14,11 @@ hub: hmbd # github名字
 safe: false
 about: "弱菜一枚"
 
-highlighter: rouge
-markdown: kramdown
-kramdown:
-    syntax_highlighter: rouge
-    extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
+# makrdown
+markdown: redcarpet
+pygments: true
+#highlighter: rouge
+#markdown: kramdown
+#kramdown:
+#    syntax_highlighter: rouge
+#    extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
