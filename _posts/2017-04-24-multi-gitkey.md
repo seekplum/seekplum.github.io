@@ -18,6 +18,11 @@ HostName github.com   // 主机所在域名或IP
 User git  // 用户名称
 IdentityFile C:/Users/username/.ssh/id_rsa_second  // 私钥路径
 ```
+## 修改项目的远程主机地址
+* 查看远程主机地址
+> git remote -v
+* 修改远程主机地址
+> git remote set-url origin git@xxx.github.com:xx/xx.git
 
 ## 添加公钥进行使用
 * > ssh-add -l
