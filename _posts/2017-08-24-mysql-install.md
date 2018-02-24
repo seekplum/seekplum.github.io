@@ -5,6 +5,18 @@ categories: 插件
 tags: mysql
 thread: mysql
 ---
+## mysql自动安装
+
+```
+sudo apt-get install mysql-server mysql-client-------------安装mysql，中间会让设置密码，用户已经默认是root
+service mysql start---------------------------启动mysql服务
+rpm -q mysql----------------------------------查询mysql是否正常安装
+/etc/rc.d/init.d/mysqld start-----------------直接启动
+chkconfig mysqld on---------------------------设置mysql开机启动
+chmod 755 /etc/rc.d/init.d/mysqld-------------修改mysqld执行权限
+service mysqld start--------------------------启动mysql服务
+service mysqld status-------------------------查看mysql状态
+```
 
 ## **mysql安装方法**
 > 注意：my.cnf中`innodb_buffer_pool_size` 参数，应该根据内存大小进行适当调整，一般设置为系统内存的50%~70%。修改这个值，需要重启mysqld服务。
