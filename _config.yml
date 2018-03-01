@@ -1,5 +1,5 @@
 permalink: /:title/
-url: hmbd.github.io
+url: seekplum.github.io
 highlighter: rouge
 gems: [jekyll-paginate]
 paginate: 20 # 每页显示篇数
@@ -8,9 +8,9 @@ name: 踏雪寻梅
 description: 踏雪寻梅 | Stop talking, start doing.
 author: HJD
 email: 1131909224m@gmail.com
-duoshuo: hmbd # 多说评论功能
+duoshuo: seekplum # 多说评论功能
 weibo: 3720825601 # 微博用户主页显示的
-hub: hmbd # github名字
+hub: seekplum # github名字
 safe: false
 about: "弱菜一枚"
 

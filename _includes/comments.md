@@ -5,7 +5,7 @@
 	<div class="ds-thread" />
 	{% endif %}	
 	<script type="text/javascript">
-	var duoshuoQuery = {short_name: "hmbd"};
+	var duoshuoQuery = {short_name: "seekplum"};
 	(function() {
 		var ds = document.createElement('script');
 		ds.type = 'text/javascript';ds.async = true;
