@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  在类中函数使用装饰器
+title:  对实例方法使用装饰器
 tags: python decorator
 thread: decorator
 ---
