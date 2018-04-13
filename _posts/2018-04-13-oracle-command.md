@@ -127,6 +127,11 @@ grant sysasm to asmsnmp; // 增加 asm 权限
 > crsctl stat res -t
 > crsctl stat res -t -init
 
+
+* 查询更新失效对象
+> select count(*) from  all_objects where status = 'INVALID';
+
+
 ## 磁盘组操作
 * 查询磁盘组路径
 ```
@@ -213,6 +218,15 @@ select dg.name,
                 order by dg.name, d.FAILGROUP, d.name;
 
 * 创建磁盘组
+> 最好选择三块大小一致的SSD来建，这样比较快，如果选择HDD会比较慢
+
+
+|冗余模式|OCRvoting disk|failgroup|
+---|---|---
+|Nomal | 3块大小一致的盘|2组（从不通的节点各选几块磁盘）|
+|High | 5块盘大小一致的盘 |3组（从不通的节点各选几块磁盘）|
+|External | 1块盘 |不需要|
+
 > CREATE DISKGROUP DATADG normal REDUNDANCY 
 failgroup DATAFG1 disk '/dev/qdata/mpath-s02.3264.01.P0B00S16'   
 failgroup DATAFG2 disk '/dev/qdata/mpath-s03.3262.01.S0P2IX3B6'   
