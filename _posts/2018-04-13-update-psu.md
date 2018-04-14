@@ -1,16 +1,9 @@
 ---
 layout: post
-title:  ubuntu相关软件
-tags: ubuntu soft
-thread: soft
+title:  更新PSU
+tags: linux psu
+thread: psu
 ---
-
-# 更新PSU
-
-标签： oracle
-
----
-
 ### 适用范围
 ```
 本文档基于PSU 11.2.0.4.8编写，理论上11.2.0.4版本之后都可参照此文档
@@ -25,6 +18,7 @@ Quick Reference to Patch Numbers for Database PSU, SPU(CPU), Bundle Patches and 
 ```
 
 安装前准备
+
 ```
 2.2	获取最新PSU信息
 参照MOS文档1454618.1来了解最新的PSU信息。一名专业的DBA应该及时跟进ORACLE官方发布的PSU信息，了解各版本PSU 所fix的数据库BUG。
@@ -126,7 +120,9 @@ export ORACLE_UNQNAME=wxh
 emctl stop dbconsole  
 
 ```
+
 安装PSU（两种模式）
+
 ```
 2.8	Opatch auto方式
 Opatch auto安装PSU方式以滚动方式进行安装，每次只能安装一个节点，opatch auto安装过程中，运行opatch auto命令的节点会临时不可用。
@@ -271,7 +267,9 @@ Oracle用户执行：
 参考opatch auto方式检查安装结果部分
 
 ```
+
 回滚卸载PSU
+
 ```
 2.10	Opatch auto回退
 软件回退
@@ -324,6 +322,7 @@ oracle用户执行：
 ```
 
 只打DB的PSU
+
 ```
 2.12	安装前准备
 参考本章开始章节

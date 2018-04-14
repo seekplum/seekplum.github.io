@@ -5,7 +5,9 @@ tags: oracle user asm grid
 thread: oraclecommand
 ---
 ## 用户赋权限
+
 * 数据库dbsnmp用户创建
+
 ```
 su - oracle
 export ORACLE_SID=qdeploy1
@@ -15,6 +17,7 @@ alter user dbsnmp account unlock;
 ```
 
 * 创建视图
+
 ```
 CREATE VIEW x$_ksppcv AS SELECT * FROM x$ksppcv;
 GRANT SELECT ON x$_ksppcv TO dbsnmp;
@@ -23,22 +26,28 @@ GRANT SELECT ON x$_ksppi TO dbsnmp;
 ```
 
 * 给用户赋权限
+
 > grant sysdba to dbsnmp;
 
 * 删除用户
+
 > drop user dbsnmp;
 
 ### ASM asmsnmp用户创建
+
 * 创建密码文件(所有节点执行)：
+
 ```
 su - grid
 orapwd file=$ORACLE_HOME/dbs/orapw$ORACLE_SID password=oracle
 ```
 
 * 查询已有的用户
+
 > select * from v$pwfile_users;
 
 * 设置asmsnmp用户的密码
+
 ```
 su - grid
 export ORACLE_SID=+ASM1
@@ -50,90 +59,111 @@ grant sysasm to asmsnmp; // 增加 asm 权限
 ```
 
 * 检查用户是否创建成功
+
 > sqlplus asmsnmp/asmsnmp as sysasm
 
 ## 环境变量
-
 > su - grid -c 'echo DBPOOLCMDBEGIN; export ORACLE_HOME=/opt/grid/products/11.2.0&&export PATH=\$PATH:\$ORACLE_HOME/bin:\$ORACLE_HOME/oracm/bin:\$ORACLE_HOME/OPatch:\$ORACLE_HOME/jdbc&&export LD_LIBRARY_PATH=\$ORACLE_HOME/lib:\$ORACLE_HOME/ctx/lib:\$ORACLE_HOME/oracm/lib&&export CLASSPATH=\$ORACLE_HOME/JRE:\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib:\$ORACLE_HOME/network/jlib:$ORACLE_HOME/jdbc/lib; "CMD 命令"; echo DBPOOLCMDEND'
 
 ## Grid相关查询
-
 * 获取集群中所有的节点
+
 > olsnodes
 
 * 获取集群名字
+
 > olsnodes -c
 
 * 获取节点对应的 ip
+
 > cat /etc/hosts
 
 * 节点对应的 vip
+
 > olsnodes -i
 
 * 查询crs状态
+
 > crsctl check cluster -all
 
 ## DB相关查询
-
 * 查询cpu,sga,pga大小
+
 > select b.INSTANCE_NAME,name,value from gv\$parameter a,gv\$instance b where a.INST_ID=b.INSTANCE_NUMBER and a.name in ('sga_target','pga_aggregate_target','cpu_count')
 
 * 查询instance状态
+
 > srvctl status database -d test -v
 
 * 启动/停止实例
+
 > srvctl stop instance -d test -i test1
 
 * 查询所有的db
+
 > srvctl config database
 
 * 查询DB的信息
+
 > crsctl stat res ora.test.db -v | grep com
 
 * 启动/停止db
+
 > srvctl stop database -d test
 
-
 * 在线迁移
+
 > 只针对RAC One Node类型
 
 * 查看磁盘状态
+
 > crsctl status res -t
 > crsctl status res -t -init
 
 * 查看监听状态
+
 > lsnrctl status
 
 * 启动监听
+
 > srvctl start scan_listener
 
 * 查询scan信息
+
 > srvctl config scan
 
 * 注册监听
+
 > alter system register;
 
 * 查询监听端口
+
 > srvctl config listener
 
 * crs启动日志
+
 > clog
 
 * 启动crs
+
 > crsctl start crs
 > crsctl stop crs -f
 
 * 查看crs状态
+
 > crsctl stat res -t
 > crsctl stat res -t -init
 
 
 * 查询更新失效对象
+
 > select count(*) from  all_objects where status = 'INVALID';
 
 
 ## 磁盘组操作
+
 * 查询磁盘组路径
+
 ```
 set linesize 200
 set pagesize 400
@@ -162,7 +192,9 @@ where dg.group_number = d.group_number and
        dg.group_number <> 0
 order by dg.name, d.FAILGROUP, d.name;
 ```
+
 * 查询磁盘组状态
+
 ```
 set linesize 9999
 set pagesize 9999
@@ -191,7 +223,9 @@ select dg.group_number,
       NVL(op.EST_MINUTES, 0) as "TIME_LEFT"
    from v$asm_diskgroup dg left outer join v$asm_operation op on dg.group_number = op.group_number;
 ```
+
 * 查询磁盘属性
+
 ```
 set linesize 200
 set pagesize 400
@@ -208,6 +242,7 @@ select dg.name,
 ```
 
 * 查询用到的磁盘路径
+
 > set pagesize 9999
 > set linesize 9999
 > select dg.name AS DG_NAME,
@@ -218,8 +253,8 @@ select dg.name,
                 order by dg.name, d.FAILGROUP, d.name;
 
 * 创建磁盘组
-> 最好选择三块大小一致的SSD来建，这样比较快，如果选择HDD会比较慢
 
+> 最好选择三块大小一致的SSD来建，这样比较快，如果选择HDD会比较慢
 
 |冗余模式|OCRvoting disk|failgroup|
 ---|---|---
@@ -237,29 +272,37 @@ attribute 'au_size'='2M';
 > alter diskgroup DATADG set attribute 'disk_repair_time'='36h';
 
 * 删除asm磁盘
+
 > drop diskgroup testdg;
 
 * 强制删除asm磁盘组
+
 > drop diskgroup testdg force including contents;
 
 * online 磁盘
+
 > select name from v$asm_diskgroup;
 > asmcmd online -a -G TESTDG;
 
 * offline磁盘
+
 > select name from v$asm_disk; 
 > asmcmd offline -G TESTDG -D TESTDG_0001
 
 ## 查询磁盘组
 * 查询所有磁盘组
+
 > lsdg
 
 * 查询磁盘组用的磁盘
+
 > lsdsk -k
 
 ## DB操作
 * 创建DB
+
 > dbca -silent -createDatabase -templateName General_Purpose.dbc -gdbName qdeploy -nodelist qdata-com41-dev,qdata-com42-dev -sid qdeploy -sysPassword oracle -systemPassword oracle -storageType ASM -diskGroupName DATADG -characterSet AL32UTF8 -nationalCharacterSet AL16UTF16 -databaseType OLTP -redoLogFileSize 1024 -initparams  sga_target=1945,pga_aggregate_target=307,db_create_online_log_dest_1=+DATADG,resource_manager_plan=default_plan
 
 * 删除db
+
 > dbca -silent -deleteDatabase -sourceDB test -sysDBAUserName sys -sysDBAPassword oracle

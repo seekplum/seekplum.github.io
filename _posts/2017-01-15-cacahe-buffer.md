@@ -6,6 +6,7 @@ tags: cache buffer
 thread: cache-buffer
 ---
 ![](/static/images/cache-buffer/free-m.png)
+
 > 使用`total1`、`used1`、`free1`、`used2`、`free2` 等名称来代表上面统计数据的各值，1、2 分别代表第一行和第二行的数据。
 
 * `total1`:表示物理内存总量

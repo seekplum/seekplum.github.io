@@ -5,7 +5,9 @@ tags: mysql install update
 thread: mysqlinstallupdate
 ---
 ## 脚本内容
+
 * mysql_maintain.sh
+
 ```bash
 #!/bin/bash
 

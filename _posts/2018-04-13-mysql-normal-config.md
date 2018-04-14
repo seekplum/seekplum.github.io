@@ -10,14 +10,15 @@ thread: mysqlinstall
  * 升级：第2 小节
 
 ### 1、安装部署
-* 以下安装过程中的如下变量在各个产品线中需要自行调整，通过安装与升级脚本进行传参：
- * \$product_name为各个产品的名称，如：seekplum
- * \$user_name为各个产品线使用的启动MySQL的用户名，如：hjd
- * \$packages_name为待安装的软件包名称前缀(去掉.tar.gz)
- * \$admin_user为个产品线中使用的超级管理员账号名
- * \$admin_pass为各个产品线中使用的MySQL 超级管理员账号密码
+* 以下安装过程中的如下变量需要自行调整，通过安装与升级脚本进行传参：
+    * \$product_name为各个产品的名称，如：seekplum
+    * \$user_name为各个产品线使用的启动MySQL的用户名，如：hjd
+    * \$packages_name为待安装的软件包名称前缀(去掉.tar.gz)
+    * \$admin_user为个产品线中使用的超级管理员账号名
+    * \$admin_pass为各个产品线中使用的MySQL 超级管理员账号密码
 
 * 使用脚本安装时，带上如上变量，如：
+
 ```
 # 安装
 sh mysql_maintain.sh --install $product_name $user_name $packages_name $admin_user $admin_pass
@@ -28,23 +29,27 @@ sh mysql_maintain.sh --update $product_name $user_name $packages_name
 
 #### 1.1. 安装
 * 创建用户
+
 ```
 # 如果启动MySQL的用户事先不存在，则创建
 useradd $user_name
 ```
 
 * 创建基本的包目录
+
 ```
 mkdir -p /home/${user_name}/${product_name}/packages/
 ```
 
 * 解压压缩包
+
 ```
 # 压缩包统一上传到/tmp目录下
 tar zxvf /tmp/${packages_name}.tar.gz -C /home/${user_name}/${product_name}/packages/
 ```
 
 * 对basedir路径做软链
+
 ```
 # 对前一次的软链进行解链
 unlink /home/${user_name}/${product_name}/packages/mysql
@@ -57,6 +62,7 @@ ln -s /home/${user_name}/${product_name}/packages/${packages_name} /home/${user_
 ```
 
 * 创建datadir等目录，创建错误日志文件
+
 ```
 rm -rf /home/${user_name}/${product_name}/packages/data/*
 mkdir -p /home/${user_name}/${product_name}/packages/data/{innodb_log,binlog,innodb_ts,log,mydata,relaylog,slowlog,sock,tmpdir,undo,conf}
@@ -64,11 +70,13 @@ touch /home/${user_name}/${product_name}/packages/data/log/error.log
 ```
 
 * 修改文件夹权限为我们创建的MySQL用户
+
 ```
 chown -R ${user_name}:${user_name} /home/${user_name}/${product_name}/packages/{mysql,data}
 ```
 
 * 把mysql做成服务,并设置自启动
+
 ```
 rm -f /etc/init.d/mysql
 cp /home/${user_name}/${product_name}/packages/mysql/support-files/mysql.server /etc/init.d/mysql
@@ -78,6 +86,7 @@ chkconfig --level 2345 mysql on
 ```
 
 * 设置mysql动态连接
+
 ```
 echo /home/${user_name}/${product_name}/packages/mysql/lib > /etc/ld.so.conf.d/mysql-qdata.conf
 ldconfig
@@ -85,6 +94,7 @@ ldconfig
 
 #### 1.2. 配置参数
 * 计算innodb_buffer_pool_size大小
+
 ```
 # 预设为物理内存的40%，计算结果值单位为MB
 let "_buffer_pool_size=$(free -g |grep Mem |awk '{print $2}') * 1000 / 100 * 40";echo $_buffer_pool_size
@@ -92,6 +102,7 @@ let "_buffer_pool_size=($_buffer_pool_size / 128 + 1)*128"
 ```
 
 * 配置文件模板
+
 ```
 cat > /home/${user_name}/${product_name}/packages/data/conf/my.cnf  << EOF
 [client]
@@ -255,6 +266,7 @@ EOF
 ```
 
 * 对配置文件做软链
+
 ```
 # 先删除软链
 unlink /etc/my.cnf &> /dev/null
@@ -265,17 +277,20 @@ ln -s /home/${user_name}/${product_name}/packages/data/conf/my.cnf  /etc/my.cnf
 ```
 
 * 执行初始化
+
 ```
 /home/${user_name}/${product_name}/packages/mysql/bin/mysqld  --defaults-file=/home/${user_name}/${product_name}/packages/data/conf/my.cnf --initialize-insecure
 ```
 
 * 启动
+
 ```
 service mysql start
 service mysql status
 ```
 
 * 修改MySQL 超级管理员账号密码
+
 ```
 echo |/home/${user_name}/${product_name}/packages/mysql/bin/mysql -uroot -S /home/${user_name}/${product_name}/packages/data/sock/mysql.sock -e "delete from mysql.user; 
 delete from mysql.db;
@@ -285,27 +300,32 @@ flush privileges;"
 ```
 
 * 创建程序用账号
+
 ```
 /home/${user_name}/${product_name}/packages/mysql/bin/mysql -uroot -p'letsg0' -S /home/${user_name}/${product_name}/packages/data/sock/mysql.sock -e "grant xxxx;"
 ```
 
 ### 2、升级
 * 检查上一版本的sql_mode参数，并保存为一个变量，后续需要使用
+
 ```
 sql_mode=`/home/${user_name}/${product_name}/packages/mysql/bin/mysql  --defaults-file=/home/${user_name}/${product_name}/packages/data/conf/my.cnf -u${admin_user} -p${admin_pass} -e "show variables like 'sql_mode'" |tail -1 |awk '{print $2}'`
 ```
 
 * 动态修改innodb_fast_shutdown=0，以执行full purge和插入缓冲合并等操作，以干净的方式关闭MySQL
+
 ```
 /home/${user_name}/${product_name}/packages/mysql/bin/mysql  --defaults-file=/home/${user_name}/${product_name}/packages/data/conf/my.cnf -u${admin_user} -p${admin_pass} -e "set global innodb_fast_shutdown=0;"
 ```
 
 * 正常关闭mysql
+
 ```
 service mysql stop
 ```
 
 * my.cnf中添加skip_grant_tables参数
+
 ```
 # 可使用如下shell实现
 if ! grep -i '^skip_grant_tables$' /home/${user_name}/${product_name}/packages/data/conf/my.cnf > /dev/null ;then
@@ -314,12 +334,14 @@ fi
 ```
 
 * 解压新版本的二进制包
+
 ```
 # 压缩包统一上传到/tmp目录下
 tar zxvf /tmp/${packages_name}.tar.gz -C /home/${user_name}/${product_name}/packages/
 ```
 
 * 替换旧版basedir软链
+
 ```
 # 对之前的软链进行解链
 unlink /home/${user_name}/${product_name}/packages/mysql
@@ -329,11 +351,13 @@ ln -s /home/${user_name}/${product_name}/packages/${packages_name} /home/${user_
 ```
 
 * 备份数据目录
+
 ```
 cp -ar /home/${user_name}/${product_name}/packages/data /home/${user_name}/${product_name}/packages/data.bak_`date +%F_%H_%M_%S`
 ```
 
 * 启动并升级MySQL
+
 ```
 # 启动
 service mysql start
@@ -343,6 +367,7 @@ service mysql start
 ```
 
 * 注释掉skip_grant_tables选项，增加sql_mode选项
+
 ```
 # 注释掉skip_grant_tables选项
 sed -i 's/^\(skip_grant_tables\)/#\1/g' /home/${user_name}/${product_name}/packages/data/conf/my.cnf
@@ -352,6 +377,7 @@ echo "sql_mode=${sql_mode}" >> /home/${user_name}/${product_name}/packages/data/
 ```
 
 * 重启mysql
+
 ```
 service mysql restart
 service mysql status

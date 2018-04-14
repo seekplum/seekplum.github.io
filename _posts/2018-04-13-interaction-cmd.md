@@ -5,6 +5,7 @@ tags: python interaction cmd
 thread: interaction
 ---
 ## 本地执行
+
 ### 精确输入
 ```python
 #!/usr/bin/env python
@@ -25,7 +26,9 @@ print child.before
 child.sendline("q")
 print "结束"
 ```
+
 ### 模糊输入
+
 ```python
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -38,7 +41,9 @@ f_input = os.popen(cmd, "w")
 f_input.write("8\n1")
 print "结束"
 ```
+
 * test2.py
+
 ```
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

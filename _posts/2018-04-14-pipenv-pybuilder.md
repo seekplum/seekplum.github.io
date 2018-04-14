@@ -12,66 +12,92 @@ thread: pipenv
 > requests 库的作者 Kenneth Reitz 编写的一个工具，目标是合并 Pipfile、pip、virtualenv 到同一个命令行工具中，实际使用中类似nodejs的依赖包管理工具npm。
 
 ### 使用
+
 * 普通安装
+
 作者推荐在python3下边安装，会提高与virtualenv的兼容性。
+
 > pip install pipenv
 
 * 用户模式安装
+
 **为防止和系统python库产生影响，可使用此种方案安装。**
+
 pip 默认安装包路径为`/usr/local/lib/python2.7/site-packages`。此模式下，pip安装包保存路径为用户库路径,一般为`/home/hjd/.local/lib/python2.7/site-packages/`, 可使用命令`python -m site --user-site` 具体查看。如果在安装后你的shell中pipenv不可用，你需要把用户库的二进制目录`/home/hjd/.local/bin/`添加到你的PATH中。
+
 > pip install --user pipenv
 
 * 添加shell补齐
+
 如果使用的是bash, 可添加下面语句到.bashrc或.bash_profile
+
 > eval "$(pipenv --completion)"
 
 * 初始化虚拟环境
+
 通过Pipflie.lock把包都装好
+
 > mkdir /tmp/test-env
 > cd /tmp/test-env && pipenv install
 
 * 安装指定包
+
 > pipenv install requests
 
 * 查看已安装模块
+
 > pipenv graph
 
 * 只安装开发环境
-可通过以下命令，仅安装在开发环境,
+
+可通过以下命令，仅安装在开发环境
+
 > pipenv install --dev requests --three
 
 * 通过 requirements.txt 安装
+
 > pipenv install -r requirements.txt
 
 * 生成requirements 文件
+
 > pipenv lock -r  > requirements.txt
 > pipenv lock -r --dev > requirements.txt   # 针对开发环境的包
 
 * 生成lockfile
+
 > pipenv lock
 
 * 运行虚拟环境
+
 可使用以下命令来运行项目：
+
 > pipenv run python xxx.py
 
 * 进入虚拟环境
+
 > pipenv shell
 > pipenv shell --anyway
 
 * 退出虚拟环境
+
 > deactivate
 
 * 删除虚拟环境
+
 > pipenv --rm
 
 ### 运行pyb异常
+
 * pkg_resources.DistributionNotFound: The 'pipenv==11.0.2' distribution was not found and is required by the application
+
 > 在pip2 中安装出现, pip3重新安装后正常
 
 * pkg_resources.DistributionNotFound: The 'pew>=0.1.26' distribution was not found and is required by pipenv
+
 > 需要安装下面几个模块,才能正常使用
 
 **注意: 以下几个包直接通过pip进行安装都无法成功,需要在下载源码进行安装**
+
 ```
 pew
 shutilwhich
@@ -80,25 +106,33 @@ virtualenv-clone
 ```
 
 ###  构建运行环境
+
 * 前提
+
 > 在此之前需要通过 pipenv install -r requiresments.txt 把依赖的包装好,会生成Pipfile, Pipfile.lock两个文件
+
 * 需要安装[pybuilder](http://pybuilder.github.io/)
+
 ```shell
 pip install pybuilder
 ```
 
 * 克隆样本代码
+
 ```shell
 git clone git@gitlab.woqutech.com:qdata/qdata-pipenv.git
 ```
 
 * 进行构建
+
 > 依赖 Pipfile, Pipfile.lock两个版本控制文件和 build.py 脚本
+
 ```shell
 cd qdata-pipenv && pyb
 ```
 
 * 激活虚拟环境，激活有2种方式
+
 ```shell
 # 直接激活
 . .venv/bin/activate
@@ -107,10 +141,13 @@ pipenv shell
 ```
 
 * 运行我们的应用
+
 ```shell
 cd src && python server.py
 ```
+
 ### 发生了什么
+
 > 相比较构建之前，多了一个`.venv`虚拟环境目录。
 
 * 构建具体做了以下2件事情：
@@ -118,21 +155,24 @@ cd src && python server.py
     - 初始化我们项目的虚拟环境(路径在项目根目录底下的`.venv`目录底下)
 
 ### 管理项目依赖
+
 * 安装包
+
 ```shell
 pipenv install tornado
 ```
 
 * 卸载包
+
 ```shell
 pipenv uninstall tornado
 ```
 
 * 更新包
+
 ```shell
 pipenv update tornado
 ```
-
 
 ### 参考
 [Stop everything! Start using Pipenv!](https://bryson3gps.wordpress.com/2017/11/08/stop-everything-start-using-pipenv/)

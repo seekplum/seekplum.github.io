@@ -30,6 +30,7 @@ stdout_logfile = /etc/supervisor/log/log.log
 
 ### 使用浏览器来管理
 > 使用浏览器来管理，只需要注释掉如下几行就可以了。
+
 ```
 ;[inet_http_server]         ; inet (TCP) server disabled by default
 ;port=127.0.0.1:9001        ; (ip_address:port specifier, *:port for ;all iface)
@@ -73,6 +74,7 @@ supervisorctl update
 ```
 
 ## 开机自启动
+
 ### 编辑脚本
 ```
 #!/bin/sh

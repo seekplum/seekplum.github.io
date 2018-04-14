@@ -6,22 +6,30 @@ thread: sqlalchemy
 ---
 
 ## group_by
+
 ### OperationalError
 - 错误详情
+
 ```
 OperationalError: (_mysql_exceptions.OperationalError) (1055, "Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'qdata_cloud.drill_base.create_time' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by") [SQL: xxx]
 ```
+
 - 原因：
+
 sql_mode使用的是默认值，而之前使用的mysql配置文件中sql_mode="",由于这个特性使在使用group_by时出现报错，默认的sql-mode里的ONLY_FULL_GROUP_BY字段导致不能直接查询group_by包裹的之外的字段，如下使用，只查询group_by的字段可以正常使用，但是同时查询create_time和count字段会出现错误：
+
 ```python
 # 正确
 session.query(Table.count).group_by(Table.count).all()
 ```
+
 ```python
 # 报错
 session.query(Table.create_time,Table.count).group_by(Table.count).all()
 ```
+
 - 解决办法：
+
 > 不建议sql_mode为空，因为会有数据丢失的风险，故推荐使用**第二种**解决方法。
 
 	1. 修改sql_mode
@@ -48,12 +56,14 @@ session.query(Table.create_time,Table.count).group_by(Table.count).all()
 
 
 ## order_by
+
 ### sqlalchemy.exc.InterfaceError
+
 * 错误详情
+
 ```
 sqlalchemy.exc.InterfaceError: (_mysql_exceptions.InterfaceError) (-1, 'error totally whack') 
 ```
-
 
 ```
 from sqlalchemy import desc

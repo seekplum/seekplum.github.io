@@ -23,6 +23,7 @@ thread: multiinheritance
 class C(A, B):
     pass
 ```
+
 ## 示例代码
 ```python
 #!/usr/bin/env python

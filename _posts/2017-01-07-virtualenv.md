@@ -14,6 +14,7 @@ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
 yum clean all
 yum makecache
 ```
+
 > **制作的路径和使用路径必须一致(在/home/hjd/hjd-env下制作， 那拷贝到其他地方使用，使用路径也必须是/home/hjd/hjd-env)**
 
 > yum install zlib* openssl openssl-devel # 相关依赖，此操作先跳过，根据报错进行安装依赖
@@ -41,6 +42,7 @@ mkdir /home/hjd/hjd-web-env
 ./configure --prefix=/home/hjd/hjd-web-env/python27/ --with-zlib --enable-loadable-sqlite-extensions
 make && make install
 ~~~
+
 ## 创建虚拟环境包,依赖我们刚刚安装的python2.7
 
 > virtualenv --no-site-packages --distribute --python=/home/hjd/hjd-web-env/python27/bin/python /home/hjd/hjd-web-env/
@@ -135,10 +137,8 @@ pyping==0.0.4
 解决方法： 0.0.4 不存在，安装pyping==0.0.5即可
 ~~~
 
-# 进入虚拟环境，安装第三方模块包和supervisor
-
+## 进入虚拟环境，安装第三方模块包和supervisor
 
 ### 安装第三放模块包
-
 > pip install -r xxx.txt
 

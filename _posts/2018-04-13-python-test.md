@@ -5,8 +5,10 @@ tags: python pytest
 thread: pythonpytest
 ---
 ## Pytest[官方文档地址](https://docs.pytest.org/en/latest/)
+
 ### 安装
 * pip安装
+
 > pip install pytest 
 
 * [源码包地址](https://pypi.python.org/pypi/pytest)
@@ -19,19 +21,24 @@ thread: pythonpytest
 
 ### 测试函数
 * setup_module/teardown_module
+
 > 在所有测试用例执行之前和之后执行。
 
 * setup_function/teardown_function
+
 > 在每个测试用例之前和之后执行。
 
 ### 测试类
 * setup_class/teardown_class
+
 > 在当前测试类的开始与结束执行。
 
 * setup/treadown
+
 > 在每个测试方法开始与结束执行。
 
 * setup_method/teardown_method
+
 > 在每个测试方法开始与结束执行，与setup/treadown级别相同。
 
 ### 测试函数执行顺序
@@ -69,10 +76,14 @@ def test_one():
 > pytest  test_restore_prepare_media.py
 
 ### 在python代码中调用pytest
-> test/ 
-> ├── \__init__.py
-> ├── test_restore_prepare_media.py
-> └── test_main.py
+
+```
+test/
+├── __init__.py
+├── test_restore_prepare_media.py
+└── test_main.py
+```
+
 ```
 import pytest
 
@@ -84,8 +95,11 @@ if __name__ == '__main__':
     pytest.main("-q test_main.py")   # 指定测试文件
     pytest.main("~/pyse/pytest/")  # 指定测试目录
 ```
+
 ### 断言
+
 #### 断言异常抛出
+
 ```
 import pytest
 
@@ -94,6 +108,7 @@ def test_zero_division():
         1 / 0
 # 1/0的时候应该抛出ZeroDivisionError，否则用例失败，断言不通过
 ```
+
 #### 访问异常的具体信息
 ```
 def test_recursion_depth():
@@ -129,6 +144,7 @@ Failed: Expecting ZeroDivisionError
 场景： 我们需要判断用户的密码中包含简单密码，规则是这样的，密码必须至少6位，满足6位的话判断用户的密码不是password123或者password之类的弱密码。
 
 * 用户的信息文件`users.dev.json`
+
 ```json
 [
   {"name":"jack","password":"Iloverose"},
@@ -138,6 +154,7 @@ Failed: Expecting ZeroDivisionError
 ```
 
 * 测试文件`test_user_password.py`
+
 ```
 import pytest
 import json
@@ -156,6 +173,7 @@ class TestUserPassword(object):
             assert passwd != 'password', msg
             assert passwd != 'password123', msg
 ```
+
 > * 使用@pytest.fixture装饰器可以定义feature
 > * 在用例的参数中传递fixture的名称以便直接调用fixture，拿到fixture的返回值
 > * 3个assert是递进关系，前1个assert断言失败后，后面的assert是不会运行的，因此重要的assert放到前面
@@ -163,10 +181,13 @@ class TestUserPassword(object):
 > * 任何1个断言失败以后，for循环就会退出，所以上面的用例1次只能发现1条错误数据，换句话说任何1个assert失败后，用例就终止运行了
 
 * 查看用例文件中可用的fixtures
+
 > pytest --fixtures test_user_password.py
 
 * 数据清洗
+
 > 有时候我们需要在用例结束的时候去清理一些测试数据，或清除测试过程中创建的对象，我们可以使用下面的方式
+
 ```
 import smtplib
 import pytest
@@ -188,12 +209,15 @@ def smtp2(request):
     request.addfinalizer(fin)
     return smtp  # provide the fixture value
 ```
+
 * yield 关键字返回了fixture中实例化的对象smtp
 * module中的用例执行完成后smtp.close()方法会执行，无论用例的运行状态是怎么样的,都会执行
 
 #### 参数化fixture
 > 允许我们向fixture提供参数，参数可以是list，该list中有几条数据，fixture就会运行几次，相应的测试用例也会运行几次。
+
 **其中len(params)的值就是用例执行的次数**
+
 ```
 @pytest.fixture(scope="module",
                 params=["smtp.gmail.com", "mail.python.org"])
@@ -224,6 +248,7 @@ class TestUserPasswordWithParam(object):
 
 ### pytest.mark.parametrize
 > 可以让我们每次参数化fixture的时候传入多个参数。因此简单理解，我们可以把parametrize装饰器想象成是数据表格，有表头(test_input,expected)以及具体的数据。
+
 ```
 import pytest
 @pytest.mark.parametrize("test_input,expected", [
@@ -237,6 +262,7 @@ def test_eval(test_input, expected):
 
 
 ### 常用技巧
+
 #### 基础用法
 
 * [把命令行参数传入到用例](https://docs.pytest.org/en/latest/example/simple.html#pass-different-values-to-a-test-function-depending-on-command-line-options)
@@ -267,6 +293,7 @@ def test_eval(test_input, expected):
 
 
 ### 接口测试
+
 #### 需求分析
 
 ```
@@ -277,6 +304,7 @@ def test_eval(test_input, expected):
 ```
 
 * 实现代码
+
 ```
 import requests
 import pytest
@@ -314,8 +342,11 @@ class TestV2exApiWithExpectation(object):
 > pytest test_quick_start.py --junit-xml=report.xml
 
 ## Selenium
+
 ### 安装[驱动](http://npm.taobao.org/mirrors/chromedriver/2.32/)
+
 #### Linux
+
 > 解压压缩包
 > sudo cp ~/Share/chromedriver /usr/local/bin/  # 拷贝到 $PATH 中
 
