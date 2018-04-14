@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  python常见面试题
+categories: python
 tags: python interview
 thread: interview
 ---
