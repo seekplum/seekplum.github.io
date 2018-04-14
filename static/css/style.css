@@ -189,31 +189,51 @@ header {
     border-bottom: 1px solid #cccccc;
 }
 
-/* 左侧导航设置 */
-nav {
-    font-family: "Electrolize", sans-serif;
-    font-size: 1.1em;
-    text-transform: uppercase;
-    float: left;
-    /*margin-left: -8em;*/
-    width: 6em;
-    text-align: center;
-    padding: 0em 0em;
-    position: fixed; /* 固定导航栏 */
-    margin-top: 100px;
-}
+/*小屏幕*/
+@media only screen and  (max-width: 479px) {
+    nav {
+        font-size: 1.1em;
+        width: 100%;
+        text-align: center;
+        position: fixed;
+        background: #fff;
+        z-index: 3;
+        padding-right: 15px;
+    }
 
-nav a {
-    display: block;
-    padding: .7em 1em;
-    color: #000000;
+    nav a {
+        color: #000000;
+    }
 }
 
 nav a:hover {
     background-color: #ddd; /* 导航鼠标悬停颜色 */
     text-decoration: none;
-    color: yellow;
+    color: #fff;
     -webkit-transition: color .2s linear;
+}
+
+@media only screen and  (min-width: 479px) {
+    /* 左侧导航设置 */
+    nav {
+        font-family: "Electrolize", sans-serif;
+        font-size: 1.1em;
+        text-transform: uppercase;
+        float: left;
+        /*margin-left: -8em;*/
+        width: 6em;
+        text-align: center;
+        padding: 0em 0em;
+        position: fixed; /* 固定导航栏 */
+        margin-top: 100px;
+    }
+
+    nav a {
+        display: block;
+        padding: .7em 1em;
+        color: #000000;
+    }
+
 }
 
 .post {
@@ -386,7 +406,7 @@ footer a:hover {
 /* 返回顶部 end */
 
 /* 阅读全文 start */
-.read-all{
+.read-all {
     font-size: 14px;
     color: #666;
     background: none;
@@ -396,15 +416,16 @@ footer a:hover {
     margin-top: 30px;
 }
 
-.read-all a:hover{
+.read-all a:hover {
     color: #666;
     text-decoration: none;
 }
+
 /* 阅读全文 end */
 
 /* 鼠标悬停目录 start */
 
-li:hover{
+li:hover {
     background: #eee;
 }
 

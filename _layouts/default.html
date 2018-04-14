@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="author" content="{{ site.author }}"/>
     <title>{% if page.path == 'index.html' %}{{ site.name }}{% else %}{% unless page.id %}{{ site.name }} - {% endunless
         %}{{ page.title }}{% endif %}</title>
@@ -31,7 +32,7 @@
                 <span><a title="关于" class="tag-about" href="/about/">关于</a></span>
             </nav>
         </div>
-        <div class="col-sm-12 col-md-8">
+        <div class="col-sm-12 col-md-10">
 
             <header>
                 <h1>{{ page.title }}</h1>

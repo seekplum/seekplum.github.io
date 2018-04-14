@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="author" content="{{ site.author }}"/>
     <title>{% if page.path == 'index.html' %}{{ site.name }}{% else %}{% unless page.id %}{{ site.name }} - {% endunless
         %}{{ page.title }}{% endif %}</title>
@@ -15,20 +16,6 @@
     <link rel="stylesheet" href="/static/css/prettify.css"/>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
     <style type="text/css">
-        .demo {
-            width: 360px;
-            margin: 50px auto 10px auto;
-            padding: 10px;
-        }
-
-        .demo p {
-            line-height: 30px
-        }
-
-        #stat {
-            display: none
-        }
-
         .nav-list li.active {
             background: #08c
         }
@@ -43,11 +30,6 @@
                 width: 100%;
                 margin: 0px 0px 20px 0px;
             }
-        }
-
-        a {
-            padding: 0;
-        !important;
         }
 
         .directory-navigation {
@@ -67,7 +49,7 @@
             height: auto;
             position: fixed;
             z-index: 11;
-            bottom:10%;
+            bottom: 10%;
             right: 0;
             margin: 0;
         }
