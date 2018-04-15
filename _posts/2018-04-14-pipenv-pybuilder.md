@@ -38,6 +38,7 @@ pip 默认安装包路径为`/usr/local/lib/python2.7/site-packages`。此模式
 通过Pipflie.lock把包都装好
 
 > mkdir /tmp/test-env
+
 > cd /tmp/test-env && pipenv install
 
 * 安装指定包
@@ -61,6 +62,7 @@ pip 默认安装包路径为`/usr/local/lib/python2.7/site-packages`。此模式
 * 生成requirements 文件
 
 > pipenv lock -r  > requirements.txt
+
 > pipenv lock -r --dev > requirements.txt   # 针对开发环境的包
 
 * 生成lockfile
@@ -76,6 +78,7 @@ pip 默认安装包路径为`/usr/local/lib/python2.7/site-packages`。此模式
 * 进入虚拟环境
 
 > pipenv shell
+
 > pipenv shell --anyway
 
 * 退出虚拟环境

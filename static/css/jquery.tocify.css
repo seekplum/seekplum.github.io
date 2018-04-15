@@ -4,14 +4,27 @@
  */
 
 /* The Table of Contents container element */
+@media screen and (min-width: 479px) {
+
+    .tocify {
+        width: 15%;
+    }
+}
+
+@media screen and (max-width: 479px) {
+
+    .tocify {
+        width: 31%;
+    }
+}
+
 .tocify {
-    width: 15%;
     max-height: 85%;
     height: auto;
     overflow-x: hidden;
     overflow-y: auto;
     position: fixed;
-	top:30px;
+    top: 30px;
     border: 1px solid #ccc;
     border-radius: 6px;
     right: 0;
@@ -28,6 +41,7 @@
     padding: 0;
     border: none;
     line-height: 30px;
+    background: #fff;
 }
 
 /* Top level header elements */

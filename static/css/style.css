@@ -428,3 +428,44 @@ li:hover {
 }
 
 /* 鼠标悬停目录 end */
+
+/* 目录导航 start */
+.nav-list li.active {
+    background: #08c
+}
+
+.nav-list li.active a {
+    color: #fff
+}
+
+@media (min-width: 479px) {
+    #toc {
+        /*position: relative;*/
+        /*width: 100%;*/
+        margin: 0 0 20px 0;
+    }
+}
+
+.directory-navigation {
+    position: fixed;
+    top: 30px;
+    float: left;
+    right: 0;
+    width: 25px;
+    border: 1px solid #e5e5e5;
+    border-right: none;
+    text-align: center;
+    background: #ffffff;
+}
+
+.no-directory {
+    width: 180px;
+    height: auto;
+    position: fixed;
+    z-index: 11;
+    bottom: 10%;
+    right: 0;
+    margin: 0;
+}
+
+/* 目录导航 end */

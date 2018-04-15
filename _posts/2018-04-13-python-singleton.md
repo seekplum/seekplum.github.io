@@ -4,7 +4,7 @@ title:  Python单例模式
 tags: python singleton
 thread: pythonsingleton
 ---
-### 使用装饰器
+## 使用装饰器
 
 ```python
 from functools import wraps
@@ -28,11 +28,13 @@ class MyClass(object):
         pass
 ```
 
-* 原理: 通过装饰器判断`某个类`是否在字典instaces中,如果不存在,则将`cls`作为key,cls(*args, **kwargs)作为value存到instances中,否则直接返回instances[cls]
+* 原理
+
+> 通过装饰器判断`某个类`是否在字典instaces中,如果不存在,则将`cls`作为key,cls(*args, **kwargs)作为value存到instances中,否则直接返回instances[cls]
 
 
-### 使用`metaclass`元类
-```
+## 使用`metaclass`元类
+```python
 class Singleton(type):
     _instances = {}
 
@@ -54,8 +56,8 @@ class MyClass(object):
     * 修改类的定义
     * 放回修改后的类
 
-### 使用 `__new__`
-```
+## 使用 `__new__`
+```python
 class Singleton(object):
     _instance = None
 
@@ -70,11 +72,13 @@ class MyClass(Singleton):
         pass
 ```
 
-* 原理: 通过将`类的实例`和一个`类变量`_instance关联起来,如果类变量为None,则创建实例,否则直接返回类变量
+* 原理
+
+> 通过将`类的实例`和一个`类变量`_instance关联起来,如果类变量为None,则创建实例,否则直接返回类变量
 
 
-### 使用模块
-```
+## 使用模块
+```python
 # my_singleton.py
 class My_Singleton(object):
     def __init__(self, *args, **kwargs):
@@ -90,13 +94,16 @@ a = MyClass()
 b = MyClass()
 ```
 
-* 原理: `Python的模块`就是`天然的单例模式`,因为模块在第一次导入时，会生成 .pyc 文件，当第二次导入时，就会`直接加载 .pyc` 文件，而不会再次执行模块代码。因此，我们只需把相关的函数和数据定义在一个模块中，就可以获得一个单例对象了。
+* 原理:
+
+> `Python的模块`就是`天然的单例模式`,因为模块在第一次导入时，会生成 .pyc 文件，当第二次导入时，就会`直接加载 .pyc` 文件，而不会再次执行模块代码。因此，我们只需把相关的函数和数据定义在一个模块中，就可以获得一个单例对象了。
+
 * 缺点:
     * 类实例化时无法传递参数
     * 无法对类进一步升级处理,比如按参数组成指定key进行实例化
 
-### 通过共享属性
-```
+## 通过共享属性
+```python
 class Singleton(object):
     _state = {}
     _running = False
@@ -119,4 +126,6 @@ print id(a.__dict__), id(b.__dict__)
 print id(a.running), id(b.running)
 ```
 
-* 原理: 单例就是所有的引用(实例,对象)拥有相同的状态(属性)和行为(方法),同一个类的所有实例天然有相同的行为(方法),只需要保证同一个类的所有实例具有相同的状态(属性)即可.
+* 原理
+
+> 单例就是所有的引用(实例,对象)拥有相同的状态(属性)和行为(方法),同一个类的所有实例天然有相同的行为(方法),只需要保证同一个类的所有实例具有相同的状态(属性)即可.
