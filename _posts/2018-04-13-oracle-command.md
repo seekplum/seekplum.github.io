@@ -65,7 +65,7 @@ grant sysasm to asmsnmp; // 增加 asm 权限
 ## 环境变量
 > su - grid -c 'echo DBPOOLCMDBEGIN; export ORACLE_HOME=/opt/grid/products/11.2.0&&export PATH=\$PATH:\$ORACLE_HOME/bin:\$ORACLE_HOME/oracm/bin:\$ORACLE_HOME/OPatch:\$ORACLE_HOME/jdbc&&export LD_LIBRARY_PATH=\$ORACLE_HOME/lib:\$ORACLE_HOME/ctx/lib:\$ORACLE_HOME/oracm/lib&&export CLASSPATH=\$ORACLE_HOME/JRE:\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib:\$ORACLE_HOME/network/jlib:$ORACLE_HOME/jdbc/lib; "CMD 命令"; echo DBPOOLCMDEND'
 
-## Grid相关查询
+## Grid相关查询和操作
 * 获取集群中所有的节点
 
 > olsnodes
@@ -86,7 +86,24 @@ grant sysasm to asmsnmp; // 增加 asm 权限
 
 > crsctl check cluster -all
 
-## DB相关查询
+* crs启动日志
+
+> clog
+
+* 启动crs
+
+> crsctl start crs
+
+> crsctl stop crs -f
+
+* 查看crs状态
+
+> crsctl stat res -t
+
+> crsctl stat res -t -init
+
+
+## DB相关查询和操作
 * 查询cpu,sga,pga大小
 
 > select b.INSTANCE_NAME,name,value from gv\$parameter a,gv\$instance b where a.INST_ID=b.INSTANCE_NUMBER and a.name in ('sga_target','pga_aggregate_target','cpu_count')
@@ -95,17 +112,17 @@ grant sysasm to asmsnmp; // 增加 asm 权限
 
 > srvctl status database -d test -v
 
-* 启动/停止实例
-
-> srvctl stop instance -d test -i test1
-
 * 查询所有的db
 
 > srvctl config database
 
 * 查询DB的信息
 
-> crsctl stat res ora.test.db -v | grep com
+> crsctl stat res ora.test.db -v \| grep com
+
+* 启动/停止实例
+
+> srvctl stop instance -d test -i test1
 
 * 启动/停止db
 
@@ -115,10 +132,39 @@ grant sysasm to asmsnmp; // 增加 asm 权限
 
 > 只针对RAC One Node类型
 
-* 查看磁盘状态
+* 查询更新失效对象
 
-> crsctl status res -t
-> crsctl status res -t -init
+> select count(*) from  all_objects where status = 'INVALID';
+
+* 创建DB
+
+```
+dbca -silent -createDatabase -templateName General_Purpose.dbc -gdbName qdeploy -nodelist qdata-com41-dev,qdata-com42-dev -sid qdeploy -sysPassword oracle -systemPassword oracle -storageType ASM -diskGroupName DATADG -characterSet AL32UTF8 -nationalCharacterSet AL16UTF16 -databaseType OLTP -redoLogFileSize 1024 -initparams  sga_target=1945,pga_aggregate_target=307,db_create_online_log_dest_1=+DATADG,resource_manager_plan=default_plan
+```
+
+* 删除db
+
+> dbca -silent -deleteDatabase -sourceDB test -sysDBAUserName sys -sysDBAPassword oracle
+
+## 修改db参数文件
+
+* 导出文件
+
+> export ORACLE_SID=<实例名>
+
+> dba
+
+> create pfile='/tmp/a.txt' from spfile='+<磁盘组名>/<实例名>/spfile<实例名>.ora';
+
+* 编辑文件
+
+> vi /tmp/a.txt
+ 
+* 把文件导回到db中
+
+> create spfile='+<磁盘组名>/<实例名>/spfile<实例名>.ora from pflie='/tmp/a.txt';
+
+## 监听相关查询和操作
 
 * 查看监听状态
 
@@ -139,25 +185,6 @@ grant sysasm to asmsnmp; // 增加 asm 权限
 * 查询监听端口
 
 > srvctl config listener
-
-* crs启动日志
-
-> clog
-
-* 启动crs
-
-> crsctl start crs
-> crsctl stop crs -f
-
-* 查看crs状态
-
-> crsctl stat res -t
-> crsctl stat res -t -init
-
-
-* 查询更新失效对象
-
-> select count(*) from  all_objects where status = 'INVALID';
 
 
 ## 磁盘组操作
@@ -243,6 +270,7 @@ select dg.name,
 
 * 查询用到的磁盘路径
 
+```
 > set pagesize 9999
 > set linesize 9999
 > select dg.name AS DG_NAME,
@@ -251,6 +279,7 @@ select dg.name,
                 where dg.group_number = d.group_number and
                        dg.group_number <> 0
                 order by dg.name, d.FAILGROUP, d.name;
+```
 
 * 创建磁盘组
 
@@ -262,14 +291,19 @@ select dg.name,
 |High | 5块盘大小一致的盘 |3组（从不通的节点各选几块磁盘）|
 |External | 1块盘 |不需要|
 
-> CREATE DISKGROUP DATADG normal REDUNDANCY 
+```
+CREATE DISKGROUP DATADG normal REDUNDANCY 
 failgroup DATAFG1 disk '/dev/qdata/mpath-s02.3264.01.P0B00S16'   
 failgroup DATAFG2 disk '/dev/qdata/mpath-s03.3262.01.S0P2IX3B6'   
 failgroup DATAFG3 disk '/dev/qdata/mpath-s01.3261.01.P0B00S00p1'   
 attribute 'au_size'='2M';
-> alter diskgroup DATADG set attribute 'compatible.asm'='11.2.0.4';
-> alter diskgroup DATADG set attribute 'compatible.rdbms'='11.2.0.4';
-> alter diskgroup DATADG set attribute 'disk_repair_time'='36h';
+
+alter diskgroup DATADG set attribute 'compatible.asm'='11.2.0.4';
+
+alter diskgroup DATADG set attribute 'compatible.rdbms'='11.2.0.4';
+
+alter diskgroup DATADG set attribute 'disk_repair_time'='36h';
+```
 
 * 删除asm磁盘
 
@@ -282,11 +316,13 @@ attribute 'au_size'='2M';
 * online 磁盘
 
 > select name from v$asm_diskgroup;
+
 > asmcmd online -a -G TESTDG;
 
 * offline磁盘
 
 > select name from v$asm_disk; 
+
 > asmcmd offline -G TESTDG -D TESTDG_0001
 
 ## 查询磁盘组
@@ -297,12 +333,3 @@ attribute 'au_size'='2M';
 * 查询磁盘组用的磁盘
 
 > lsdsk -k
-
-## DB操作
-* 创建DB
-
-> dbca -silent -createDatabase -templateName General_Purpose.dbc -gdbName qdeploy -nodelist qdata-com41-dev,qdata-com42-dev -sid qdeploy -sysPassword oracle -systemPassword oracle -storageType ASM -diskGroupName DATADG -characterSet AL32UTF8 -nationalCharacterSet AL16UTF16 -databaseType OLTP -redoLogFileSize 1024 -initparams  sga_target=1945,pga_aggregate_target=307,db_create_online_log_dest_1=+DATADG,resource_manager_plan=default_plan
-
-* 删除db
-
-> dbca -silent -deleteDatabase -sourceDB test -sysDBAUserName sys -sysDBAPassword oracle
