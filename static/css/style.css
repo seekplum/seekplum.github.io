@@ -143,6 +143,18 @@ td, th {
     box-shadow: #999 1px 1px 4px;
 }
 
+.content-search img {
+    position: fixed;
+    right: 16px;
+    bottom: 20px;
+    max-width: 640px;
+    display: block;
+    margin: 35px -1px;
+    -webkit-box-shadow: #999 1px 1px 4px;
+    -moz-box-shadow: #999 1px 1px 4px;
+    box-shadow: #999 1px 1px 4px;
+}
+
 #tag_cloud {
     margin-bottom: 1em;
 }

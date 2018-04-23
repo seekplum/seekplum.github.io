@@ -14,4 +14,5 @@
 * 在右上角增加目录导航按钮
 * 对引用(>)等部分样式进行了优化
 * 增加了腾讯公益404页面
+* [增加搜索框](https://github.com/androiddevelop/jekyll-search)
 
