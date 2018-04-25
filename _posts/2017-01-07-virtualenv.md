@@ -34,41 +34,48 @@ yum makecache
 > pip install virtualenv
 
 ## 安装python
-~~~
-1.创建 hjd-web-env目录
-mkdir /home/hjd/hjd-web-env
-2.安装python到/home/hjd/hjd-web-env/python27目录
-编译安装python，下载地址 http://www.python.org/
-./configure --prefix=/home/hjd/hjd-web-env/python27/ --with-zlib --enable-loadable-sqlite-extensions
-make && make install
-~~~
 
-## 创建虚拟环境包,依赖我们刚刚安装的python2.7
+1.创建 hjd-web-env目录
+
+> mkdir /home/hjd/hjd-web-env
+
+2.安装python到/home/hjd/hjd-web-env/python27目录
+
+编译安装python，[下载地址](http://www.python.org/)
+
+> ./configure --prefix=/home/hjd/hjd-web-env/python27/ --with-zlib --enable-loadable-sqlite-extensions
+
+> make && make install
+
+## 虚拟环境操作
+
+* 创建虚拟环境包依赖我们刚刚安装的python2.7
 
 > virtualenv --no-site-packages --distribute --python=/home/hjd/hjd-web-env/python27/bin/python /home/hjd/hjd-web-env/
 
-## 进入虚拟环境
+* 进入虚拟环境
 
 > source /home/hjd/hjd-web-env/bin/activate
 
-## 退出虚拟环境
+* 退出虚拟环境
 
 > deactivate
 
 ## 安装oracle, redis
 
-~~~
 oracle, redis不用安装，只要把原来hjd/packages目录下的oracle, redis-3.2.0复制到hjd-web-env/package目录下即可,**注意把文件中的hjd-dev-env修改为我们制作的虚拟包的名字**
-cp -r /home/hjd/hjd-dev-env/packages/oracle /home/hjd/hjd-web-env/package
-cp -r /home/hjd/hjd-dev-env/packages/redis-3.2.0 /home/hjd/hjd-web-env/package
 
-~~~
+> cp -r /home/hjd/hjd-dev-env/packages/oracle /home/hjd/hjd-web-env/package
+
+> cp -r /home/hjd/hjd-dev-env/packages/redis-3.2.0 /home/hjd/hjd-web-env/package
 
 
 ### 安装nginx
 
-> [下载1.10.1版本nginx](http://nginx.org/download/)
+下载1.10.1版本nginx](http://nginx.org/download/)
+
 > ./configure --prefix=/home/hjd/hjd-web-env/packages/nginx --with-http_gzip_static_module
+
 > make && make install
 
 ### 下载MySQL压缩包，解压修改后再重新压缩
@@ -78,7 +85,9 @@ cp -r /home/hjd/hjd-dev-env/packages/redis-3.2.0 /home/hjd/hjd-web-env/package
 * 修改mysql.server中的值(值位置参考图片)
 
 > basedir=/home/hjd/hjd-web-env/packages/mysql
+
 > datadir=$basedir/data
+
 > conf=/home/hjd/hjd-web-env/packages/conf/my.cnf
 
 ![](/static/images/mysql/basedir.png)
@@ -102,43 +111,38 @@ cp -r /home/hjd/hjd-dev-env/packages/redis-3.2.0 /home/hjd/hjd-web-env/package
 
 ### 安装虚拟环境所需的python第三方模块(其中有的模块无法直接通过pip进行安装， 请按照解决方法提示后再安装)
 
-* base.txt
+* MySQL-python==1.2.5
 
-~~~
-
-MySQL-python==1.2.5
 解决方法：安装依赖包，yum install mysql-devel
 
-~~~
+* M2Crypto==0.24.0(确定安装了swig)
 
-~~~
-M2Crypto==0.24.0(确定安装了swig)
 解决方法：要先在系统中安装pcre， swig（依赖pcre）
-安装pcre: [下载地址](https://sourceforge.net/projects/pcre/files/pcre/)
-cd pcre-8.39
-./configure && make && make install
+
+安装pcre:
+
+[下载地址](https://sourceforge.net/projects/pcre/files/pcre/)
+
+> cd pcre-8.39
+
+> ./configure && make && make install
+
 安装 swig：[下载地址](http://www.swig.org/download.html)
-cd swig-3.0.10
-./configure && make && make install
 
-~~~
+> cd swig-3.0.10
 
-* dbpool.txt
+> ./configure && make && make install
 
-~~~
+* gnureadline==6.3.3
 
-gnureadline==6.3.3
 解决方法：yum install ncurses*
 
-~~~
+* pyping==0.0.4
 
-~~~
-pyping==0.0.4
 解决方法： 0.0.4 不存在，安装pyping==0.0.5即可
-~~~
 
 ## 进入虚拟环境，安装第三方模块包和supervisor
 
-### 安装第三放模块包
+### 安装第三方模块包
 > pip install -r xxx.txt
 
