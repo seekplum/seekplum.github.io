@@ -204,7 +204,7 @@ header {
 }
 
 /*小屏幕*/
-@media only screen and  (max-width: 479px) {
+@media only screen and  (max-width: 993px) {
     nav {
         font-size: 1.1em;
         width: 100%;
@@ -227,7 +227,7 @@ nav a:hover {
     -webkit-transition: color .2s linear;
 }
 
-@media only screen and  (min-width: 479px) {
+@media only screen and  (min-width: 993px) {
     /* 左侧导航设置 */
     nav {
         font-family: "Electrolize", sans-serif;
@@ -450,7 +450,7 @@ li:hover {
     color: #fff
 }
 
-@media (min-width: 479px) {
+@media (min-width: 993px) {
     #toc {
         /*position: relative;*/
         /*width: 100%;*/

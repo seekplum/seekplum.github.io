@@ -4,14 +4,14 @@
  */
 
 /* The Table of Contents container element */
-@media screen and (min-width: 479px) {
+@media screen and (min-width: 993px) {
 
     .tocify {
         width: 15%;
     }
 }
 
-@media screen and (max-width: 479px) {
+@media screen and (max-width: 993px) {
 
     .tocify {
         width: 31%;
