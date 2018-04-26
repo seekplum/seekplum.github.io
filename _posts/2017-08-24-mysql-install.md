@@ -71,7 +71,24 @@ chown -R hjd:hjd /home/hjd/hjd-dev-env/packages/mysql/
 rm /etc/init.d/mysql
 ```
 
-### 10.修改mysql.server(值位置参考图片)
+### 10.修改mysql配置
+
+需要按照下面两种方式中的一种进行修改，否则会无法启动mysql
+
+* 第一种
+
+1.对my.cnf文件做符号链接
+
+> ln -s /home/hjd/hjd-web-env/packages/conf/my.cnf /etc/my.cnf
+
+2.对sock文件做符号链接
+
+> ln -s /home/hjd/hjd-web-env/packages/mysql/mysql.sock /tmp/mysql.sock
+
+
+* 第二种
+
+1.修改mysql.server(值位置参考图片)
 
 > basedir=/home/hjd/hjd-web-env/packages/mysql
 
@@ -92,6 +109,10 @@ rm /etc/init.d/mysql
 > $bindir/mysqld_safe --defaults-file=$conf >/dev/null &  # 没有这一行无法在mysql生成tmp目录，导致mysql无法启动
 
 ![](/static/images/mysql/mysqld-safe.png)
+
+2.对sock文件做符号链接
+
+> ln -s /home/hjd/hjd-web-env/packages/mysql/mysql.sock /tmp/mysql.sock
 
 
 ### 11.重新复制mysql.server

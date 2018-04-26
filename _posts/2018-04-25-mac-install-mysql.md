@@ -486,7 +486,7 @@ install_mysql() {
     # echo -e "set mysql _buffer_pool_size" |tee -a $logs
 
     # 截取ip的最后一位
-    last=`ifconfig en0 | awk '/inet /{print $2}' | awk -F. '{print $NF}'`  # 注意端口号
+    last=`ifconfig | grep -v "127.0.0.1" | awk '/inet /{print $2}'| head -1 | awk -F. '{print $NF}'`  # 注意端口号
     let "serverid=${last}+3306"
 
     cat > $mysql_data/conf/my.cnf  << EOF
@@ -637,7 +637,7 @@ innodb_max_undo_log_size = 2G  # 5.7 only
 gtid-mode = on # GTID only
 enforce-gtid-consistency = true # GTID only
 optimizer_switch = 'mrr=on,mrr_cost_based=off,batched_key_access=on'
-# explicit_defaults_for_timestamp = ON
+explicit_defaults_for_timestamp = ON
 slave_preserve_commit_order = ON
 slave_parallel_workers = 8
 slave_parallel_type = LOGICAL_CLOCK
