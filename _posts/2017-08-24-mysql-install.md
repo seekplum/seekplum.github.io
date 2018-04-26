@@ -18,7 +18,7 @@ service mysqld start--------------------------启动mysql服务
 service mysqld status-------------------------查看mysql状态
 ```
 
-## **mysql安装方法**
+## mysql tar包安装方法
 > 注意：my.cnf中`innodb_buffer_pool_size` 参数，应该根据内存大小进行适当调整，一般设置为系统内存的50%~70%。修改这个值，需要重启mysqld服务。
 
 ### 1.删除虚拟环境中旧的mysql
@@ -71,18 +71,41 @@ chown -R hjd:hjd /home/hjd/hjd-dev-env/packages/mysql/
 rm /etc/init.d/mysql
 ```
 
-### 10.重新复制mysql.server
+### 10.修改mysql.server(值位置参考图片)
+
+> basedir=/home/hjd/hjd-web-env/packages/mysql
+
+> datadir=$basedir/data
+
+> conf=/home/hjd/hjd-web-env/packages/conf/my.cnf
+
+![](/static/images/mysql/basedir.png)
+
+> mysqld_pid_file_path=/home/hjd/hjd-web-env/packages/mysql/tmp/mysql.pid
+
+![](/static/images/mysql/pid-file.png)
+
+> conf=/home/hjd/hjd-web-env/packages/conf/my.cnf
+
+![](/static/images/mysql/conf.png)
+
+> $bindir/mysqld_safe --defaults-file=$conf >/dev/null &  # 没有这一行无法在mysql生成tmp目录，导致mysql无法启动
+
+![](/static/images/mysql/mysqld-safe.png)
+
+
+### 11.重新复制mysql.server
 ```
 cp /home/hjd/hjd-dev-env/packages/mysql/support-files/mysql.server /etc/init.d/mysql
 ```
 
-### 11.添加环境变量
+### 12.添加环境变量
 ```
 export MYSQL_HOME='/home/hjd/hjd-dev-env/packages/mysql/'
 export PATH='$PATH:$MYSQL_HOME/bin'
 ```
 
-### 12.设置开机启动
+### 13.设置开机启动
 ```
 chkconfig --add mysql
 chkconfig --level 2345 mysql on

@@ -41,9 +41,15 @@ yum makecache
 
 2.安装python到/home/hjd/hjd-web-env/python27目录
 
+**安装python前需要先确认openssl是否安装**
+
+安装openssl:[下载地址](https://github.com/openssl/openssl)
+
+> ./config && make && make install
+
 编译安装python，[下载地址](http://www.python.org/)
 
-> ./configure --prefix=/home/hjd/hjd-web-env/python27/ --with-zlib --enable-loadable-sqlite-extensions
+> ./configure --prefix=/home/hjd/hjd-web-env/python27/ --with-ssl --with-zlib --enable-loadable-sqlite-extensions
 
 > make && make install
 
@@ -61,55 +67,17 @@ yum makecache
 
 > deactivate
 
-## 安装oracle, redis
+## [安装oracle](/cx_Oracle)
 
-oracle, redis不用安装，只要把原来hjd/packages目录下的oracle, redis-3.2.0复制到hjd-web-env/package目录下即可,**注意把文件中的hjd-dev-env修改为我们制作的虚拟包的名字**
+## [安装redis](/redis)
 
-> cp -r /home/hjd/hjd-dev-env/packages/oracle /home/hjd/hjd-web-env/package
+## [安装nginx](/nginx)
 
-> cp -r /home/hjd/hjd-dev-env/packages/redis-3.2.0 /home/hjd/hjd-web-env/package
-
-
-### 安装nginx
-
-下载1.10.1版本nginx](http://nginx.org/download/)
-
-> ./configure --prefix=/home/hjd/hjd-web-env/packages/nginx --with-http_gzip_static_module
-
-> make && make install
-
-### 下载MySQL压缩包，解压修改后再重新压缩
-
-[下载地址](http://101.96.10.60/ftp.ntu.edu.tw/MySQL/Downloads/MySQL-5.7/mysql-5.7.15-linux-glibc2.5-x86_64.tar.gz)
-
-* 修改mysql.server中的值(值位置参考图片)
-
-> basedir=/home/hjd/hjd-web-env/packages/mysql
-
-> datadir=$basedir/data
-
-> conf=/home/hjd/hjd-web-env/packages/conf/my.cnf
-
-![](/static/images/mysql/basedir.png)
-
-> mysqld_pid_file_path=/home/hjd/hjd-web-env/packages/mysql/tmp/mysql.pid
-
-![](/static/images/mysql/pid-file.png)
-
-> conf=/home/hjd/hjd-web-env/packages/conf/my.cnf
-
-![](/static/images/mysql/conf.png)
-
-> $bindir/mysqld_safe --defaults-file=$conf >/dev/null &  # 没有这一行无法在mysql生成tmp目录，导致mysql无法启动
-
-![](/static/images/mysql/mysqld-safe.png)
-
-### 设置LD_LIBRARY_PATH(用于安装cx_Oracle模块)
+## 设置LD_LIBRARY_PATH(用于安装cx_Oracle模块)
 
 > export LD_LIBRARY_PATH=/home/hjd/hjd-web-env/packages/oracle/11.2/client64/lib
 
-
-### 安装虚拟环境所需的python第三方模块(其中有的模块无法直接通过pip进行安装， 请按照解决方法提示后再安装)
+## 安装虚拟环境所需的python第三方模块(其中有的模块无法直接通过pip进行安装， 请按照解决方法提示后再安装)
 
 * MySQL-python==1.2.5
 
@@ -119,9 +87,7 @@ oracle, redis不用安装，只要把原来hjd/packages目录下的oracle, redis
 
 解决方法：要先在系统中安装pcre， swig（依赖pcre）
 
-安装pcre:
-
-[下载地址](https://sourceforge.net/projects/pcre/files/pcre/)
+安装pcre:[下载地址](https://sourceforge.net/projects/pcre/files/pcre/)
 
 > cd pcre-8.39
 
@@ -132,6 +98,10 @@ oracle, redis不用安装，只要把原来hjd/packages目录下的oracle, redis
 > cd swig-3.0.10
 
 > ./configure && make && make install
+
+* 安装
+
+> pip install M2Crypto
 
 * gnureadline==6.3.3
 
