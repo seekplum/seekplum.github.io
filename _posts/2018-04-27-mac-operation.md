@@ -118,6 +118,22 @@ PS：当你重新打开终端的时候可能看不到变化，可能你的字体
 
 用 vim 打开 zsh-autosuggestions.zsh 文件，修改 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10' （ fg=10 在我电脑上显示良好）。
 
+* 语法高亮
+
+1.使用homebrew安装 zsh-syntax-highlighting 插件。
+
+> brew install zsh-syntax-highlighting
+
+
+2.配置.zshrc文件，插入一行。
+
+> source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+
+3.输入命令。
+
+> source ~/.zshrc
+
 
 ## 安装软件列表
 * 企业微信
