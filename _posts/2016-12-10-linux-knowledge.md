@@ -2,7 +2,7 @@
 layout: post
 title: 《鸟哥的 Linux 私房菜》
 categories: Linux
-tags: 鸟哥的Linux私房菜
+tags: 鸟哥 Linux
 thread: linux
 ---
 

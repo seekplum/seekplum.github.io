@@ -2,7 +2,7 @@
 layout: post
 title: windows 共享网络
 categories: 软件
-tags: 网络 共享
+tags: 网络 共享 shar
 thread: compute-share
 ---
 

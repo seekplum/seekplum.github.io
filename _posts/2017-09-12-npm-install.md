@@ -2,7 +2,7 @@
 layout: post
 title:  nodejs安装
 categories: 插件
-tags: nodejs
+tags: nodejs npm
 thread: nodejs
 ---
 

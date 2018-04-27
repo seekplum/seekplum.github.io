@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  filezilla服务器
+title:  安装filezilla服务器
 categories: 软件
-tags: ftp 服务器
+tags: ftp 服务器 install
 thread: ftp
 ---
 
