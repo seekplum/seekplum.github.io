@@ -14,6 +14,8 @@ thread: operation
 ```bash
 alias senv='source $HOME/pythonenv/python27env/bin/activate'
 alias mymysql='$HOME/packages/mysql/bin/mysql -uroot -proot -S $HOME/packages/mysql/data/sock/mysql.sock'
+alias clouddoc="apidoc -i $HOME/PythonProjects/qdata-cloud -o /tmp/doc/ -e $HOME/PythonProjects/qdata-cloud/qflame && scp -r /tmp/doc/ qdata:/root/ && ssh qdata /home/sendoh/sendoh-web-env/bin/supervisorctl -c /home/sendoh/sendoh-web-env/packages/conf/supervisor/supervisord.conf restart nginx"
+alias deploydoc="rm -rf /tmp/doc/ && apidoc -i $HOME/PythonProjects/qdeploy -o /tmp/doc/ && scp -r /tmp/doc/ deploy:/root/ && ssh deploy /home/sendoh/sendoh-web-env/bin/supervisorctl -c /home/sendoh/sendoh-web-env/packages/conf/supervisor/supervisord.conf restart nginx"
 
 alias ll='ls -l'
 alias cdp='cd $HOME/PythonProjects/'
@@ -32,6 +34,8 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Hom
 export CLASS_PATH=$JAVA_HOME/lib
 
 export PATH=$PATH:$HOME/bin:$MYSQL_HOME/bin:$JAVA_HOME/bin
+
+source $HOME/pythonenv/python27env/bin/activate
 ```
 
 ## omyzsh 未执行 ~/.bash_profile、~/.bashrc等脚本
