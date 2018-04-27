@@ -81,6 +81,44 @@ public class HelloWorld{
 
 > javaws *.jnlp  //运行.jnlp文件
 
+## 安装配置zsh[github连接](https://github.com/robbyrussell/oh-my-zsh)
+
+### 安装
+
+* 使用 crul 安装：
+
+> sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+* 或使用wget：
+
+> sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+
+### 配置
+
+* 自动提示命令
+
+当我们输入命令时，终端会自动提示你接下来可能要输入的命令，这时按 → 便可输出这些命令，非常方便。
+
+设置如下：
+
+1.克隆仓库到本地 ~/.oh-my-zsh/custom/plugins 路径下
+
+> git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+
+2.用 vim 打开 .zshrc 文件，找到插件设置命令，默认是 plugins=(git) ，我们把它修改为
+
+> plugins=(zsh-autosuggestions git)
+
+
+3.重新打开终端窗口。
+
+PS：当你重新打开终端的时候可能看不到变化，可能你的字体颜色太淡了，我们把其改亮一些：
+
+> cd ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+
+用 vim 打开 zsh-autosuggestions.zsh 文件，修改 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10' （ fg=10 在我电脑上显示良好）。
+
+
 ## 安装软件列表
 * 企业微信
 * 微信
