@@ -63,8 +63,11 @@ thread: golang
 * 设置环境变量
 
 > export GOROOT=/usr/local/go
-> export GOPATH=/home/hjd/GoglandProjects
+
+> export GOPATH=$HOME/GolangProjects
+
 > export PATH=\$PATH:\$GOROOT/bin:$GOPATH/bin
+
 > export GOARCH="amd64"
 
 **注意 `GOROOT` 的权限，用 Gogland IDE的时候无法运行程序，需要把权限改成 777**
