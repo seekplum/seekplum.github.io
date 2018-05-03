@@ -81,7 +81,7 @@ public class HelloWorld{
 
 > javaws *.jnlp  //运行.jnlp文件
 
-## 安装配置zsh[github连接](https://github.com/robbyrussell/oh-my-zsh)
+## 安装配置[zsh](https://github.com/robbyrussell/oh-my-zsh)
 
 ### 安装
 

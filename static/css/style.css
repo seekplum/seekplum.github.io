@@ -93,7 +93,7 @@ pre code {
 
 blockquote {
     display: block;
-    text-align: justify;
+    /*text-align: justify;*/
     border-left: 4px solid #eeeeee;
 }
 
