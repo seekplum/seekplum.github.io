@@ -313,6 +313,10 @@ alter diskgroup DATADG set attribute 'disk_repair_time'='36h';
 
 > drop diskgroup testdg force including contents;
 
+* 删除failgroup中的磁盘
+
+> alter diskgroup DATA DROP DISK DATA_0003 force;
+
 * online 磁盘
 
 > select name from v$asm_diskgroup;
