@@ -268,12 +268,32 @@ select dg.name,
   from v$asm_diskgroup dg;
 ```
 
+* 查询磁盘状态
+
+```
+col group_number format 9
+col DG_NAME format a10
+col DISK_NAME format a10
+col failgroup format a15
+col DISK_PATH format a40
+col mount_status format a8
+col header_status format a8
+col mode_status format a8
+col state format a8
+set linesize 200
+set pagesize 400
+select dg.group_number, dg.name AS DG_NAME, d.failgroup, d.name as DISK_NAME, nvl(d.path, 'NONE') as DISK_PATH, d.mount_status, d.header_status, d.mode_status, d.state
+from v$asm_diskgroup dg, v$asm_disk d
+where dg.group_number = d.group_number and dg.group_number <> 0
+order by dg.name, d.FAILGROUP, d.name;
+```
+
 * 查询用到的磁盘路径
 
 ```
-> set pagesize 9999
-> set linesize 9999
-> select dg.name AS DG_NAME,
+set pagesize 9999
+set linesize 9999
+select dg.name AS DG_NAME,
                     nvl(d.path, 'NONE') as DISK_PATH
                 from v\$asm_diskgroup dg, v$asm_disk d
                 where dg.group_number = d.group_number and
