@@ -1,7 +1,7 @@
 permalink: /:title/
 url: seekplum.github.io
-highlighter: rouge
 gems: [jekyll-paginate]
+#plugins: [jekyll-paginate]
 paginate: 20 # 每页显示篇数
 paginate_path: "page:num"
 name: 踏雪寻梅
@@ -13,33 +13,78 @@ weibo: 3720825601 # 微博用户主页显示的
 hub: seekplum # github名字
 safe: false
 about: "弱菜一枚"
+language: zh-Hans
+# Where things are
+source:       .
+destination:  ./_site
+plugins_dir:  ./_plugins
+layouts_dir:  ./_layouts
+data_dir:     ./_data
+includes_dir: ./_includes
+collections:  null
+
+# Handling Reading
+safe:         false
+include:      [".htaccess"]
+exclude:      []
+keep_files:   [".git", ".svn"]
+encoding:     "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+
+# Filtering Content
+show_drafts: null
+limit_posts: 0
+future:      false
+unpublished: false
+
+# Plugins
+whitelist: []
+
+# Conversion
+lsi:         false
+excerpt_separator: "\n\n"
+incremental: false
+
+# Serving
+detach:  false
+port:    5000
+host:    127.0.0.1
+baseurl: "" # does not include hostname
+
+# Outputting
+timezone:      null
+
+quiet:    false
+defaults: []
 
 # ======================== makrdown配置 ========================
 # ======================== 1 ========================
-#markdown: redcarpet
-#pygments: true
+markdown: redcarpet
+redcarpet:
+    extensions: ["hard_wrap","autolink", "tables", "strikethrough", "superscript", "with_toc_data", "highlight", "prettify","no_intra_emphasis"]
 
+highlighter: pygments
 # ======================== 2 ========================
 #highlighter: rouge
 #markdown: kramdown
 #kramdown:
 #  input: GFM
 #  syntax_highlighter: rouge
-#    syntax_highlighter: rouge
-#    extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
+#  extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
 
 # ======================== 3 ========================
-markdown:       kramdown
-highlighter:    rouge
-kramdown:
-  input:                     GFM
-  auto_ids:                  true
-  footnote_nr:               1
-  entity_output:             as_char
-  toc_levels:                1..6
-  smart_quotes:              lsquo,rsquo,ldquo,rdquo
-  enable_coderay:            false
-  hard_wrap:                 false
-  syntax_highlighter:        rouge
-  transliterated_header_ids: true
-  footnote_backlink:         "&#8617;&#xfe0e;"
+#markdown:       kramdown
+#highlighter:    rouge
+#kramdown:
+#  input:                     GFM
+#  auto_ids:                  true
+#  footnote_nr:               1
+#  entity_output:             as_char
+#  toc_levels:                1..6
+#  smart_quotes:              lsquo,rsquo,ldquo,rdquo
+#  enable_coderay:            false
+#  hard_wrap:                 false
+#  syntax_highlighter:        rouge
+#  extensions: ["fenced_code_blocks", "autolink", "tables", "smart"]
+#  transliterated_header_ids: true
+#  footnote_backlink:         "&#8617;&#xfe0e;"
