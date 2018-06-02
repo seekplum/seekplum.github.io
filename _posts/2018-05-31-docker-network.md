@@ -19,6 +19,8 @@ docker: Error response from daemon: driver failed programming external connectiv
 ## 错误原因
 在搭建ftp服务器时，本地访问成功，远程访问失败，把防火墙启动并开发`21`端口后导致docker网络映射失败。
 
+**docker必须要关闭防火墙，具体原因需要进一步分析。**
+
 ## 解决方案
 * 停止docker
 
