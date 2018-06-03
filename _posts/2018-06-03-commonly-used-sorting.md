@@ -806,6 +806,71 @@ if __name__ == '__main__':
 
 3.反向填充目标数组B：将数组元素A[i]放在数组B的第C[A[i]]个位置（下标为C[A[i]] - 1），每放一个元素就将C[A[i]]递减
 
+### 代码
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+def counting_sort(data, k):
+    """计数排序
+
+    分类： 内部非比较排序
+    数据结构： 数组
+    最差时间复杂度： O(n + k)
+    最优时间复杂度： O(n + k)
+    平均时间复杂度： O(n + k)
+    所需辅助空间：  O(n + k)
+    稳定性： 稳定
+
+    :param data 被排序的数组
+    :type data list
+    :example data [2, 4, 3, 6]
+
+    :param k 基数,必须大于数组中最大数，在当例中 k 允许的最小值为 7
+    :type k int
+    :example k 7
+
+    :rtype data list
+    :return data 排序后的数组
+    :example data [2, 3, 4, 6]
+    """
+    length = len(data)
+    cnt = [0] * k  # 计数数组
+
+    # 使 cnt[i] 保存着 i 元素的个数
+    for i in range(length):
+        cnt[(data[i])] += 1
+
+    # 使cnt[i]保存着小于等于i的元素个数，排序后元素i就放在第cnt[i]个输出位置上
+    for i in range(1, k):
+        cnt[i] = cnt[i] + cnt[i - 1]
+
+    # 分配临时空间
+    temp = [0] * length
+
+    # 从后向前扫描保证计数排序的稳定性(重复元素相对次序不变)
+    for i in range(length - 1, -1, -1):
+        cnt[data[i]] -= 1
+        # 把每个元素data[i]放到它在输出数组B中的正确位置上
+        # 当再遇到重复元素时会被放在当前元素的前一个位置上保证计数排序的稳定性
+        temp[cnt[data[i]]] = data[i]
+    data[:] = temp[:]
+
+
+def main():
+    """排序
+    """
+    data = [2, 4, 3, 6]
+    print data
+    counting_sort(data, 7)
+    print data
+
+
+if __name__ == '__main__':
+    main()
+```
+
 ## 基数排序
 将所有待比较正整数统一为同样的数位长度，数位较短的数前面补零。然后，从最低位开始进行基数为10的计数排序，一直到最高位计数排序完后，数列就变成一个有序序列（利用了计数排序的稳定性）。
 
