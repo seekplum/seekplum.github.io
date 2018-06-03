@@ -793,10 +793,268 @@ if __name__ == '__main__':
 ```
 
 ## 计数排序
+计数排序用到一个额外的计数数组C，根据数组C来将原数组A中的元素排到正确的位置。
+
+计数排序的时间复杂度和空间复杂度与数组A的数据范围（A中元素的最大值与最小值的差加上1）有关，**因此对于数据范围很大的数组，计数排序需要大量时间和内存。**
+
+### 原理
+计数排序的步骤如下：
+
+1.统计数组A中每个值A[i]出现的次数，存入C[A[i]]
+
+2.从前向后，使数组C中的每个值等于其与前一项相加，这样数组C[A[i]]就变成了代表数组A中小于等于A[i]的元素个数
+
+3.反向填充目标数组B：将数组元素A[i]放在数组B的第C[A[i]]个位置（下标为C[A[i]] - 1），每放一个元素就将C[A[i]]递减
 
 ## 基数排序
+将所有待比较正整数统一为同样的数位长度，数位较短的数前面补零。然后，从最低位开始进行基数为10的计数排序，一直到最高位计数排序完后，数列就变成一个有序序列（利用了计数排序的稳定性）。
+
+### 代码
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+def get_digit(x, d):
+    """获取元素 x 的第 d 位数字
+
+    :param x 被排序的数组中的某个数字
+    :type x int
+    :example x 123
+
+    :param d 要获取x中的第几位数
+    :type d int
+    :example d 2
+    """
+    return x / 10 ** (d - 1) % 10
+
+
+def counting_sort(data, length, d, k):
+    """依据元素的第d位数字，对 data 数组进行计数排序
+
+
+    :param data 被排序的数组
+    :type data list
+    :example data [20, 90, 64, 289, 998, 365, 852, 123, 789, 456]
+
+    :param length 被排序的数组长度
+    :type length int
+    :example length 3
+
+    :param d 待排序元素的位数
+    :type d int
+    :example d 3
+
+    :param k 基数，每个元素单个数字的值范围
+    :type k int
+    :example k 10
+
+    :rtype temp list
+    :return temp 计数排序后的数组
+    :example temp [20, 90, 852, 123, 64, 365, 456, 998, 289, 789]
+    """
+    cnt = [0] * k
+    for i in range(length):
+        cnt[get_digit(data[i], d)] += 1
+
+    for i in range(1, k):
+        cnt[i] = cnt[i] + cnt[i - 1]
+
+    temp = [0] * length
+    for i in range(length - 1, -1, -1):
+        # 元素A[i]当前位数字为digit
+        digit = get_digit(data[i], d)
+        cnt[digit] -= 1
+
+        #  根据当前位数字，把每个元素data[i]放到它在输出数组B中的正确位置上
+        # 当再遇到当前位数字同为digit的元素时，会将其放在当前元素的前一个位置上保证计数排序的稳定性
+        temp[cnt[digit]] = data[i]
+    return temp
+
+
+def radix_sort(data, k, d):
+    """基数排序
+
+    分类： 内部非比较排序
+    数据结构： 数组
+    最差时间复杂度： O(n * dn)
+    最优时间复杂度： O(n * dn)
+    平均时间复杂度： O(n * dn)
+    所需辅助空间：  O(n * dn)
+    稳定性： 稳定
+
+    :param data 被排序的数组
+    :type data list
+    :example data [20, 90, 64, 289, 998, 365, 852, 123, 789, 456]
+
+    :param k 基数，每个元素单个数字的值范围
+    :type k int
+    :example k 10
+
+    :param d 待排序元素的位数
+    :type d int
+    :example d 3
+
+    :rtype temp list
+    :return temp 排序后的数组
+    :example temp [20, 64, 90, 123, 289, 365, 456, 789, 852, 998]
+    """
+    length = len(data)
+    for d in range(1, d + 1):
+        data = counting_sort(data, length, d, k)
+    return data
+
+
+def main():
+    """排序
+    """
+    data = [20, 90, 64, 289, 998, 365, 852, 123, 789, 456]
+    print data
+    print radix_sort(data, 10, 3)
+
+
+if __name__ == '__main__':
+    main()
+```
 
 ## 桶排序
+
+### 原理
+桶排序也叫箱排序。工作的原理是将数组元素映射到有限数量个桶里，利用计数排序可以定位桶的边界，每个桶再各自进行桶内排序（使用其它排序算法或以递归方式继续使用桶排序）。
+
+### 代码
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+def insert_on_sort(data, left, right):
+    """在有序的数据中插入
+
+    :param data 被排序的数组
+    :type data list
+    :example data
+
+    :param left 数组起始位置下标
+    :type left int
+    :example left 0
+
+    :param right 数组截止位置下标
+    :type right int
+    :example right 3
+    """
+    for i in range(left + 1, right + 1):
+        value = data[i]
+        j = i - 1
+        while j >= left and data[j] > value:
+            data[j + 1] = data[j]
+            j -= 1
+        data[j + 1] = value
+
+
+def map_to_bucket(x):
+    """把数据分到桶中
+
+    :param x 数组中的某个元素
+    :type x int
+    :example x 21
+
+    :return x元素所在的桶号
+    :rtype int
+    :example 2
+    """
+    return x / 10
+
+
+def counting_sort(data, length, bn):
+    """计数排序
+
+    :param data 被排序的数组
+    :type data list
+    :example data [29, 25, 3, 49, 9, 37, 21, 43]
+
+    :param length 数组长度
+    :type length int
+    :example 4
+
+    :param bn 桶的数量
+    :type bn int
+    :example bn 5
+
+    :rtype cnt list
+    :return cnt 计数数组，存放桶边界信息
+    :example cnt [0, 2, 2, 5, 6]
+    """
+    cnt = [0] * bn  # 计数数组，存放桶边界信息
+    # 使 cnt[i] 保存着 i 号桶中元素的个数
+    for i in range(length):
+        cnt[map_to_bucket(data[i])] += 1
+
+    # 定位桶边界：初始时，cnt[i]-1为i号桶最后一个元素的位置
+    for i in range(1, bn):
+        cnt[i] = cnt[i] + cnt[i - 1]
+
+    temp = [0] * length
+    # 从后向前扫描保证计数排序的稳定性(重复元素相对次序不变)
+    for i in range(length - 1, -1, -1):
+        b = map_to_bucket(data[i])  # 元素data[i]位于b号桶
+        cnt[b] -= 1
+        # 把每个元素data[i]放到它在输出数组B中的正确位置上
+        # 桶的边界被更新：C[b]为b号桶第一个元素的位置
+        temp[cnt[b]] = data[i]
+    data[:] = temp[:]
+    return cnt
+
+
+def bucket_sort(data, bn):
+    """桶排序
+
+    分类： 内部非比较排序
+    数据结构： 数组
+    最差时间复杂度： O(nlogn)或O(n^2)，只有一个桶，取决于桶内排序方式
+    最优时间复杂度： O(n)，每个元素占一个桶
+    平均时间复杂度： O(n)，保证各个桶内元素个数均匀即可
+    所需辅助空间：  O(n + bn)
+    稳定性： 稳定
+
+    :param data 被排序的数组
+    :type data list
+    :example data [29, 25, 3, 49, 9, 37, 21, 43]
+
+    :param bn 桶的数量
+    :type bn int
+    :example bn 5
+
+    :rtype data list
+    :return data 排序后的数组
+    :example data [3, 9, 21, 25, 29, 37, 43, 49]
+    """
+    length = len(data)
+    # 利用计数排序确定各个桶的边界
+    cnt = counting_sort(data, length, bn)
+
+    # 对每个桶中的元素进行插入排序
+    for i in range(bn):
+        left = cnt[i]  # cnt[i]为i号桶第一个元素的位置
+
+        # cnt[i+1]-1为i号桶最后一个元素的位置
+        right = length - 1 if (i == (bn - 1)) else cnt[i + 1] - 1
+        if left < right:
+            insert_on_sort(data, left, right)
+    return data
+
+
+def main():
+    """排序
+    """
+    data = [29, 25, 3, 49, 9, 37, 21, 43]
+    print data
+    print bucket_sort(data, 5)
+
+
+if __name__ == '__main__':
+    main()
+```
 
 ## 参考
 [常用排序算法总结(一)](http://www.cnblogs.com/eniac12/p/5329396.html)
