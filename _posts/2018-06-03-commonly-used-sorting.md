@@ -439,3 +439,366 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
+## 归并排序
+
+**递归实现**: 递归实现的归并排序是算法设计中分治策略的典型应用，我们将一个大问题分割成小问题分别解决，然后用所有小问题的答案来解决整个大问题。
+
+**非递归(迭代)实现**: 非递归(迭代)实现的归并排序首先进行是两两归并，然后四四归并，然后是八八归并，一直下去直到归并了整个数组。
+
+### 原理
+归并排序算法主要依赖归并(Merge)操作。归并操作指的是将两个已经排序的序列合并成一个序列的操作，归并操作步骤如下：
+
+1.申请空间，使其大小为两个已经排序序列之和，该空间用来存放合并后的序列
+
+2.设定两个指针，最初位置分别为两个已经排序序列的起始位置
+
+3.比较两个指针所指向的元素，选择相对小的元素放入到合并空间，并移动指针到下一位置
+
+4.重复步骤3直到某一指针到达序列尾
+
+5.将另一序列剩下的所有元素直接复制到合并序列尾
+
+### 代码
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+def merge(data, left, mid, right):
+    """合并两个已经排序的数组
+
+    :param data 被排序的数组
+    :type data list
+    :example data [2, 3, 1, 4]
+
+    :param left 数组起始位置下标
+    :type left int
+    :example left 0
+
+    :param mid 数组中间位置下标,即分割两个数组的位置
+    :type mid int
+    :example mid 2
+
+    :param right 数组截止位置下标
+    :type right int
+    :example right 3
+    """
+    length = right - left + 1
+
+    temp = [0] * length
+    index = 0
+
+    i = left  # 前一数组的起始元素
+    j = mid + 1  # 后一数组的起始元素
+    while i <= mid and j <= right:
+        if data[i] <= data[j]:
+            temp[index] = data[i]
+            i += 1
+        else:
+            temp[index] = data[j]
+            j += 1
+        index += 1
+
+    while i <= mid:
+        temp[index] = data[i]
+        index += 1
+        i += 1
+    while j <= right:
+        temp[index] = data[j]
+        index += 1
+        j += 1
+    data[left:left + length] = temp
+
+
+def merge_sort_recursion(data, left, right):
+    """递归实现归并排序
+
+    分类： 内部比较排序
+    数据结构： 数组
+    最差时间复杂度： O(nlogn)
+    最优时间复杂度： O(nlogn)
+    平均时间复杂度： O(nlogn)
+    所需辅助空间： O(n)
+    稳定性： 稳定
+
+    :param data 被排序的数组
+    :type data list
+    :example data [4, 3, 2, 1]
+
+    :param left 数组起始位置下标
+    :type left int
+    :example left 0
+
+    :param right 数组截止位置下标
+    :type right int
+    :example right 3
+    """
+    if left == right:
+        return
+    mid = (left + right) / 2
+    merge_sort_recursion(data, left, mid)
+    merge_sort_recursion(data, mid + 1, right)
+    merge(data, left, mid, right)
+
+
+def merge_sort_iteration(data, length):
+    """递归实现归并排序
+
+    分类： 内部比较排序
+    数据结构： 数组
+    最差时间复杂度： O(nlogn)
+    最优时间复杂度： O(nlogn)
+    平均时间复杂度： O(nlogn)
+    所需辅助空间： O(n)
+    稳定性： 稳定
+
+    :param data 被排序的数组
+    :type data list
+    :example data [4, 3, 2, 1]
+
+    :param length 数组长度
+    :type length int
+    :example left 4
+    """
+    i = 1
+    while i < length:
+        left = 0
+        while (left + i) < length:
+            mid = left + i - 1
+            right = mid + i if (mid + i) < length else length - 1
+            merge(data, left, mid, right)
+            left = right + 1
+        i *= 2
+
+
+def main():
+    """排序
+    """
+    data = [4, 9, 7, 3, 2, 1, 8, 6]
+    print data
+    merge_sort_recursion(data, 0, len(data) - 1)
+    print data
+
+    data1 = [4, 9, 7, 3, 2, 1, 8, 6]
+    print data1
+    merge_sort_iteration(data1, len(data1))
+    print data1
+
+
+if __name__ == '__main__':
+    main()
+```
+
+## 堆排序
+堆排序是指利用堆这种数据结构所设计的一种选择排序算法。堆是一种近似完全二叉树的结构（通常堆是通过一维数组来实现的），并满足性质：以最大堆（也叫大根堆、大顶堆）为例，其中父结点的值总是大于它的孩子节点。
+
+### 原理
+
+1.由输入的无序数组构造一个最大堆，作为初始的无序区
+
+2.把堆顶元素（最大值）和堆尾元素互换
+
+3.把堆（无序区）的尺寸缩小1，并调用heapify(A, 0)从新的堆顶元素开始进行堆调整
+
+4.重复步骤2，直到堆的尺寸为1
+
+
+### 代码
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+def heap_ify(data, i, size):
+    """调整堆结构
+
+    :param data 被排序的数组
+    :type data list
+    :example data [4, 3, 2, 1]
+
+    :param i 当前值下标
+    :type i int
+    :example i 1
+
+    :param size 堆大小
+    :type size int
+    :example 4
+    """
+    left_child = 2 * i + 1  # 左孩子索引
+    right_child = 2 * i + 2  # 右孩子索引
+    max_i = i  # 选出当前节点与其左右孩子之中的最大值
+    if left_child < size and data[left_child] > data[max_i]:
+        max_i = left_child
+    if right_child < size and data[right_child] > data[max_i]:
+        max_i = right_child
+    if max_i != i:
+        # 把当前结点和它的最大(直接)子节点进行交换
+        data[i], data[max_i] = data[max_i], data[i]
+
+        # 递归调用，继续从当前结点向下进行堆调整
+        heap_ify(data, max_i, size)
+
+
+def build_heap(data, length):
+    """构建一个堆
+
+    :param data 被排序的数组
+    :type data list
+    :example data [4, 3, 2, 1]
+
+    :param length 数组长度
+    :type length int
+    :example length 4
+    """
+    heap_size = length
+    for i in range(heap_size / 2 - 1, -1, -1):
+        heap_ify(data, i, heap_size)
+    return heap_size
+
+
+def heap_sort(data):
+    """堆排序
+
+    分类： 内部比较排序
+    数据结构： 数组
+    最差时间复杂度： O(nlogn)
+    最优时间复杂度： O(nlogn)
+    平均时间复杂度： O(nlogn)
+    所需辅助空间： O(1)
+    稳定性： 不稳定
+
+    :param data 被排序的数组
+    :type data list
+    :example data [4, 3, 2, 1]
+    """
+    length = len(data)
+
+    # 建立一个最大堆
+    heap_size = build_heap(data, length)
+
+    # 堆（无序区）元素个数大于1，未完成排序
+    while heap_size > 1:
+        # 将堆顶元素与堆的最后一个元素互换，并从堆中去掉最后一个元素
+        # 此处交换操作很有可能把后面元素的稳定性打乱，所以堆排序是不稳定的排序算法
+        heap_size -= 1
+        data[0], data[heap_size] = data[heap_size], data[0]
+        heap_ify(data, 0, heap_size)  # 从新的堆顶元素开始向下进行堆调整，时间复杂度O(logn)
+
+
+def main():
+    """排序
+    """
+    data = [4, 3, 2, 1]
+    print data
+    heap_sort(data)
+    print data
+
+
+if __name__ == '__main__':
+    main()
+
+```
+
+## 快速排序
+在平均状况下，排序n个元素要O(nlogn)次比较。在最坏状况下则需要O(n^2)次比较，但这种状况并不常见。事实上，快速排序通常明显比其他O(nlogn)算法更快，因为它的内部循环可以在大部分的架构上很有效率地被实现出来。
+
+### 原理
+快速排序使用分治策略(Divide and Conquer)来把一个序列分为两个子序列。步骤为：
+
+1.从序列中挑出一个元素，作为"基准"(pivot).
+
+2.把所有比基准值小的元素放在基准前面，所有比基准值大的元素放在基准的后面（相同的数可以到任一边），这个称为分区(partition)操作。
+
+3.对每个分区递归地进行步骤1~2，递归的结束条件是序列的大小是0或1，这时整体已经被排好序了。
+
+### 代码
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+def partition(data, left, right):
+    """划分函数
+
+    :param data 被排序的数组
+    :type data list
+    :example data [4, 3, 2, 1]
+
+    :param left 数组起始位置下标
+    :type left int
+    :example left 0
+
+    :param right 数组截止位置下标
+    :type right int
+    :example right 3
+
+    :rtype pivot_index int
+    :return pivot_index 分割左右两边的下标值
+    :example pivot_index 0
+    """
+    pivot = data[right]  # 每次都选择最后一个元素作为基准
+    tail = left - 1  # 小于基准的子数组最后一个元素的索引
+    for i in range(left, right):
+        if data[i] <= pivot:
+            tail += 1
+            data[i], data[tail] = data[tail], data[i]
+    pivot_index = tail + 1
+    data[right], data[pivot_index] = data[pivot_index], data[right]
+    return pivot_index
+
+
+def quick_sort(data, left, right):
+    """快速排序
+
+    分类： 内部比较排序
+    数据结构： 数组
+    最差时间复杂度： O(n^2)每次选取的基准都是最大（或最小）的元素，导致每次只划分出了一个分区，需要进行n-1次划分才能结束递归
+    最优时间复杂度： O(nlogn)每次选取的基准都是中位数，这样每次都均匀的划分出两个分区，只需要logn次划分就能结束递归
+    平均时间复杂度： O(nlogn)
+    所需辅助空间： 主要是递归造成的栈空间的使用(用来保存left和right等局部变量)，取决于递归树的深度，一般为O(logn)，最差为O(n)
+    稳定性： 不稳定
+
+    :param data 被排序的数组
+    :type data list
+    :example data [4, 3, 2, 1]
+
+    :param left 数组起始位置下标
+    :type left int
+    :example left 0
+
+    :param right 数组截止位置下标
+    :type right int
+    :example right 3
+    """
+    if left >= right:
+        return
+
+    pivot_index = partition(data, left, right)
+    quick_sort(data, left, pivot_index - 1)
+    quick_sort(data, pivot_index + 1, right)
+
+
+def main():
+    """排序
+    """
+    data = [4, 3, 2, 1]
+    print data
+    quick_sort(data, 0, len(data) - 1)
+    print data
+
+
+if __name__ == '__main__':
+    main()
+```
+
+## 计数排序
+
+## 基数排序
+
+## 桶排序
+
+## 参考
+[常用排序算法总结(一)](http://www.cnblogs.com/eniac12/p/5329396.html)
+
+[常用排序算法总结(二)](http://www.cnblogs.com/eniac12/p/5332117.html)
