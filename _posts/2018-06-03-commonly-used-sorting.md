@@ -851,9 +851,9 @@ def counting_sort(data, k):
 
     # 从后向前扫描保证计数排序的稳定性(重复元素相对次序不变)
     for i in range(length - 1, -1, -1):
+        # 当再遇到重复元素时会被放在当前元素的前一个位置上保证计数排序的稳定性
         cnt[data[i]] -= 1
         # 把每个元素data[i]放到它在输出数组B中的正确位置上
-        # 当再遇到重复元素时会被放在当前元素的前一个位置上保证计数排序的稳定性
         temp[cnt[data[i]]] = data[i]
     data[:] = temp[:]
 
@@ -929,10 +929,9 @@ def counting_sort(data, length, d, k):
     for i in range(length - 1, -1, -1):
         # 元素A[i]当前位数字为digit
         digit = get_digit(data[i], d)
-        cnt[digit] -= 1
-
-        #  根据当前位数字，把每个元素data[i]放到它在输出数组B中的正确位置上
         # 当再遇到当前位数字同为digit的元素时，会将其放在当前元素的前一个位置上保证计数排序的稳定性
+        cnt[digit] -= 1
+        # 根据当前位数字，把每个元素data[i]放到它在输出数组B中的正确位置上
         temp[cnt[digit]] = data[i]
     return temp
 
@@ -1063,9 +1062,10 @@ def counting_sort(data, length, bn):
     # 从后向前扫描保证计数排序的稳定性(重复元素相对次序不变)
     for i in range(length - 1, -1, -1):
         b = map_to_bucket(data[i])  # 元素data[i]位于b号桶
+        # 防止有重复元素，把值减一
         cnt[b] -= 1
         # 把每个元素data[i]放到它在输出数组B中的正确位置上
-        # 桶的边界被更新：C[b]为b号桶第一个元素的位置
+        # 桶的边界被更新：cnt[b]为b号桶第一个元素的位置
         temp[cnt[b]] = data[i]
     data[:] = temp[:]
     return cnt
