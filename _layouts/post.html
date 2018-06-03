@@ -94,7 +94,7 @@ layout: content
     }
 
     function setWidth(btn) {
-        if (screen.width > 993) {
+        if (document.body.offsetWidth > 993) {
             btn.style.right = "15%";
         }
         else {
@@ -110,7 +110,7 @@ layout: content
         var directory = getCookie(cookie_name);
         var btn = document.getElementById('directory_navigation');
         if (directory == null || directory == '') {
-            directory = 'none';
+            directory = 'block';
         }
         if (directory == 'block') {
             btn = setWidth(btn)
