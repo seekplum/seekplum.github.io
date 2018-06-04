@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  docker学习
+title:  docker常用操作
 tags: linux docker
 thread: docker
 ---
@@ -99,5 +99,90 @@ Docker 要求 Ubuntu 系统的内核版本高于 3.10 ，查看本页面的前�
 
 > docker build --help  # 查看build的详细用法
 
+## 构建镜像
+> docker build -t 镜像名 .  # 其中`.`代表在当前路径在构建
 
-## 运行web应用
+
+## 重命名镜像
+> docker tag IMAGE ID(镜像ID) REPOSITORY:TAG(仓库：标签)
+
+比如
+
+> docker tag d698781c1863 ftp:ftp
+
+重命名后原来旧的镜像还是存在，只是多了 ftp:ftp 的镜像而已
+
+## 修改容器保存为新的image
+```
+docker commit -h
+Flag shorthand -h has been deprecated, please use --help
+
+Usage:	docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+
+Create a new image from a container's changes
+
+Options:
+  -a, --author string    Author (e.g., "John Hannibal Smith <hannibal@a-team.com>")
+  -c, --change list      Apply Dockerfile instruction to the created image
+      --help             Print usage
+  -m, --message string   Commit message
+  -p, --pause            Pause container during commit (default true)
+```
+* -a: 作者信息
+* -c: 使用Dockerfile指令来创建镜像，不确定 -c 参数的使用场景
+* -m: 本次修改的描述信息
+* -p: 默认情况下，在提交时，容器的执行将被暂停，以保证数据的完整性，可以指定选项 p 来禁止。
+
+## 查看镜像详细信息
+> docker inspect IMAGE NAME(镜像名)\|IMAGE ID(镜像ID)
+
+## 迁移镜像
+
+### 发布到[Docker镜像中心](https://hub.docker.com)
+1.登陆
+
+> docker login
+
+之后会让输入用户名、密码，没有则先在[Docker镜像中心](https://hub.docker.com)注册
+
+2.镜像打tag
+
+见[重命名镜像](#重命名镜像)
+
+3.发布镜像
+
+> docker push username/repository:tag
+
+### 转为文件传输
+1.保存为文件
+
+> docker save -o /tmp/test.tar 镜像名
+
+2.确认文件是否生成
+
+> ls -l /tmp/test.tar
+
+3.恢复镜像
+
+> docker load -i /tmp/test.tar
+
+4.检查是否恢复成功
+
+> docker images
+
+
+## 修改容器配置
+比如要修改容器的映射端口
+
+### 常规方法
+* 1.停止容器, docker stop
+* 2.保存为新的image, docker commit
+* 3.重新运行容器, docker run 指定新的端口和镜像
+
+### 修改json文件方式
+* 1.停止容器, docker stop
+* 2.修改json配置文件，找到端口映射部分内容进行修改,文件位置`/var/lib/docker/containers/容器id`
+    - hostconfig.json
+    - config.v2.json  # 可能会不需要改
+* 3.重启docker, service docker restart
+* 4.重新运行容器, docker run
