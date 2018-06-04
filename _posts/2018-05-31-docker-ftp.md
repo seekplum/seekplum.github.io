@@ -61,6 +61,8 @@ dir  # 查看目录下的文件
 
 ## python上传文件
 
+**特别注意不能把全路径加上，否则会导致权限不足**
+
 ```python
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -71,15 +73,40 @@ import tempfile
 from contextlib import contextmanager
 from ftplib import FTP
 
-# ftp服务器相关配置
-FTP_HOST = "192.168.1.85"
-FTP_USERNAME = "test"
-FTP_PASSWORD = "test"
-FTP_ROOT = "/home/ftp/test"
-FTP_PORT = 21
 
-ACTIVE_MODE = 0  # 主动模式
-PASSIVE_MODE = 1  # 被动模式
+class FtpConfig(object):
+    """ftp配置信息
+    """
+    __ftp_config = None
+
+    ACTIVE_MODE = 1  # 主动模式
+    PASSIVE_MODE = 0  # 被动模式
+
+    def __init__(self, host, username, password, port, ftp_root):
+        self.host = host
+        self.username = username
+        self.password = password
+        self.port = port
+        self.ftp_root = ftp_root
+
+    @classmethod
+    def get_ftp_object(cls):
+        """查询ftp配置信息
+
+        :return ftp配置对象
+        :rtype FtpConfig()
+        """
+        if cls.__ftp_config:
+            return cls.__ftp_config
+        # ftp服务器相关配置
+        # TODO: 配置文件应该单独维护在配置文件中，方便修改，演示用，就不另外拆分了
+        host = "192.168.1.86"
+        username = "ftp"
+        password = "ftp"
+        root = "/home/ftp/ftp"
+        port = 21
+        cls.__ftp_config = cls(host, username, password, port, root)
+        return cls.__ftp_config
 
 
 @contextmanager
@@ -106,25 +133,27 @@ def ftp_connect(host, username, password, port):
     ftp_conn.quit()
 
 
-def upload_file(local_path, remote_path):
+def upload_file(local_path, remote_name):
     """上传文件到ftp服务器
 
     :param local_path: 本地文件路径
     :type local_path str
 
-    :param remote_path: 目标服务器路径
-    :type remote_path str
+    :param remote_name: 目标服务文件名
+    :type remote_name str
     """
     buf_size = 1024 * 1  # 每次读取的文件大小
-    with ftp_connect(FTP_HOST, FTP_USERNAME, FTP_PASSWORD, FTP_PORT) as ftp_conn:
+    ftp_obj = FtpConfig.get_ftp_object()
+    with ftp_connect(ftp_obj.host, ftp_obj.username, ftp_obj.password, ftp_obj.port) as ftp_conn:
         old_pasv = ftp_conn.passiveserver
         # 修改模式
-        if old_pasv == PASSIVE_MODE:
-            ftp_conn.set_pasv(ACTIVE_MODE)
+        if old_pasv == ftp_obj.ACTIVE_MODE:
+            ftp_conn.set_pasv(ftp_obj.PASSIVE_MODE)
         try:
             # 上传文件
             with open(local_path, 'rb') as fp:
-                ftp_conn.storbinary('STOR ' + remote_path, fp, buf_size)
+                # 特别注意不能把全路径加上，否则会导致权限不足
+                ftp_conn.storbinary('STOR ' + remote_name, fp, buf_size)
         finally:
             # 修改回原来的模式
             if old_pasv != ftp_conn.passiveserver:
@@ -161,9 +190,10 @@ def test():
         file_name = os.path.basename(temp_file)
         with open(temp_file, "a") as f:
             f.write(file_name)
-        upload_file(temp_file, os.path.join(FTP_ROOT, file_name))
+        upload_file(temp_file, file_name)
 
 
 if __name__ == '__main__':
     test()
+
 ```
