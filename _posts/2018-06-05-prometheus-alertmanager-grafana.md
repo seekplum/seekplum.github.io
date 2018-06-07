@@ -179,6 +179,8 @@ rule_files:
 
 其中targets是我们采集的主机和端口，`127.0.0.1`代表agent在本机，`10001`代表agent提供的端口是10001
 
+添加target有两种方式，在prometheus.yml写入则需要手动重载才生效，可以指定yaml文件地址，就不需要重载了
+
 4.启动prometheus
 
 **prometheus存入数据会和系统时间有关，启动前先确认系统时间是否正常**
