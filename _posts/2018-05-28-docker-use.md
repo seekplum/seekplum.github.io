@@ -186,3 +186,16 @@ Options:
     - config.v2.json  # 可能会不需要改
 * 3.重启docker, service docker restart
 * 4.重新运行容器, docker run
+
+## 查看dockerfile内容
+当pull一个镜像后，不知道Dockerfile里面的内容，看知道一些基本的信息，可以用以下方式
+
+1.查看镜像的ID
+
+> docker images
+
+2.查看json文件内容
+
+> find / -name "镜像ID*"  | xargs cat | python -m json.tool
+
+或者可以尝试逆向分析,请参考[从镜像历史记录逆向分析出Dockerfile](https://andyyoung01.github.io/2016/08/23/%E4%BB%8E%E9%95%9C%E5%83%8F%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95%E9%80%86%E5%90%91%E5%88%86%E6%9E%90%E5%87%BADockerfile/)
