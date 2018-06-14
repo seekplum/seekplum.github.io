@@ -199,3 +199,27 @@ Options:
 > find / -name "镜像ID*"  | xargs cat | python -m json.tool
 
 或者可以尝试逆向分析,请参考[从镜像历史记录逆向分析出Dockerfile](https://andyyoung01.github.io/2016/08/23/%E4%BB%8E%E9%95%9C%E5%83%8F%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95%E9%80%86%E5%90%91%E5%88%86%E6%9E%90%E5%87%BADockerfile/)
+
+## 从私有仓库拉取镜像
+
+1.修改daemon.json文件
+
+vi /etc/docker/daemon.json
+
+```json
+{
+    "insecure-registries": ["registry.xxx.com"]
+}
+```
+
+2.重启docker
+
+> systemctl daemon-reload && systemctl restart docker
+
+3.登陆
+
+> docker login -u admin -p admin registry.xxx.com
+
+4.pull镜像
+
+> docker pull registry.xxx.com/project/IMAGE-NAME:latest
