@@ -136,6 +136,24 @@ Options:
 ## 查看镜像详细信息
 > docker inspect IMAGE NAME(镜像名)\|IMAGE ID(镜像ID)
 
+## 进入容器方式
+* 1.attach
+
+> docker attach 容器ID|容器名
+
+**缺点:当多个窗口同事使用该方式进入时，所有的窗口都同步显示。如果有一个窗口阻塞了，那么其他窗口也无法再进行操作。即只有一个窗口可以操作容器。**
+
+* 2.使用SSH
+
+**需要容器提供了sshd服务，不建议使用。**
+
+
+* 3.使用nsenter
+
+* 4.使用exec
+
+> docker exec -it 容器ID|容器名 bash
+
 ## 迁移镜像
 
 ### 发布到[Docker镜像中心](https://hub.docker.com)
