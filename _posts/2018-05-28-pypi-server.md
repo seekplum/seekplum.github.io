@@ -41,7 +41,7 @@ mkdir -p /srv/pypi
 > htpasswd -s /srv/pypi/.htpasswd yourusername
 
 ## 启动docker镜像
-> docker run -itd \-\-rm -v /srv/pypi:/srv/pypi:rw -p 8080:80 \-\-name pypi codekoala/pypi
+> docker run -itd \-\-rm -e PYPI_EXTRA=\"\-\-disable-fallback\" -v /srv/pypi:/srv/pypi:rw -p 8080:80 \-\-name pypi codekoala/pypi
 
 ## 配置服务器地址
 
