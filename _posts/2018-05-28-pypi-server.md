@@ -69,7 +69,7 @@ password:yourpassword
 ## 从私服安装包
 > export PIP_EXTRA_INDEX_URL=http://192.168.1.27:8080  # 设置pip备用源地址
 
-> pip install xxx==x.x.x  # 安装包
+> pip install xxx==x.x.x  # 安装包默认安装源 https://pypi.Python.org/simple/
 
 ## 参考
 [使用docker搭建pip私服](https://github.com/codekoala/docker-pypi)
