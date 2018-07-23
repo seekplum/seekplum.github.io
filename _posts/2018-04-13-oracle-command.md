@@ -357,3 +357,6 @@ alter diskgroup DATADG set attribute 'disk_repair_time'='36h';
 * 查询磁盘组用的磁盘
 
 > lsdsk -k
+
+## crs服务
+关机过程中会调用`oracle-ohasd.service`服务进行关闭crs
