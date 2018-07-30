@@ -11,6 +11,8 @@ thread: snakefood
 
 ## 安装
 * pip安装
+> pip install snakefood
+
 * 源码安装
 
 ## 安装依赖
