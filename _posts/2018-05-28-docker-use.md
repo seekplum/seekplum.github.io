@@ -51,6 +51,13 @@ Docker 要求 Ubuntu 系统的内核版本高于 3.10 ，查看本页面的前�
 * ubuntu:16.04: 指定要运行的镜像，Docker首先从本地主机上查找镜像是否存在，如果不存在，Docker 就会从镜像仓库 Docker Hub 下载公共镜像。
 * /bin/echo Hello world: 在启动的容器里执行的命令
 
+
+### redhat6.7安装
+```bash
+rpm -iUvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+yum -y install docker-io
+```
+
 ## 基本使用
 
 ### 运行交互式的容器
@@ -246,3 +253,31 @@ vi /etc/docker/daemon.json
 4.pull镜像
 
 > docker pull registry.xxx.com/project/IMAGE-NAME:latest
+
+
+## 搭建本地Registry
+以`codekoala/pypi`镜像作为示例
+
+### 目标私服启动镜像
+
+> docker run -d -p 5000:5000 -v /registry:/var/lib/registry registry:2
+ 
+
+### 上传镜像到私服
+* 1.修改hosts文件，添加域名和IP的映射
+* 2.对镜像打tag
+
+> docker tag codekoala/pypi private.docker.hub:5000/codekoala/pypi
+
+**repository 的完整格式为：[registry-host]:[port]/[username]/xxx,只有 Docker Hub 上的镜像可以省略 [registry-host]:[port] 。**
+
+* 3.上传镜像
+
+> docker push private.docker.hub:5000/codekoala/pypi
+
+* 4.下载镜像
+
+> docker pull private.docker.hub:5000/codekoala/pypi
+
+registry 也支持认证，https 安全传输等特性，具体可以参考[官方文档](https://docs.docker.com/registry/configuration/)
+

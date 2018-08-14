@@ -205,9 +205,36 @@ runtime 是容器真正运行的地方。runtime 需要跟操作系统 kernel �
 
 **只有当需要修改时才复制一份数据，这种特性被称作Copy-on-Write。可见，容器层保存的是镜像变化的部分，不会对镜像本身进行任何修改。**
 
+## 镜像缓存
+Docker 会缓存已有镜像的镜像层，构建新镜像时，如果某镜像层已经存在，就直接使用，无需重新创建。
+
+`--no-cache`在构建镜像时不使用缓存
+
+Dockerfile中每个指令都会创建一个镜像层，上层是依赖于下层的。无论什么时候，只要某一层发生变化，其上面所有层的缓存都会失效。当改变了Dockerfile指令执行顺序，或者修改了指令，缓存都会失效。
+
+## Debug Dockerfile
+在构建过程中，极有可能在执行某个指令的时候就失败了，我们可以运行最新的这个镜像定位指令失败的原因。
 
 
+## RUN、CMD、ENTRYPOINT对比
+* 1.RUN 执行命令并创建新的镜像层，RUN 经常用于安装软件包。
+* 2.CMD 设置容器启动后默认执行的命令及其参数，但 CMD 能够被 docker run 后面跟的命令行参数替换。
+* 3.ENTRYPOINT 配置容器启动时运行的命令。
 
+**ENTRYPOINT 不会被忽略，一定会被执行，即使运行 docker run 时指定了其他命令。**
+
+**update 和 install 操作需要放在一个 RUN 指令中执行，这样能够保证每次安装的是最新的包。如果 install 在单独的 RUN 中执行，则会使用 update 创建的镜像层，而这一层可能是很久以前缓存的。**
+
+## Shell、Exec对比
+* 1.当指令执行时，shell 格式底层会调用 /bin/sh -c <command> 
+* 2.当指令执行时，exec 格式会直接调用 <command>，不会被 shell 解析。
+
+
+**CMD 和 ENTRYPOINT 推荐使用 Exec 格式，因为指令可读性更强，更容易理解**。RUN 则两种格式都可以。 
+
+**ENTRYPOINT 的 Exec 格式用于设置要执行的命令及其参数，同时可通过 CMD 提供额外的参数。**
+
+**ENTRYPOINT 的 Shell 格式会忽略任何 CMD 或 docker run 提供的参数。**
 
 
 
