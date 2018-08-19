@@ -90,3 +90,28 @@ umount /mnt/hda5
 
 umount /dev/hda5 /mnt/hda5
 ```
+
+## 操作系统挂载新盘
+1.查看现有分区信息
+
+> df -Th
+
+2.格式化成xfs
+
+> mkfs.xfs -f /dev/sdb
+
+3.挂载到指定目录
+
+> mount /dev/sdb /virtbox/
+
+4.检查是否mount成功
+
+> df -Th
+
+5.设置系统重启自动挂载
+
+编辑`/etc/fstab`文件，加入如下内容
+
+```bash
+/dev/sdb  /virtbox/ xfs     defaults        0 0
+```
