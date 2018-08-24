@@ -281,3 +281,6 @@ vi /etc/docker/daemon.json
 
 registry 也支持认证，https 安全传输等特性，具体可以参考[官方文档](https://docs.docker.com/registry/configuration/)
 
+## 批量删除容器
+> docker rm -v $(docker ps -aq -f status=exited)
+
