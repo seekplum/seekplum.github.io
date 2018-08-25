@@ -1,11 +1,10 @@
 ---
 layout: post
-title:  持续学习docker
+title:  持续学习docker<一>
 categories: docker
-tags: docker images
+tags: docker images cgroup namespace pause cpu memory block io
 thread: docker
 ---
-
 ## 容器生态系统
 
 ### 容器核心技术
@@ -279,6 +278,48 @@ Docker 可以通过 `-c` 或 `--cpu-shares` 设置容器使用 CPU 的权重。�
 > docker run \-\-name container_B -it -c 512 progrium/stress \-\-cpu 1
  
 * 通过`top`命令观察两容器CPU占用
+
+## 限制 block IO
+Block IO 是另一种可以限制容器使用的资源。Block IO 指的是磁盘的读写，docker 可通过设置权重、限制 bps 和 iops 的方式控制容器读写磁盘的带宽。
+
+* bps: 是 byte per second，每秒读写的数据量。
+* iops: 是 io per second，每秒 IO 的次数。
+
+**注：目前 Block IO 限额只对 direct IO（不使用文件缓存）有效。**
+
+默认情况下，所有容器能平等地读写磁盘，可以通过设置 `--blkio-weight` 参数来改变容器 block IO 的优先级。默认为`500`
+
+### 限制 bps 和 iops
+可通过以下参数控制容器的 bps 和 iops：
+
+* --device-read-bps: 限制读某个设备的 bps。
+* --device-write-bps: 限制写某个设备的 bps。
+* --device-read-iops: 限制读某个设备的 iops。
+* --device-write-iops: 限制写某个设备的 iops。
+
+
+### 测试命令
+* 限制容器写 `/dev/sda` 的速率为 `30 MB/s`
+
+> docker run -it \-\-device-write-bps /dev/sda:30MB ubuntu
+
+* dd测试
+> time dd if=/dev/zero of=test.out bs=1M count=800 oflag=direct
+
+## cgroup
+cgroup 全称 Control Group,实现资源限额.Linux 操作系统通过 cgroup 可以设置进程使用 CPU、内存 和 IO 资源的限额。
+
+## namespace
+namespace管理着host中全局唯一的资源，并可以让每个容器都觉得只有自己在使用它。**namespace 实现了容器间资源的隔离。**
+
+Linux 使用了六种 namespace，分别对应六种资源：
+
+* Mount: 容器看上去拥有整个文件系统。容器有自己的 / 目录，可以执行 mount 和 umount 命令。
+* UTS: 让容器有自己的 hostname。 默认情况下，容器的 hostname 是它的短ID，可以通过 `-h` 或 `--hostname` 参数设置。
+* IPC:  让容器拥有自己的共享内存和信号量（semaphore）来实现进程间通信，而不会与 host 和其他容器的 IPC 混在一起。
+* PID: 容器在host中以进程的形式运行,所有容器的进程都挂在dockerd进程下，可以看到容器自己的子进程。 而且进程的 PID 不同于 host 中对应进程的 PID，容器中 PID=1 的进程当然也不是 host 的 init 进程。**容器拥有自己独立的一套 PID**.
+* Network: 让容器拥有自己独立的网卡、IP、路由等资源。
+* User: 让容器能够管理自己的用户
 
 
 
