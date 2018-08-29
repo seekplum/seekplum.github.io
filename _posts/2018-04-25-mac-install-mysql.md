@@ -154,7 +154,7 @@ parse_server_arguments() {
         ;;
       --datadir=*)  datadir=`echo "$arg" | sed -e 's/^[^=]*=//'`
 		    datadir_set=1
-	;;
+    ;;
       --pid-file=*) mysqld_pid_file_path=`echo "$arg" | sed -e 's/^[^=]*=//'` ;;
       --service-startup-timeout=*) service_startup_timeout=`echo "$arg" | sed -e 's/^[^=]*=//'` ;;
     esac
@@ -232,7 +232,7 @@ else
     dirs=`sed -e "/$subpat/!d" -e 's//\1/' $conf`
     for d in $dirs
     do
-      d=`echo $d | sed -e 's/[ 	]//g'`
+      d=`echo $d | sed -e 's/[    ]//g'`
       if test -x "$d/bin/my_print_defaults"
       then
         print_defaults="$d/bin/my_print_defaults"

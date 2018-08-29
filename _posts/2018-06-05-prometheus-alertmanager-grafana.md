@@ -111,11 +111,11 @@ vi /home/prometheus/prometheus/rules/test.rules
 
 ```text
 ALERT node_load5
-	IF node_load5>0
-	LABELS {
+    IF node_load5>0
+    LABELS {
 			severity = "warn" ,
-	}
-	ANNOTATIONS {
+    }
+    ANNOTATIONS {
 
 			alertname = "系统负载（5分钟）" ,
 
@@ -127,14 +127,14 @@ ALERT node_load5
 
 			suggest = "可尝试检查应用状态是否正常，如活跃连接是否过多等" ,
 
-	}
+    }
 
 ALERT node_load5
-	IF node_load5>5
-	LABELS {
+    IF node_load5>5
+    LABELS {
 			severity = "critical" ,
-	}
-	ANNOTATIONS {
+    }
+    ANNOTATIONS {
 
 			alertname = "系统负载（5分钟）" ,
 
@@ -146,7 +146,7 @@ ALERT node_load5
 
 			suggest = "可尝试检查应用状态是否正常，如活跃连接是否过多等" ,
 
-	}
+    }
 ```
 
 3.配置yaml文件

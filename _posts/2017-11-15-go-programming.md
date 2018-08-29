@@ -227,11 +227,11 @@ import (
 **任何类型都是空接口类型的**
 
 2.预定义字符
-|append	|bool	|byte	|cap	|close	|complex	|complex64	|complex128	|uint16|
+|append|bool|byte|cap|close|complex|complex64|complex128|uint16|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|copy	|false	|float32	|float64	|imag	|int	|int8	|int16	|uint32|
-|int32	|int64	|iota	|len	|make	|new	|nil	|panic	|uint64|
-|print	|println	|real	|recover	|string	|true	|uint	|uint8	|uintptr|
+|copy|false|float32|float64|imag|int|int8|int16|uint32|
+|int32|int64|iota|len|make|new|nil|panic|uint64|
+|print|println|real|recover|string|true|uint|uint8|uintptr|
 
 ### 操作符
 ```
@@ -389,23 +389,23 @@ type 结构体名 struct{
 package main
 
 import (
-	"strings"
-	"fmt"
+    "strings"
+    "fmt"
 )
 
 func main()  {
-	var content = "Python"
-	switch lang := strings.TrimSpace(content); lang{
-	default:
+    var content = "Python"
+    switch lang := strings.TrimSpace(content); lang{
+    default:
 		fmt.Println("Unknown language")
-	case "Python":
+    case "Python":
 		fmt.Println("Python language")
 		fallthrough
-	case "Py":
+    case "Py":
 		fmt.Println("Py language")
-	case "Go":
+    case "Go":
 		fmt.Println("Go language")
-	}
+    }
 }
 ```
 
@@ -416,25 +416,25 @@ switch 语句还可以被用于 type-switch 来判断某个 `interface` 变量�
 
 ```
 func main() {
-	var v interface{}
-	v = 1234
-	switch v.(type) {
-	case string:
+    var v interface{}
+    v = 1234
+    switch v.(type) {
+    case string:
 		fmt.Printf("The string is %s", v.(string))
-	case int, uint, int8:
+    case int, uint, int8:
 		fmt.Printf("The integer is %d", v)
-	default:
+    default:
 		fmt.Printf("Unknown value: type=%T", v)
-	}
-	fmt.Println()
-	switch i := v.(type) {
-	case string:
+    }
+    fmt.Println()
+    switch i := v.(type) {
+    case string:
 		fmt.Printf("The string is %s", i)
-	case int, uint, int8:
+    case int, uint, int8:
 		fmt.Printf("The integer is %d", i)
-	default:
+    default:
 		fmt.Printf("Unknown value: type=%T", i)
-	}
+    }
 }
 ```
 
@@ -445,25 +445,25 @@ func main() {
 #### for子句
 ```
 func main() {
-	var number int
-	for i:=0;i<10;i++{
+    var number int
+    for i:=0;i<10;i++{
 		number ++
-	}
-	var j = 1
-	for ;j%5!=0;j*=5{
+    }
+    var j = 1
+    for ;j%5!=0;j*=5{
 		number ++
-	}
-	for k:=1; k%5!=0;{
+    }
+    for k:=1; k%5!=0;{
 		k *= 5
 		number ++
-	}
-	var m = 1
-	for m < 5{
+    }
+    var m = 1
+    for m < 5{
 		m += 2
-	}
-	// 无限循环
-	for {
-	}
+    }
+    // 无限循环
+    for {
+    }
 }
 ```
 
@@ -484,8 +484,8 @@ func main() {
 
 ```
 for index, rune := range str2 {
-    	fmt.Printf(""))
-	}
+        fmt.Printf(""))
+    }
 ```
 
 ### defer语句
@@ -496,8 +496,8 @@ for index, rune := range str2 {
 ```
 value, err := pack1.Function1(param1)
 if err != nil {
-	fmt.Printf("An error occured in pack1.Function1 with parameter %v", param1)
-	return err
+    fmt.Printf("An error occured in pack1.Function1 with parameter %v", param1)
+    return err
 }
 // 未发生错误，继续执行：
 ```

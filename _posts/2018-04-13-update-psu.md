@@ -20,13 +20,13 @@ Quick Reference to Patch Numbers for Database PSU, SPU(CPU), Bundle Patches and 
 安装前准备
 
 ```
-2.2	获取最新PSU信息
+2.2获取最新PSU信息
 参照MOS文档1454618.1来了解最新的PSU信息。一名专业的DBA应该及时跟进ORACLE官方发布的PSU信息，了解各版本PSU 所fix的数据库BUG。
 Note 1454618.1 Quick Reference to Patch Numbers for Database PSU, SPU(CPU), Bundle Patches and Patchsets
 
-2.3	阅读PSU的README文件
+2.3阅读PSU的README文件
 每一个PSU的安装包都会包含一个 README的文档，它是DBA打补丁之前需要仔细阅读的重要参考文档，里面包含了详细的此PSU的安装信息以及需要注意的安装事项。
-2.4	Opatch工具安装
+2.4Opatch工具安装
 Opatch工具现在都已经集成在了ORACLE安装软件的home路径下，但是自带的OPATCH版本可能不够高，DBA在安装PSU之前需要查看PSU安装包中README.html的OPatch Utility Information部分，获取此版本PSU对opatch工具的最小版本要求。如果自带的opatch工具不满足最小版本要求，需要下载相应版本的opatch工具。对于11.2.0.4.8的PSU，需要的OPATCH最小版本为11.2.0.3.6，ORACLE推荐使用11.2最新的OPATCH版本。（不能使用12.X的OPATCH版本）。 
 Opatch工具下载地址：
 https://updates.oracle.com/download/6880880.html
@@ -39,7 +39,7 @@ https://updates.oracle.com/download/6880880.html
 # <GI_HOME>/OPatch/opatch version
 # <ORACLE_HOME>/OPatch/opatch version
 
-2.5	下载解压patch
+2.5下载解压patch
 可以从MOS文档1454618.1中下载到各版本的PSU。这里下载了11.2.0.4.8的GI的PSU，此PSU包含了DB的PSU。
 unzip p21523375_112040_Linux-x86-64.zip -d /opt/grid
 chown -R grid.oinstall /opt/grid/21523375
@@ -57,7 +57,7 @@ drwxrwxrwx  5 grid oinstall  4096 Sep  3 14:43 21352649
 前三个文件夹是此PSU的sub-patch，可以通过README文件知道这三个sub-patch需要打个哪个ORACLE_HOME下。
  
 可以看到三个补丁都要应用到GI HOME下，前两个补丁也要应用到DB HOME下。
-2.6	冲突检测
+2.6冲突检测
 查看已经安装的补丁信息：
 $ <ORACLE_HOME>/OPatch/opatch lsinventory -detail -oh <ORACLE_HOME>
 如果当前版本没有任何one-off补丁，那么安装PSU一般不会存在补丁的冲突。如果当前版本安装了one-off补丁，那么需要检查是否存在补丁冲突：
@@ -110,7 +110,7 @@ Sub-Patch : 19769489
 
 OPatch succeeded.
   $ opatch rollback -id 16776922
-2.7	停止dbconsole
+2.7停止dbconsole
 SELECT name, db_unique_name FROM v$database;
 
 NAME               DB_UNIQUE_NAME
@@ -124,7 +124,7 @@ emctl stop dbconsole
 安装PSU（两种模式）
 
 ```
-2.8	Opatch auto方式
+2.8Opatch auto方式
 Opatch auto安装PSU方式以滚动方式进行安装，每次只能安装一个节点，opatch auto安装过程中，运行opatch auto命令的节点会临时不可用。
 OCM配置
 Opatch auto方式安装PSU的整个过程会以静默方式进行，需要创建OCM配置文件来达到此目的，创建OCM参考文档：
@@ -228,7 +228,7 @@ root用户：
 ```
 
 ```
-2.9	手工安装
+2.9手工安装
 本文档提供的手工安装方式也是以滚动方式安装PSU，手工安装的方式也可以一个命令对多个节点打PATCH，主要是依靠opatch 命令不带local参数来实现的。
 停止DB homes上的资源，以oracle用户执行
 oracle用户执行：
@@ -259,7 +259,7 @@ Root用户执行：
 /opt/grid/products/11.2.0/rdbms/install/rootadd_rdbms.sh
 /opt/grid/products/11.2.0/crs/install/rootcrs.pl -patch
 启动ORACLE
-Oracle用户执行：	
+Oracle用户执行：
 /opt/oracle/products/11.2.0/bin/srvctl start home -o /opt/oracle/products/11.2.0 -s /opt/oracle/products/11.2.0/srvm/admin/stophome.txt -n rac1
 安装数据字典
 每个RAC节点重复以上操作，然后进行数据字典的更新和安装，参考opatch auto方式的安装数据字典部分
@@ -271,7 +271,7 @@ Oracle用户执行：
 回滚卸载PSU
 
 ```
-2.10	Opatch auto回退
+2.10Opatch auto回退
 软件回退
 opatch auto /opt/grid/21523375 -rollback -ocmrf /home/grid/file.rsp
 此命令只会回退本节点的PSU，另外节点如果有需要执行相同如上操作。
@@ -284,7 +284,7 @@ SQL> STARTUP
 SQL> @catbundle_PSU_<database SID PREFIX>_ROLLBACK.sql
 SQL> QUIT
 
-2.11	手工安装PSU的回退
+2.11手工安装PSU的回退
 每个节点都要执行
 停止DB资源
 /opt/oracle/products/11.2.0/bin/srvctl stop home -o /opt/oracle/products/11.2.0 -s /opt/oracle/products/11.2.0/srvm/admin/stophome.txt -n rac1 -f
@@ -292,7 +292,7 @@ SQL> QUIT
 运行root脚本 
 /opt/grid/products/11.2.0/crs/install/rootcrs.pl -unlock
 /sbin/fuser -k /opt/grid/products/11.2.0/bin/crsctl.bin
-	
+
 回退GI psu
 Grid用户执行： 
 /opt/grid/products/11.2.0/OPatch/opatch rollback -id 21352635 -local -silent -oh /opt/grid/products/11.2.0 -invPtrLoc /opt/grid/products/11.2.0/oraInst.loc
@@ -324,12 +324,12 @@ oracle用户执行：
 只打DB的PSU
 
 ```
-2.12	安装前准备
+2.12安装前准备
 参考本章开始章节
-2.13	下载解压PATCH
+2.13下载解压PATCH
 需要的软件
 补丁程序21352635: DATABASE PATCH SET UPDATE 11.2.0.4.8 (INCLUDES CPUOCT2015)
-2.14	安装部署。
+2.14安装部署。
 安装PSU 21352635
 >>> 停止1号机数据库的ORACLE_HOME下所有的数据库实例，包括asm
 $srvctl stop instance -d <dbname> -i <instance_name>
@@ -355,12 +355,12 @@ $opatch apply
     $ORACLE_HOME/OPatch/opatch lsinventory
 
 
-2.15	安装数据字典
+2.15安装数据字典
 参照上面章节安装数据字典部分
-2.16	检查安装结果
+2.16检查安装结果
 按照上面章节安装数据字典部分
 
-2.17	回退DB PSU
+2.17回退DB PSU
 >>> 停止1号机数据库ORACLE_HOME下所有的数据库实例（如果有ASM，也要停止）：
 $srvctl stop instance -d <dbname> -i <instance_name>
 $srvctl stop asm -n <nodename>

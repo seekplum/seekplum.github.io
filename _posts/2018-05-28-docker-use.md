@@ -124,7 +124,7 @@ yum -y install docker-io
 docker commit -h
 Flag shorthand -h has been deprecated, please use --help
 
-Usage:	docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+Usage:    docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
 
 Create a new image from a container's changes
 

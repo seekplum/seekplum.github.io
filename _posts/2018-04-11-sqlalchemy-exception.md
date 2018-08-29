@@ -32,17 +32,17 @@ session.query(Table.create_time,Table.count).group_by(Table.count).all()
 
 > 不建议sql_mode为空，因为会有数据丢失的风险，故推荐使用**第二种**解决方法。
 
-	1. 修改sql_mode
+    1. 修改sql_mode
 
-	    设置： 在mysql的conf文件中加上`sql_mode=""`这一行
-	    
+        设置： 在mysql的conf文件中加上`sql_mode=""`这一行
+        
 
-	2. 程序中改变查询语句的写法，group_by之外的字段使用func函数包围
+    2. 程序中改变查询语句的写法，group_by之外的字段使用func函数包围
 
         为了符合ONLY_FULL_GROUP_BY=True的要求，如下：
 
-	
-	    那么在程序中正确  的写法应为：
+    
+        那么在程序中正确  的写法应为：
 
     ```python
     from sqlalchemy import func
