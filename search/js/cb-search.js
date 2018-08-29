@@ -61,7 +61,7 @@ $(document).ready(function () {
         time1 = 0;
     });
 
-    $.getJSON("/search/cb-search.json").done(function (data) {
+    function parseSearch(data) {
         if (data.code == 0) {
             for (var index in data.data) {
                 var item = data.data[index];
@@ -80,8 +80,23 @@ $(document).ready(function () {
                 }
             });
         }
-    }).error(function (data, b) {
-        console.log("json解析错误，搜索功能暂不可用，请检查文章title，确保不含有换行等特殊符号");
+    }
+
+    $.getJSON("/search/cb-search.json").done(function (data) {
+        console.log(data.data);
+        return parseSearch(data)
+    }).error(function (response, err) {
+        console.log(err);
+
+        var content = response.responseText;
+        console.log(typeof content);
+        console.log(content);
+
+        // var data = JSON.parse(content);
+        var data = $.parseJSON(content);
+        console.log(typeof data);
+
+        return parseSearch(data)
     });
 
 });
