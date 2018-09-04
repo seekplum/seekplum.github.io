@@ -81,5 +81,40 @@ joined 容器是另一种实现容器间通信的方式。joined 容器非常特
 
 > wget 127.0.0.1
 
+## 容器访问外网
+* 查看`iptables`规则
+
+> iptables -t nat -S
+
+```text
+-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+```
+
+其含义是：来自 172.17.0.0/16 网段的包，目标地址是外网（! -o docker0 即目标地址不是docker0），就把它交给 MASQUERADE 处理。而 MASQUERADE 的处理方式是将包的源地址替换成 host 的地址发送出去，即做了一次网络地址转换（NAT）。
+
+### 测试
+* tcpdump监控docker0 上的 icmp（ping）数据包
+
+> tcpdump -i docker0 -n icmp
+
+* tcpdump监控eth0(即宿主机正常up网卡)上的 icmp（ping）数据包
+
+> tcpdump -i eth0 -n icmp
+
+* 进入容器，执行ping操作
+
+> docker run -it --rm --name busybox1 busybox
+
+> ping www.baidu.com
+
+## 外部访问容器
+* 端口映射
+
+docker 可将容器对外提供服务的端口映射到 host 的某个端口，外网通过该端口访问容器。容器启动时通过`-p`参数映射端口。
+
+在Virtualbox中也是使用了端口映射使得外部可以访问内部没有配置IP的VDI.
+
+**每一个映射的端口，host 都会启动一个 `docker-proxy` 进程来处理访问容器的流量.**
+
 ## 参考
 [理解容器之间的连通性 ](https://www.cnblogs.com/CloudMan6/p/7087765.html)
