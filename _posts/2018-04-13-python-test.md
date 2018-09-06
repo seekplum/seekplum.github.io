@@ -44,7 +44,7 @@ thread: pythonpytest
 ### 测试函数执行顺序
 > 按照函数声明顺序,依次执行
 
-```
+```python
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -84,7 +84,7 @@ test/
 └── test_main.py
 ```
 
-```
+```python
 import pytest
 
 def test_main():
@@ -100,7 +100,7 @@ if __name__ == '__main__':
 
 #### 断言异常抛出
 
-```
+```python
 import pytest
 
 def test_zero_division():
@@ -110,7 +110,7 @@ def test_zero_division():
 ```
 
 #### 访问异常的具体信息
-```
+```python
 def test_recursion_depth():
     with pytest.raises(RuntimeError) as excinfo:
         def f():
@@ -128,6 +128,14 @@ Failed: Expecting ZeroDivisionError
 
 ### pytest.fixture
 > 通过@pytest.fixture() 注释会在执行测试用例之前初始化操作.然后直接在测试用例的方法中就可以拿到初始化返回的参数(参数名要和初始化的方法名一样)
+
+为可靠的和可重复执行的测试提供固定的基线。（可以理解为测试的固定配置，使不同范围的测试都能够获得统一的配置。）
+
+fixture提供了区别于传统单元测试（setup/teardown）风格的令人惊喜的功能：
+
+* 1.有独立的命名，可以按照测试的用途来激活，比如用于functions/modules/classes甚至整个project。
+* 2.按模块单元的方式实现，每个fixture name可以出发一个fixture function，每个fixture function本身也能调用其他的fixture function。（相互调用，不只是用于test_func()）。
+* 3.fixture的范围覆盖简单的单元测试到复杂的功能测试，可用于参数传入或者class、module及test session范围内的复用。
 
 #### 参数含义
 * scope: 
@@ -155,7 +163,7 @@ Failed: Expecting ZeroDivisionError
 
 * 测试文件`test_user_password.py`
 
-```
+```python
 import pytest
 import json
 
@@ -188,7 +196,7 @@ class TestUserPassword(object):
 
 > 有时候我们需要在用例结束的时候去清理一些测试数据，或清除测试过程中创建的对象，我们可以使用下面的方式
 
-```
+```python
 import smtplib
 import pytest
 
@@ -218,7 +226,7 @@ def smtp2(request):
 
 **其中len(params)的值就是用例执行的次数**
 
-```
+```python
 @pytest.fixture(scope="module",
                 params=["smtp.gmail.com", "mail.python.org"])
 def smtp(request):
@@ -249,7 +257,7 @@ class TestUserPasswordWithParam(object):
 ### pytest.mark.parametrize
 > 可以让我们每次参数化fixture的时候传入多个参数。因此简单理解，我们可以把parametrize装饰器想象成是数据表格，有表头(test_input,expected)以及具体的数据。
 
-```
+```python
 import pytest
 @pytest.mark.parametrize("test_input,expected", [
     ("3+5", 8),
@@ -260,6 +268,114 @@ def test_eval(test_input, expected):
     assert eval(test_input) == expected
 ```
 
+### 在classes，modules或者projects中使用fixtures
+有时，测试函数是不直接访问一个fixture对象的。比如，测试需要用一个空的路径当作当前工作路径，但是并不关心当前的具体路径。下面的例子是用标准的tempfile库和pytest fixtures来实现的。我们将创建fixture的部分单独放到conftest.py中。
+
+#### class
+
+* conftest.py
+
+```python
+import pytest
+import tempfile
+import os
+
+@pytest.fixture()
+def cleandir():
+    newpath = tempfile.mkdtemp()
+    os.chdir(newpath)
+
+```
+
+* test_setenv.py
+
+```python
+import os
+import pytest
+
+@pytest.mark.usefixtures("cleandir")
+class TestDirectoryInit(object):
+    def test_cwd_starts_empty(self):
+        assert os.listdir(os.getcwd()) == []
+        with open("myfile", "w") as f:
+            f.write("hello")
+
+    def test_cwd_again_starts_empty(self):
+        assert os.listdir(os.getcwd()) == []
+```
+
+* 指定多个fixtures
+
+> @pytest.mark.usefixtures("cleandir", "anotherfixture") 
+
+#### modules
+* 在test module的层级指定fixture的用途，通过使用标记机制的通用功能： 
+
+> pytestmark = pytest.mark.usefixtures("cleandir")  
+
+**被指定的变量必须命名为`pytestmark`，比如像foomark这样的是不能激活fixtures的。**
+
+#### project
+* pytest.ini
+
+```python
+[pytest]
+usefixtures = cleandir
+```
+
+#### Auto use fixtures (xUnit setup on steroids)
+偶尔地，我们可能希望在不明确声明一个函数参数或一个usefixtures装饰器的情况下，让fixtures被调用。以一个实际情况为例，假设我们有一个database fixture有begin/rollback/commit的结构，我们想要让每个测试方法都自动地跟随一个事务和回滚。下面是这个概念的一个虚拟的独立实现：
+
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import pytest
+
+
+class DB(object):
+    def __init__(self):
+        self.intransaction = []
+
+    def begin(self, name):
+        self.intransaction.append(name)
+
+    def rollback(self):
+        self.intransaction.pop()
+
+
+@pytest.fixture(scope="module")
+def db():
+    return DB()
+
+
+class TestClass(object):
+    @pytest.fixture(autouse=True)
+    def transact(self, request, db):
+        db.begin(request.function.__name__)
+        yield
+        db.rollback()
+
+    def test_method1(self, db):
+        assert db.intransaction == ["test_method1"]
+
+    def test_method2(self, db):
+        assert db.intransaction == ["test_method2"]
+
+```
+
+在class层级transactfixture被autouse=True标记，这个标记是为了实现，让这个class里面的所有测试方法，不需要在测试函数标记或class层级使用usefixtures装饰器的前提下就能使用这个fixture。
+
+
+下面是autouse fixtures怎么在其他scope下工作的：
+
+* autouse fixtures遵从`scope=关键字参数`：如果一个autouse fixture有`scope="session"`，不管它在哪里定义都只会运行一次。`scope='class'`表示将会在每个class运行一次等等。
+* 如果一个autouse fixture在test module中定义，这个module中所有的测试函数将会自动使用它。
+* 如果一个autouse fixture定义在conftest.py中，该路径下的所有测试module下的所有测试函数都会调用这个fixture。
+* 最后，请小心的使用：如果你在插件中定义了一个autouse fixture，它将会在被安装的所有project的所有测试中调用。如果这个fixture无论如何都会在当前确定的settings下运行，比如在ini-file中，这样的设定非常有用。像这样一个全局的fixture应该快速确定它是否需要做任何工作，并避免不必要的imports或计算。
+
+#### fixture functions查找顺序
+如果你在实现测试的过程中发现一个fixture会用于多个测试，则可以将其移动到conftest.py中，或者甚至在不改变代码的情况下单独安装插件。fixture functions的查找顺序是`test classes`，`test modules`，`conftest.py`文件，最后是`builtin`和`三方插件`。
 
 ### 常用技巧
 
@@ -305,7 +421,7 @@ def test_eval(test_input, expected):
 
 * 实现代码
 
-```
+```python
 import requests
 import pytest
 

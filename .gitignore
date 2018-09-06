@@ -3,3 +3,4 @@ _site/*
 .DS_Store
 test.py
 tests/*
+.pytest_cache/*
