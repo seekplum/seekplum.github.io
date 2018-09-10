@@ -6,12 +6,16 @@ tags: virtualenv env
 thread: virtualenv
 ---
 ## Centos换源
+* 1.首先备份/etc/yum.repos.d/CentOS-Base.repo
+* 2.下载对应版本repo文件, 放入/etc/yum.repos.d/(操作前请做好相应备份)
+* 3.运行以下命令生成缓存
+
 ```
-首先备份/etc/yum.repos.d/CentOS-Base.repo
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
-下载对应版本repo文件, 放入/etc/yum.repos.d/(操作前请做好相应备份)
-运行以下命令生成缓存
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+sed -i 's/$releasever/7/g' /etc/yum.repos.d/CentOS-Base.repo
 yum clean all
+yum list
 yum makecache
 ```
 
