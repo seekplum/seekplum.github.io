@@ -15,6 +15,9 @@ thread: docker
 
 docker: Error response from daemon: driver failed programming external connectivity on endpoint python-test (b32173a31d81bd415b0fa81671c5bb8931530a1d02a8208f22f8326f4e0b13dd):  (iptables failed: iptables --wait -t nat -A DOCKER -p tcp -d 0/0 --dport 4000 -j DNAT --to-destination 172.17.0.3:80 ! -i docker0: iptables: No chain/target/match by that name.
  (exit status 1)).
+ 
+## 安装ifconfig工具
+> yum -y install net-tools
 
 ## 错误原因
 在搭建ftp服务器时，本地访问成功，远程访问失败，把防火墙启动并开发`21`端口后导致docker网络映射失败。

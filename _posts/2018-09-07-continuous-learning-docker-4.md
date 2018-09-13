@@ -70,18 +70,20 @@ echo "PS1='[\\\u@\h \W\$(__docker_machine_ps1)]\$'" >> ~/.bashrc
 > source ~/.bashrc
 
 ## 创建Machine
-> docker-machine create \-\-driver generic \-\-generic-ip-address=10.10.20.98 \-\-generic-ssh-key ~/.ssh/seekplum  \-\-generic-ssh-user=root  host98
+> docker-machine --debug create \-\-driver generic \-\-generic-ip-address=192.168.1.78 \-\-generic-ssh-key ~/.ssh/seekplum  \-\-generic-ssh-user=root \-\-generic-ssh-port=22 host78
 
 docker-machine详细命令参见: [https://docs.docker.com/machine/](https://docs.docker.com/machine/)
 
 命令分析：
 
+* --debug: 输出信息开启debug级别，可以看到详细信息
 * create: 创建docker主机
 * --driver generic: 驱动类型 generic 支持linux通用服务器，还支持很多种云主机
-* --generic-ip-address=10.10.20.98: 指定主机
-* --generic-ssh-key ~/.ssh/seekplum: 指定私钥
-* --generic-ssh-user=root: 指定用户
-* host98: 主机名称
+* --generic-ip-address=192.168.1.78: 指定主机IP
+* --generic-ssh-key ~/.ssh/seekplum: 指定ssh登陆私钥
+* --generic-ssh-user=root: 指定ssh登陆用户名
+* --generic-ssh-port=22: 指定ssh登陆端口
+* host78: 主机名称
 
 **创建过程**
 * 1.通过 ssh 登录到远程主机
@@ -94,8 +96,8 @@ docker-machine详细命令参见: [https://docs.docker.com/machine/](https://doc
 
 * 查看: docker-machine ls
 * 删除: docker-machine rm -y \<machine-name\>
-* 依赖冲突
 
+### 依赖冲突解决方法
 ```text
 因为依赖关系问题而跳过的软件包：
     initscripts-9.49.41-1.el7_5.1.x86_64 来自 updates
@@ -103,7 +105,11 @@ docker-machine详细命令参见: [https://docs.docker.com/machine/](https://doc
 
 * 卸载冲突包
 
-> rpm -e redhat-release-server-7.4-18.el7.x86_64 \-\-nodeps
+```bash
+cp /etc/os-release  /etc/os-release.bak
+rpm -e redhat-release-server-7.4-18.el7.x86_64 \-\-nodeps
+cp /etc/os-release.bak  /etc/os-release
+```
 
 ## 管理Machine
 执行远程 docker 命令我们需要通过 `-H` 指定目标主机的连接字符串，比如：
