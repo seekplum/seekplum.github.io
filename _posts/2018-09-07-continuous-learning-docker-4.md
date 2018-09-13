@@ -40,34 +40,33 @@ Docker Machine 为这些环境起了一个统一的名字：`provider`。对于�
 ### tab补全
 为了得到更好的体验，我们可以安装 bash completion script，这样在 bash 能够通过 tab 键补全 docker-mahine 的子命令和参数。
 
-[completion script](https://github.com/docker/machine/tree/master/contrib/completion/bash)
+[completion script](https://github.com/docker/machine/tree/master/contrib/completion/bash),设置shell提示`PS1='[\u@\h \W$(__docker_machine_ps1)]\$ '`.
 
 注: 以下操作在macos下
 
-* 1.安装bash_completion
-
-> brew install bash-completion
-
-* 2.运行脚本
-
+* 1.安装工具
 ```bash
-echo "source '$(brew --prefix)/etc/bash_completion'" >> ~/.bashrc
-
-cd $(brew --prefix)/etc/bash_completion.d/
-
-curl -O https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-prompt.bash
-curl -O https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-wrapper.bash
-curl -O https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine.bash
-chmod 755 docker-machine*.bash
-echo "source '$(brew --prefix)/etc/bash_completion.d/docker-machine-prompt.bash'" >> ~/.bashrc
-echo "source '$(brew --prefix)/etc/bash_completion.d/docker-machine-wrapper.bash'" >> ~/.bashrc
-echo "source '$(brew --prefix)/etc/bash_completion.d/docker-machine.bash'" >> ~/.bashrc
-echo "PS1='[\\\u@\h \W\$(__docker_machine_ps1)]\$'" >> ~/.bashrc
+brew install docker-completion
+brew install docker-compose-completion
+brew install docker-machine-completion
 ```
 
-* 3.设置快捷键生效
+* 2.设置命令行提示符
 
-> source ~/.bashrc
+注:**本环境安装了oh-my-zsh**，可以通过`echo $PS1`或者`echo $PROMPT`查看当前的默认提示符
+
+vi ~/.bashrc
+
+```bash
+source '/usr/local/etc/bash_completion.d/docker-machine-prompt.bash'
+export PS1='${ret_status} %{$fg[cyan]%}%c%{$reset_color%}$(__docker_machine_ps1) $(git_prompt_info)'
+```
+
+**需要在其他soure前面(比如还有soure ~/python27env)，不然会python27env的提示符给弄丢**
+
+使设置生效
+
+> source ~/.zshrc
 
 ## 创建Machine
 > docker-machine --debug create \-\-driver generic \-\-generic-ip-address=192.168.1.78 \-\-generic-ssh-key ~/.ssh/seekplum  \-\-generic-ssh-user=root \-\-generic-ssh-port=22 host78
@@ -111,6 +110,37 @@ rpm -e redhat-release-server-7.4-18.el7.x86_64 \-\-nodeps
 cp /etc/os-release.bak  /etc/os-release
 ```
 
+### 创建错误
+```text
+Reading CA certificate from /Users/seekplum/.docker/machine/certs/ca.pem
+Reading client certificate from /Users/seekplum/.docker/machine/certs/cert.pem
+Reading client key from /Users/seekplum/.docker/machine/certs/key.pem
+Error creating machine: Error checking the host: Error checking and/or regenerating the certs: There was an error validating certificates for host "192.168.1.98:2376": dial tcp 192.168.1.98:2376: getsockopt: connection refused
+You can attempt to regenerate them using 'docker-machine regenerate-certs [name]'.
+Be advised that this will trigger a Docker daemon restart which might stop running containers.
+
+notifying bugsnag: [Error creating machine: Error checking the host: Error checking and/or regenerating the certs: There was an error validating certificates for host "192.168.1.98:2376": dial tcp 192.168.1.98:2376: getsockopt: connection refused
+You can attempt to regenerate them using 'docker-machine regenerate-certs [name]'.
+Be advised that this will trigger a Docker daemon restart which might stop running containers.
+```
+
+错误原因是防火墙开启着，关闭防火墙后成功
+
+### 关闭防火墙
+* 关闭firewall
+
+> systemctl stop firewalld.service
+
+* 禁止firewall开机启动
+
+> systemctl disable firewalld.service
+
+* 查看默认防火墙状态
+
+关闭后显示notrunning，开启后显示running
+
+> firewall-cmd \-\-state
+
 ## 管理Machine
 执行远程 docker 命令我们需要通过 `-H` 指定目标主机的连接字符串，比如：
 
@@ -120,9 +150,19 @@ Docker Macheine，显示访问`host98`需要的所有环境变量
 
 > docker-machine env host98
 
-进入host98 docker所在主机
+* 进入host98 docker所在主机
 
 > eval $(docker-machine env host98)
+
+如果你用的不是docker命令，而是`ls`, `cat`这些命令，操作指令还是由本机来完成的。**只有docker命令才是由host98来完成**
+
+**docker-machine env 并不是让你真的登录到服务器，不是保持跟服务器的连接，而是当你操作docker命令的时候，往env中设置的host上发送数据。**
+
+* 退出host98主机的docker
+
+> eval $(docker-machine env -u
+
+`-u`: unset
 
 命令行提示符已经变了，其原因是我们之前在`$HOME/.bashrc` 中配置了 `PS1='[\u@\h \W$(__docker_machine_ps1)]\$'`，用于显示当前 docker host。
 
@@ -131,4 +171,6 @@ Docker Macheine，显示访问`host98`需要的所有环境变量
 * `docker-machine scp host1:/tmp/a host2:/tmp/b`: 在不同 machine 之间拷贝文件
 
 
+## 参考
+* [oh-my-zsh终端用户名设置（PS1)](https://blog.csdn.net/jichunw/article/details/80088995)
 
