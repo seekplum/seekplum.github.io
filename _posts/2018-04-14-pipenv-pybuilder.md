@@ -69,6 +69,8 @@ pip 默认安装包路径为`/usr/local/lib/python2.7/site-packages`。此模式
 
 > pipenv lock
 
+> pipenv lock -v \-\-keep-outdated
+
 * 运行虚拟环境
 
 可使用以下命令来运行项目：
@@ -88,6 +90,18 @@ pip 默认安装包路径为`/usr/local/lib/python2.7/site-packages`。此模式
 * 删除虚拟环境
 
 > pipenv --rm
+
+### 制作env
+* 1.virtualenv创建env
+
+> virtualenv \-\-always-copy \-\-python=/Users/seekplum/pythonenv/python27env/bin/python /tmp/env
+
+* 2.进入env环境安装相应包
+
+> pipenv install \-\-deploy \-\-system
+
+`--system`: 参数表示使用 pip 直接安装相应依赖
+`--deploy`: 如果Pipfile.lock已过期，或者Python版本错误，则中止
 
 ### 运行pyb异常
 
