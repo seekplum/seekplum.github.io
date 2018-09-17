@@ -53,7 +53,7 @@ yum makecache
 
 编译安装python，[下载地址](http://www.python.org/)
 
-> ./configure --prefix=/home/hjd/hjd-web-env/python27/ --with-ssl --with-zlib --enable-loadable-sqlite-extensions
+> ./configure \-\-prefix=/home/hjd/hjd-web-env/python27/ \-\-with-ssl \-\-with-zlib \-\-enable-loadable-sqlite-extensions
 
 > make && make install
 
@@ -61,7 +61,7 @@ yum makecache
 
 * 创建虚拟环境包依赖我们刚刚安装的python2.7
 
-> virtualenv --no-site-packages --distribute --python=/home/hjd/hjd-web-env/python27/bin/python /home/hjd/hjd-web-env/
+> virtualenv \-\-no-site-packages \-\-distribute \-\-python=/home/hjd/hjd-web-env/python27/bin/python /home/hjd/hjd-web-env/
 
 * 进入虚拟环境
 

@@ -14,14 +14,16 @@ thread: operation
 ```bash
 alias senv='source $HOME/pythonenv/python27env/bin/activate'
 alias mymysql='$HOME/packages/mysql/bin/mysql -uroot -proot -S $HOME/packages/mysql/data/sock/mysql.sock'
-alias clouddoc="apidoc -i $HOME/PythonProjects/qdata-cloud -o /tmp/doc/ -e $HOME/PythonProjects/qdata-cloud/qflame && scp -r /tmp/doc/ qdata:/root/ && ssh qdata /home/sendoh/sendoh-web-env/bin/supervisorctl -c /home/sendoh/sendoh-web-env/packages/conf/supervisor/supervisord.conf restart nginx"
-alias deploydoc="rm -rf /tmp/doc/ && apidoc -i $HOME/PythonProjects/qdeploy -o /tmp/doc/ && scp -r /tmp/doc/ deploy:/root/ && ssh deploy /home/sendoh/sendoh-web-env/bin/supervisorctl -c /home/sendoh/sendoh-web-env/packages/conf/supervisor/supervisord.conf restart nginx"
+alias clouddoc="trash /tmp/doc;apidoc -i $HOME/PythonProjects/qdata-cloud -o /tmp/doc/ -e $HOME/PythonProjects/qdata-cloud/qflame && scp -r /tmp/doc/ qdata:/root/ && ssh qdata /home/sendoh/sendoh-web-env/bin/supervisorctl -c /home/sendoh/sendoh-web-env/packages/conf/supervisor/supervisord.conf restart nginx"
+alias deploydoc="trash /tmp/doc/; apidoc -i $HOME/PythonProjects/qdeploy -o /tmp/doc/ && scp -r /tmp/doc/ cloud:/root/ && ssh cloud  /home/sendoh/qdata-cloud/packages/python/bin/supervisorctl -c /home/sendoh/qdata-cloud/conf/supervisor/supervisord.conf restart nginx"
 
 alias ll='ls -l'
 alias cdp='cd $HOME/PythonProjects/'
 alias cds='cd $HOME/PythonProjects/seekplum'
+alias cdi='cd $HOME/PythonProjects/seekplum.github.io'
 alias cdc='cd $HOME/PythonProjects/qdata-cloud'
 alias cdm='cd $HOME/PythonProjects/qdata-mgr/src'
+alias cdd='cd $HOME/PythonProjects/qdeploy'
 
 
 export MYSQL_HOME=$HOME/packages/mysql
@@ -33,7 +35,26 @@ export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$ORACLE_HOME:$MYSQL_HOME/lib
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home
 export CLASS_PATH=$JAVA_HOME/lib
 
-export PATH=$PATH:$HOME/bin:$MYSQL_HOME/bin:$JAVA_HOME/bin
+export M2_HOME=$HOME/packages/apache-maven-3.5.4
+export M2=$M2_HOME/bin
+
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/GolangProjects
+
+alias cdg='cd $GOPATH/src'
+
+export PATH=$PATH:$HOME/.nvm/versions/node/v10.0.0/bin
+export PATH=$PATH:$GOPATH/src/github.com/kardianos/govendor
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export PATH=$PATH:$HOME/bin:$HOME/pythonenv/python27env/bin
+export PATH=$PATH:$MYSQL_HOME/bin:$JAVA_HOME/bin
+export PATH=$PATH:$M2
+
+# alias rm='trash-put'
+alias rm='echo -e "\033[33mThis is not the command you are looking for.\033[0m"; false'
+
+source '/usr/local/etc/bash_completion.d/docker-machine-prompt.bash'
+export PS1='${ret_status} %{$fg[cyan]%}%c%{$reset_color%}$(__docker_machine_ps1) $(git_prompt_info)'
 
 source $HOME/pythonenv/python27env/bin/activate
 ```
@@ -80,6 +101,17 @@ public class HelloWorld{
 > java HelloWorld //运行java
 
 > javaws *.jnlp  //运行.jnlp文件
+
+## 安装Maven
+* 1.[下载Maven的`bin包`](http://maven.apache.org/download.cgi)
+* 2.把包解压到指定目录
+* 3.设置环境变量
+
+```bash
+export M2_HOME=$HOME/packages/apache-maven-3.5.4
+export M2=$M2_HOME/bin
+export PATH=$PATH:$M2
+```
 
 ## 安装配置[zsh](https://github.com/robbyrussell/oh-my-zsh)
 
