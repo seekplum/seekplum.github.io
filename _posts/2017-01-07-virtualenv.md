@@ -19,11 +19,16 @@ yum list
 yum makecache
 ```
 
-> **制作的路径和使用路径必须一致(在/home/hjd/hjd-env下制作， 那拷贝到其他地方使用，使用路径也必须是/home/hjd/hjd-env)**
+## 注意事项
+**制作的路径和使用路径必须一致(在/home/hjd/hjd-env下制作，那拷贝到其他地方使用，使用路径也必须是/home/hjd/hjd-env)**
 
-> yum install zlib* openssl openssl-devel # 相关依赖，此操作先跳过，根据报错进行安装依赖
+## 安装依赖
+可能的相关依赖，**此操作可以先跳过，根据报错进行安装对应的依赖**
 
-## 安装 `pip`
+> yum install zlib* openssl openssl-devel 
+
+
+## 安装 pip
 
 > 使用现有的 python 2.6.x 安装pip
 
@@ -33,7 +38,7 @@ yum makecache
 
 ## 安装 virtualenv
 
-> 使用 pip 安装 virtualenv
+使用 pip 安装 virtualenv
 
 > pip install virtualenv
 
@@ -51,7 +56,7 @@ yum makecache
 
 > ./config && make && make install
 
-编译安装python，[下载地址](http://www.python.org/)
+编译安装python:[下载地址](http://www.python.org/)
 
 > ./configure \-\-prefix=/home/hjd/hjd-web-env/python27/ \-\-with-ssl \-\-with-zlib \-\-enable-loadable-sqlite-extensions
 

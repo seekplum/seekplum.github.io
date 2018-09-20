@@ -151,7 +151,7 @@ Options:
 ## 进入容器方式
 * 1.attach
 
-> docker attach 容器ID|容器名
+> docker attach 容器ID\|容器名
 
 **缺点:当多个窗口同事使用该方式进入时，所有的窗口都同步显示。如果有一个窗口阻塞了，那么其他窗口也无法再进行操作。即只有一个窗口可以操作容器。**
 
@@ -159,12 +159,10 @@ Options:
 
 **需要容器提供了sshd服务，不建议使用。**
 
-
 * 3.使用nsenter
-
 * 4.使用exec
 
-> docker exec -it 容器ID|容器名 bash
+> docker exec -it 容器ID\|容器名 bash
 
 ## 迁移镜像
 
