@@ -29,7 +29,7 @@ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 * 3.[rpm依赖包地址](https://centos.pkgs.org/6/centos-x86_64/libxshmfence-1.2-1.el6.x86_64.rpm.html)
 * 4.卸载之前的包
 
-> rpm -qa | grep -i tigervnc | xargs rpm -e
+> rpm -qa \| grep -i tigervnc \| xargs rpm -e
 
 * 5.安装依赖包
 
