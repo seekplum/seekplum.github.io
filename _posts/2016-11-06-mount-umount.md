@@ -96,19 +96,27 @@ umount /dev/hda5 /mnt/hda5
 
 > df -Th
 
-2.格式化成xfs
+2.格式化分区 
+
+> mklabel gpt
+
+3.格式化成xfs
 
 > mkfs.xfs -f /dev/sdb
 
-3.挂载到指定目录
+4.分区
+
+> mkpart primary 0% 100%
+
+5.挂载到指定目录
 
 > mount /dev/sdb /virtbox/
 
-4.检查是否mount成功
+6.检查是否mount成功
 
 > df -Th
 
-5.设置系统重启自动挂载
+7.设置系统重启自动挂载
 
 编辑`/etc/fstab`文件，加入如下内容
 
