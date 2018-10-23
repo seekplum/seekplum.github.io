@@ -32,7 +32,7 @@ Network 包含一组 Endpoint，同一 Network 的 Endpoint 可以直接通信�
 
 * 以容器方式运行 Consul：
 
-> docker run -d -p 8500:8500 -h consul --name consul progrium/consul -server -bootstrap
+> docker run -d -p 8500:8500 -h consul \-\-name consul progrium/consul -server -bootstrap
 
 ## 参考
 * [跨主机网络概述](https://www.cnblogs.com/CloudMan6/p/7259266.html)
