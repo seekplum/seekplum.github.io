@@ -13,11 +13,11 @@ thread: efk
 ![EFK架构](/static/images/efk/fluentd-elasticsearch-kibana.png)
 
 ## 目标
-* 1.Fluentd可以动态的重载配置，支持修改采集日志路径替换和Elastaic主机服务端替换
-* 2.Fluentd中需要包含自身节点信息，用于查询时进行过滤
-* 3.Kibana或Elasticsearch支持精确查询、模糊查询和组合查询等方式，方便产品聚合整个集群日志
-* 4.Elasticsearch提供排序、搜索、分页等API功能
-* 5.环境部署支持无外网部署
+* [x] 1.Fluentd可以动态的重载配置，支持修改采集日志路径替换和Elastaic主机服务端替换
+* [x] 2.Fluentd中需要包含自身节点信息，用于查询时进行过滤
+* [x] 3.Kibana或Elasticsearch支持精确查询、模糊查询和组合查询等方式，方便产品聚合整个集群日志
+* [x] 4.Elasticsearch提供排序、搜索、分页等API功能
+* [ ] 5.环境部署支持无外网部署，td-agent插件为完成无外网部署
 
 ## Fluentd
 
@@ -171,6 +171,8 @@ sudo sed -i "s/TD_AGENT_GROUP=td-agent/TD_AGENT_GROUP=root/g" /etc/init.d/td-age
 [在线测试format是否正确](http://fluentular.herokuapp.com/)，建议先通过该网站测试通过后再填写到conf文件中。
 
 #### 配置nginx采集
+* 创建目录
+
 > mkdir -p /var/log/td-agent/access && chown -R td-agent:td-agent /var/log/td-agent/access
 
 ```bash
@@ -199,11 +201,17 @@ EOF
 ```
 
 #### 配置supervisor采集
+* 创建目录
+
 > mkdir -p /var/log/td-agent/supervisor && chown -R td-agent:td-agent /var/log/td-agent/supervisor
+
+* 示例输出
 
 ```text
 2018-11-12 19:50:43,588 INFO success: qdata_worker entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
 ```
+
+* 配置文件
 
 ```bash
 cat >/etc/td-agent/conf.d/supervisor.conf <<EOF
@@ -237,6 +245,82 @@ cat >/etc/td-agent/conf.d/supervisor.conf <<EOF
 </match>
 EOF
 ```
+
+#### 配置http server采集
+* 配置supervisor服务
+
+创建目录
+
+> mkdir /etc/conf.d
+
+配置文件
+
+```bash
+cat >/etc/conf.d/http-server.conf <<EOF
+[program:http-server]
+command=python -m SimpleHTTPServer 80
+process_name=%(program_name)s ; process_name expr (default %(program_name)s)
+numprocs=1                    ; number of processes copies to start (def 1)
+redirect_stderr=true          ; redirect proc stderr to stdout (default false)
+stdout_logfile=/tmp/http-server.log
+stdout_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)
+stdout_logfile_backups=10     ; # of stdout logfile backups (default 10)
+stdout_capture_maxbytes=1MB   ; number of bytes in 'capturemode' (default 0)
+stdout_events_enabled=false   ; emit events on stdout writes (default false)
+directory=/tmp
+EOF
+```
+
+* 设置td-agent配置
+
+创建目录
+
+> mkdir -p /var/log/td-agent/http-server && chown -R td-agent:td-agent /var/log/td-agent/http-server
+
+示例输出
+
+```text
+10.10.110.35 - - [16/Nov/2018 02:04:04] "GET / HTTP/1.1" 200 -
+```
+
+配置文件
+
+```bash
+cat >/etc/td-agent/conf.d/http-server.conf <<EOF
+<source>
+  @type tail
+  path /tmp/http-server.log
+  pos_file /var/log/td-agent/http-server/http-server.log.pos
+
+  tag http-server.log
+  format /^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>.+)\] "(?<method>\w+) (?<path>\S+) (?<version>.+)" (?<code>\d+) (?<other>.*)$/ 
+  time_format %d/%b/%Y %H:%M:%S 
+</source>
+
+<filter http-server.log>
+  @type record_transformer
+  <record>
+    hostname \${hostname}
+  </record>
+</filter>
+
+<match http-server.log>
+  @type elasticsearch
+  host 192.168.1.78
+  port 9200
+
+  flush_interval 2s
+  buffer_queue_limit 4096
+  buffer_chunk_limit 1024m
+  num_threads 4
+  logstash_format true
+</match>
+EOF
+```
+
+* 生成日志
+
+> for i in `seq 1 99 `; do echo "$i"; curl http://localhost:80 ; sleep 1; done >/dev/null 2>&1 &
 
 ## Kibana
 
@@ -328,11 +412,291 @@ text: 存储数据时候，会自动分词，并生成索引（这是很智能�
 原方式在`Discover`中是 `hostname: qdata`进行查询的, 修改为`hostname.keyword: qdata`进行查询即可。
 
 ## Elasticsearch
+Elasticsearch是一个分布式，可扩展，实时的搜索与数据分析引擎。它能从项目一开始就赋予你的数据以搜索，分析和探索的能力。
+
+Elasticsearch不仅仅是全文搜索，我们还将介绍结构化搜索，数据分析，复杂的语言处理，地理位置和对象间关联关系等。还将探讨如何给数据建模来充分利用Elasticsearch的水平伸缩性，以及在生产环境中如何配置和监视你的集群。
+
 [中文版是基于Elasticsearch 2.x版本](https://www.elastic.co/guide/cn/elasticsearch/guide/current/foreword_id.html)，目前最新是6.4.1版本，建议直接阅读[最新官方文档](https://www.elastic.co/guide/index.html)。
 
 ### 官方客户端
 * python: [github地址](https://github.com/elastic/elasticsearch-py)，[使用文档链接](https://elasticsearch-py.readthedocs.io/en/master/index.html)
 * golang: [github地址](https://github.com/elastic/go-elasticsearch)
+
+### python示例代码
+```python
+# -*- coding: utf-8 -*-
+
+from elasticsearch import Elasticsearch
+
+ES_HOST = "192.168.1.78"
+ES_PORT = 9200
+
+
+class ElasticSearchClient(object):
+    def __init__(self, es):
+        """ElasticSearch客户端，支持搜索数据
+
+        :param es: 实例化的es对象
+        :type es: Elasticsearch
+        :example es: Elasticsearch()
+        """
+        self._es = es
+
+    def search_body(self, body):
+        """搜索数据
+
+        :param body: 查询参数
+        :type body: dict
+        :example body: {
+            "query": {
+                "match_phrase": {
+                    "name": "alertmanager"
+                }
+            }
+        }
+
+        :rtype dict
+        :return 查询结果
+        :example {
+            'hits': {
+                'hits': [
+                    {
+                        '_score': 0.18232156,
+                        '_type': 'fluentd',
+                        '_id': 'aybAFWcB90wAhiDJQr4S',
+                        '_source': {
+                            'status': 'RUNNING',
+                            'name': 'alertmanager',
+                            'level': 'INFO',
+                            '@timestamp': '2018-11-15T13:02:57.000000000+08:00',
+                            'hostname': 'qdata-98lite-dev',
+                            'state': 'success:',
+                            'line': '394'
+                        },
+                        '_index': 'logstash-2018.11.15'},
+                    {
+                        '_score': 0.18232156,
+                        '_type': 'fluentd',
+                        '_id': 'bCYTFmcB90wAhiDJrr6i',
+                        '_source': {
+                            'status': 'RUNNING',
+                            'name': 'alertmanager',
+                            'level': 'INFO',
+                            '@timestamp': '2018-11-15T14:34:04.000000000+08:00',
+                            'hostname': 'qdata-98lite-dev', 'state': 'success:',
+                            'line': '520'
+                        },
+                        '_index': 'logstash-2018.11.15'
+                    }],
+                'total': 2,
+                'max_score': 0.18232156
+            },
+            '_shards': {
+                'successful': 11,
+                'failed': 0,
+                'skipped': 0,
+                'total': 11
+            },
+            'took': 8,
+            'timed_out': False
+        }
+        """
+        return self._es.search(body=body)
+
+
+def print_text(text):
+    print text
+
+
+def get_data(client):
+    """查询数据
+
+    :param client:
+    :type client: ElasticSearchClient
+    :example client: ElasticSearchClient(es)
+    """
+    body = {
+        "query": {
+            "match_phrase": {
+                "name": "alertmanager"
+            }
+        }
+    }
+    result = client.search_body(body)
+    hists = result["hits"]
+    total = hists["total"]
+
+    print_text("total: {}".format(total))
+
+    for item in hists["hits"]:
+        source = item["_source"]
+
+        timestamp = source["@timestamp"]
+        name = source["name"]
+        hostname = source["hostname"]
+        level = source["level"]
+        status = source["status"]
+
+        message = "timestamp: {}, hostname: {}, name: {}, level: {}, status: {}".format(timestamp, hostname, name, level, status)
+        print_text(message)
+
+
+def get_page_data(client, number, page_line):
+    """查询分页数据
+
+    :param client:
+    :type client: ElasticSearchClient
+    :example client: ElasticSearchClient(es)
+
+    :param number: 指定页数
+    :type number: int
+    :example number: 3
+
+    :param page_line: 每页条数， ElasticSearch中默认值 10 条
+    :type page_line: int
+    :example page_line: 20
+    """
+    body = {
+        # 搜索
+        "query": {
+            # 广泛匹配
+            "match": {
+                "hostname": "host"
+            },
+
+            # 精确匹配
+            # "match_phrase": {
+            #     "hostname": "host-192-168-1-178"
+            # }
+        },
+
+        # 分页
+        "from": number * page_line,
+        "size": page_line,
+
+        # 排序
+        "sort": {
+            "@timestamp": {
+                "order": "asc",
+                # "order": "desc"
+            }
+        }
+
+    }
+
+    result = client.search_body(body)
+
+    hists = result["hits"]
+    total = hists["total"]
+
+    print_text("total: {}".format(total))
+
+    for item in hists["hits"]:
+        source = item["_source"]
+
+        timestamp = source["@timestamp"]
+        hostname = source["hostname"]
+        code = source["code"]
+        method = source["method"]
+        host = source["host"]
+
+        message = "timestamp: {}, host: {}, hostname: {}, method: {}, code: {}".format(timestamp, host, hostname, method, code)
+        print_text(message)
+
+
+def main():
+    hosts = "{host}:{port}".format(host=ES_HOST, port=ES_PORT)
+    es = Elasticsearch(hosts=hosts)
+    client = ElasticSearchClient(es)
+    get_data(client)
+    get_page_data(client, 1, 11)
+
+
+if __name__ == '__main__':
+    main()
+
+```
+
+### go示例代码
+```golang
+package main
+
+import (
+  "fmt"
+
+  "github.com/olivere/elastic"
+  "github.com/prometheus/common/log"
+  "context"
+  "encoding/json"
+)
+
+type SupervisorTweet struct {
+  Timestamp string `json:"@timestamp"`
+  Hostname  string `json:"hostname"`
+  Level     string `json:"level"`
+  Line      string `json:"line"`
+  Name      string `json:"name"`
+  State     string `json:"state"`
+  Status    string `json:"status"`
+}
+
+func CreateElasticSearchClient(url string) (*elastic.Client, error) {
+  ctx := context.Background()
+
+  c, err := elastic.NewSimpleClient(elastic.SetURL(url))
+  if err != nil {
+    log.Errorf("Create Elastic client error: %s NewSimpleClient(%s)", err, url)
+    return nil, err
+  }
+
+  info, code, err := c.Ping(url).Do(ctx)
+  if err != nil {
+    log.Errorf("Elastic client can not ping %s, error: %s", url, err)
+    return nil, err
+  }
+  log.Infof("Elastic returned with code %d and version %s", code, info.Version.Number)
+  return c, nil
+}
+
+func SearchData(client *elastic.Client) {
+  termQuery := elastic.NewQueryStringQuery("name:alertmanager")
+
+  searchResult, err := client.Search().Query(termQuery).Do(context.Background())
+
+  if err != nil {
+    log.Errorf("Elastic query term error: %s", err)
+  }
+
+  if searchResult.Hits.TotalHits > 0 {
+    log.Infof("Total: %d", searchResult.Hits.TotalHits)
+
+    for _, hit := range searchResult.Hits.Hits {
+      var t SupervisorTweet
+      err := json.Unmarshal(*hit.Source, &t)
+
+      if err != nil {
+        log.Errorln("Deserialization failed")
+      }
+      log.Infof("time: %s, hostname: %s, name: %s, status: %s", t.Timestamp, t.Hostname, t.Name, t.Status)
+    }
+  } else {
+    log.Errorln("Found no tweets")
+  }
+}
+
+func main() {
+  fmt.Println("Elastic Demo...")
+
+  url := "http://192.168.1.78:9200"
+  c, err := CreateElasticSearchClient(url)
+  if err != nil {
+    panic("Create ElasticSearch client failed!")
+  }
+  
+  SearchData(c)
+}
+
+```
 
 ## 搭建td-agent yum源
 参考这篇[搭建本地yum源](/local-yum-repo)博客进行操作

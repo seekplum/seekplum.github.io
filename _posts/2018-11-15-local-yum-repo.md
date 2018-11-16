@@ -12,6 +12,7 @@ yum install -y yum-plugin-downloadonly
 yum install -y createrepo
 
 ## 下载rpm包
+**注意:此种方式需要要求未安装过改软件才能下载，比如之前未安装过wget**
 
 * 指定要安装的包,比如 `wget`
 
