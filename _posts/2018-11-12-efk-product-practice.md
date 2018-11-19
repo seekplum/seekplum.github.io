@@ -17,9 +17,28 @@ thread: efk
 * [x] 2.Fluentd中需要包含自身节点信息，用于查询时进行过滤
 * [x] 3.Kibana或Elasticsearch支持精确查询、模糊查询和组合查询等方式，方便产品聚合整个集群日志
 * [x] 4.Elasticsearch提供排序、搜索、分页等API功能
-* [ ] 5.环境部署支持无外网部署，td-agent插件为完成无外网部署
+* [x] 5.EFK环境部署支持无外网部署，td-agent插件支持无外网部署
 
 ## Fluentd
+
+### 离线安装插件
+以安装 `fluent-plugin-elasticsearch-2.12.0.gem` 为例，[fluent-plugin-elasticsearch插件下载地址](https://rubygems.org/gems/fluent-plugin-elasticsearch)，在官网下载gem包。
+
+* 安装
+
+> td-agent-gem install fluent-plugin-elasticsearch-2.12.0.gem --local
+
+* 报错信息
+
+> ERROR:  Could not find a valid gem 'elasticsearch' (>= 0) in any repository
+
+* 报错原因
+
+原因是gem包和rpm包类似，会有依赖关系，需要成功安装所有依赖包后才能安装
+
+* 解决方法
+  - 1.直接在官网中下载所有依赖包，只方便于依赖不多的包文件，当依赖包不多时直接下载即可。
+  - 2.从缓存中获取，当在线安装gem包成功后，在 `ruby安装路径的cache目录` 中会有相关的依赖gem包，把 `/opt/td-agent/embedded/lib/ruby/gems/2.1.0/cache` 目录拷贝到安装机器后，进入cache目录再次执行上条安装命令即可。
 
 ### 默认的fluentd配置
 cat /etc/td-agent/td-agent.conf
