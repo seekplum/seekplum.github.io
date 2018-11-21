@@ -76,14 +76,14 @@ createrepo \-\-update /root/rpms/data/admin/files/repo/rhel74-x86_64
 
 cd /root/rpms/data/admin/files/repo/rhel74-x86_64
 
-python -m SimpleHTTPServer 80 &>/dev/null &
+python -m SimpleHTTPServer 8080 &>/dev/null &
 
 ## 客户端配置
 ```bash
 cat >/etc/yum.repos.d/td.repo <<EOF
-[test]
+[td-agent]
 name=Server
-baseurl=http://10.10.20.179
+baseurl=http://127.0.0.1:8080
 enable=1
 gpgcheck=0
 EOF

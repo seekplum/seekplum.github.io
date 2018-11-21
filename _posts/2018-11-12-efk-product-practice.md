@@ -341,6 +341,33 @@ EOF
 
 > for i in `seq 1 99 `; do echo "$i"; curl http://localhost:80 ; sleep 1; done >/dev/null 2>&1 &
 
+## Fluent Bit
+[官网和Fluentd对比](https://fluentbit.io/documentation/0.8/about/fluentd_and_fluentbit.html)
+
+|组件|用途|
+|:---|:---|
+|Fluent Bit|拉起在每台宿主机上采集宿主机上的容器日志。（Fluent Bit 比较新一些，但是资源消耗比较低，性能比Fluentd好一些，但稳定性有待于进一步提升）|
+|Fluentd|两个用途：1 以日志收集中转中心角色拉起，Deployment部署模式；2 在部分Fluent Bit无法正常运行的主机上，以Daemon Set模式运行采集宿主机上的日志，并发送给日志收集中转中心|
+
+* 安装
+
+配置yum源
+
+```bash
+cat >/etc/yum.repos.d/td-bit.repo<<EOF
+[td-agent-bit]
+name = TD Agent Bit
+baseurl = http://packages.fluentbit.io/centos/7
+gpgcheck=1
+gpgkey=http://packages.fluentbit.io/fluentbit.key
+enabled=1
+EOF
+```
+
+* 启动
+
+> systemctl start td-agent-bit
+
 ## Kibana
 
 ### 项（Term）
