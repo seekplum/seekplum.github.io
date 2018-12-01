@@ -26,7 +26,13 @@ thread: efk
 
 * 安装
 
-> td-agent-gem install fluent-plugin-elasticsearch-2.12.0.gem --local
+> td-agent-gem install fluent-plugin-elasticsearch-2.12.0.gem \-\-local
+
+* 处理依赖
+
+fluent-plugin-elasticsearch 插件会依赖 `libcurl-devel`, `gcc`，需要先进行安装
+
+> yum install -y libcurl-devel gcc
 
 * 报错信息
 
