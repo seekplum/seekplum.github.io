@@ -360,3 +360,31 @@ alter diskgroup DATADG set attribute 'disk_repair_time'='36h';
 
 ## crs服务
 关机过程中会调用`oracle-ohasd.service`服务进行关闭crs
+
+## 开启时间
+> set timing on
+
+## 查询表字段
+> desc v$asm_disk_stat
+
+## 查询ASM磁盘状态
+* sql
+
+> select name,mode_status,case when total_mb=0 then 0 else trunc((total_mb-free_mb)*100/total_mb) end used_pct, free_mb from v$asm_disk_stat;
+
+* 在root在查询
+
+注意`$`符号转义
+
+```bash
+su - grid -c "sqlplus '/as sysasm' <<EOF
+set pagesize 200
+set linesize 9999
+set heading off
+select 'seekplum_begin' from dual;
+select name,mode_status,case when total_mb=0 then 0 else trunc((total_mb-free_mb)*100/total_mb) end used_pct, free_mb from v\\\$asm_disk_stat;
+select 'seekplum_end' from dual;
+exit
+EOF"
+```
+
