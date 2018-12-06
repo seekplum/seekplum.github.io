@@ -110,7 +110,7 @@ EOF
 
 * 3.替换版本信息
 
-> sed -i 's/$releasever/7/g' /etc/yum.repos.d/CentOS-Base.repo
+> sed -i \'s/$releasever/7/g\' /etc/yum.repos.d/CentOS-Base.repo
 
 * 4.运行以下命令生成缓存
 
