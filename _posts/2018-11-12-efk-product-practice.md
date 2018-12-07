@@ -757,8 +757,10 @@ func main() {
 * [ ] 1.fluentd和fluentbit对比
 * [ ] 2.性能测试、稳定性测试
 * [ ] 3.业务场景封装
+* [ ] 4.结合prometheus/alertmanger
 
 ## 参考资料
 * [在fluentd数据中增加主机名](https://www.fluentd.org/guides/recipes/apache-add-hostname)
 * [在kibana里使用lucene语法进行搜索query搜索](http://xiaorui.cc/2015/02/13/%E5%9C%A8kibana%E9%87%8C%E4%BD%BF%E7%94%A8lucene%E8%AF%AD%E6%B3%95%E8%BF%9B%E8%A1%8C%E6%90%9C%E7%B4%A2query%E6%90%9C%E7%B4%A2/)
+* [Monitoring Fluentd (Prometheus)](https://docs.fluentd.org/v0.12/articles/monitoring-prometheus)
 * [ELK：kibana使用的lucene查询语法](https://segmentfault.com/a/1190000002972420)
