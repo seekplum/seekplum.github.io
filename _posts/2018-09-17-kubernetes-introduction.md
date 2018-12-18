@@ -9,6 +9,34 @@ thread: docker
 * OSX 10.13.4 (17E202)
 * Python 2.7.14
 
+## 安装
+
+### 安装kubectl
+* 安装
+
+> brew install kubernetes-cli
+
+* 查看版本
+
+> kubectl version
+
+### 安装minikube
+* 下载
+
+> wget -O ~/Downloads/minikube-darwin-amd64 https://github-production-release-asset-2e65be.s3.amazonaws.com/56353740/fc501700-fc5f-11e8-8248-2a4b2c49316a\?X-Amz-Algorithm\=AWS4-HMAC-SHA256\&X-Amz-Credential\=AKIAIWNJYAX4CSVEH53A%2F20181218%2Fus-east-1%2Fs3%2Faws4_request\&X-Amz-Date\=20181218T020448Z\&X-Amz-Expires\=300\&X-Amz-Signature\=84bca3b7ec65d5e164646334548d46bb49326e3fbc0ada0bac26bb9acf1ab158\&X-Amz-SignedHeaders\=host\&actor_id\=16517653\&response-content-disposition\=attachment%3B%20filename%3Dminikube-darwin-amd64\&response-content-type\=application%2Foctet-stream
+
+* 拷贝目录
+
+```bash
+sudo mv ~/Downloads/minikube-darwin-amd64 /usr/local/bin
+sudo chmod 755 /usr/local/bin/minikube-darwin-amd64
+sudo mv /usr/local/bin/minikube-darwin-amd64 /usr/local/bin/minikube
+```
+
+* 查看版本
+
+> /usr/local/bin/minikube version
+
 ## 说明
 本文是按照[三小时学会Kubernetes：容器编排详细指南](http://dockone.io/article/5132)实际上手操作的，`代码`和`图片`出处均是这篇博客。
 
@@ -174,3 +202,5 @@ Pod的主要属性是：
 ## 参考
 * [三小时学会Kubernetes：容器编排详细指南](http://dockone.io/article/5132)
 * [通过Minikube快速搭建一个本地的Kubernetes单节点环境](https://zhuanlan.zhihu.com/p/34487833)
+* [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* [Install Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
