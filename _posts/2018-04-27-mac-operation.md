@@ -5,9 +5,12 @@ tags: mac 配置 operation
 thread: operation
 ---
 
+## 安装brew
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"   
+
 ## 信任任何来源
 
-> sudo spctl --master-disable
+> sudo spctl \-\-master-disable
 
 ## bashrc配置
 
