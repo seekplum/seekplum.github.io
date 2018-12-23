@@ -1,0 +1,38 @@
+```plantuml
+@startuml
+
+title tornado.ioloop类关系图
+
+
+interface Configurable {
+	+ __new__(cls, *args, **kwargs)(self)
+	+ configurable_base(cls)
+	+ configured_class(cls)
+	+ configurable_default(cls)
+	+ initialize(self)
+
+}
+
+class IOLoop {
+	+ _current
+
+	+ current(instance=True)
+	+ configurable_base(cls)
+	+ configurable_default(cls)
+}
+
+class PollIOLoop {
+	+ initialize(self, impl, time_func=None, **kwargs)
+	+ configurable_base(cls)
+	+ configurable_default(cls)
+}
+
+class KQueueIOLoop {
+	+ initialize(self, **kwargs)
+}
+
+Configurable <|-down- IOLoop: Implementation
+IOLoop <|-down- PollIOLoop: Inheritance
+PollIOLoop <|-down- KQueueIOLoop: Inheritance
+
+@enduml
