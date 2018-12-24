@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 解决Goland run报错 "undefined:xxxx"
+title: 解决Goland run报错 undefined:xxxx
 categories: goland
 tags: goland go
 thread: goland
