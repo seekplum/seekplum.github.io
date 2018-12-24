@@ -23,19 +23,102 @@ thread: docker
 ### 安装minikube
 * 下载
 
-> wget -O ~/Downloads/minikube-darwin-amd64 https://github-production-release-asset-2e65be.s3.amazonaws.com/56353740/fc501700-fc5f-11e8-8248-2a4b2c49316a\?X-Amz-Algorithm\=AWS4-HMAC-SHA256\&X-Amz-Credential\=AKIAIWNJYAX4CSVEH53A%2F20181218%2Fus-east-1%2Fs3%2Faws4_request\&X-Amz-Date\=20181218T020448Z\&X-Amz-Expires\=300\&X-Amz-Signature\=84bca3b7ec65d5e164646334548d46bb49326e3fbc0ada0bac26bb9acf1ab158\&X-Amz-SignedHeaders\=host\&actor_id\=16517653\&response-content-disposition\=attachment%3B%20filename%3Dminikube-darwin-amd64\&response-content-type\=application%2Foctet-stream
+[github地址](https://github.com/kubernetes/minikube/releases/tag/v0.25.2) 选择 `v0.25.2` 版本，高于这个版本在执行 `minikube start` 过程中一直出现各种各样问题，[查看issues详情](https://github.com/kubernetes/minikube/issues/2703)
+
+`v0.25.2` 最新的 kubernetes-version 为 `v1.10.0`
 
 * 拷贝目录
 
 ```bash
-sudo mv ~/Downloads/minikube-darwin-amd64 /usr/local/bin
-sudo chmod 755 /usr/local/bin/minikube-darwin-amd64
-sudo mv /usr/local/bin/minikube-darwin-amd64 /usr/local/bin/minikube
+sudo mv ~/Downloads/minikube-darwin-amd64 /usr/local/bin/minikube
+sudo chmod 755 /usr/local/bin/minikube
 ```
 
 * 查看版本
 
 > /usr/local/bin/minikube version
+
+* 关闭报告错误提示
+
+> minikube config set WantReportErrorPrompt false
+
+* 启动
+
+> sudo minikube start \-\-kubernetes-version v1.13.1
+
+`--kubernetes-version v1.13.1` 指定版本，版本信息可以不指定，使用默认值
+
+### 卸载
+
+停止集群，删除镜像，[issues详情](https://github.com/kubernetes/minikube/issues/1043)
+
+> minikube stop; minikube delete; sudo trash ~/.minikube; sudo trash ~/.kube
+
+> docker stop $(docker ps -aq) \| xargs docker rm -v
+
+> sudo trash /usr/local/bin/minikube
+
+> docker system prune -af --volumes  # 会删除所有的镜像
+
+> brew uninstall kubernetes-cli kubernetes-helm
+
+trash是个回收站功能工具，用于代替`rm`，防止误删除，以 `pip install trash-cli` 命令安装
+
+### 报错
+```text
+➜  ~ minikube start --kubernetes-version v1.13.1
+Starting local Kubernetes v1.13.1 cluster...
+Starting VM...
+Downloading Minikube ISO
+ 178.87 MB / 178.87 MB [============================================] 100.00% 0s
+Getting VM IP address...
+E1219 14:03:57.207483   72064 start.go:210] Error parsing version semver:  Version string empty
+Moving files into cluster...
+Downloading kubelet v1.13.1
+Downloading kubeadm v1.13.1
+Finished Downloading kubeadm v1.13.1
+Finished Downloading kubelet v1.13.1
+Setting up certs...
+Connecting to cluster...
+Setting up kubeconfig...
+Stopping extra container runtimes...
+Starting cluster components...
+E1219 14:06:54.094254   72064 start.go:342] Error starting cluster:  kubeadm init error
+sudo /usr/bin/kubeadm init --config /var/lib/kubeadm.yaml --ignore-preflight-errors=DirAvailable--etc-kubernetes-manifests --ignore-preflight-errors=DirAvailable--data-minikube --ignore-preflight-errors=Port-10250 --ignore-preflight-errors=FileAvailable--etc-kubernetes-manifests-kube-scheduler.yaml --ignore-preflight-errors=FileAvailable--etc-kubernetes-manifests-kube-apiserver.yaml --ignore-preflight-errors=FileAvailable--etc-kubernetes-manifests-kube-controller-manager.yaml --ignore-preflight-errors=FileAvailable--etc-kubernetes-manifests-etcd.yaml --ignore-preflight-errors=Swap --ignore-preflight-errors=CRI
+ running command: : running command:
+sudo /usr/bin/kubeadm init --config /var/lib/kubeadm.yaml --ignore-preflight-errors=DirAvailable--etc-kubernetes-manifests --ignore-preflight-errors=DirAvailable--data-minikube --ignore-preflight-errors=Port-10250 --ignore-preflight-errors=FileAvailable--etc-kubernetes-manifests-kube-scheduler.yaml --ignore-preflight-errors=FileAvailable--etc-kubernetes-manifests-kube-apiserver.yaml --ignore-preflight-errors=FileAvailable--etc-kubernetes-manifests-kube-controller-manager.yaml --ignore-preflight-errors=FileAvailable--etc-kubernetes-manifests-etcd.yaml --ignore-preflight-errors=Swap --ignore-preflight-errors=CRI
+
+, output: [init] Using Kubernetes version: v1.13.1
+[preflight] Running pre-flight checks
+    [WARNING Swap]: running with swap on is not supported. Please disable swap
+[preflight] Pulling images required for setting up a Kubernetes cluster
+[preflight] This might take a minute or two, depending on the speed of your internet connection
+[preflight] You can also perform this action in beforehand using 'kubeadm config images pull'
+error execution phase preflight: [preflight] Some fatal errors occurred:
+    [ERROR ImagePull]: failed to pull image k8s.gcr.io/kube-apiserver:v1.13.1: output: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+, error: exit status 1
+    [ERROR ImagePull]: failed to pull image k8s.gcr.io/kube-controller-manager:v1.13.1: output: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+, error: exit status 1
+    [ERROR ImagePull]: failed to pull image k8s.gcr.io/kube-scheduler:v1.13.1: output: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+, error: exit status 1
+    [ERROR ImagePull]: failed to pull image k8s.gcr.io/kube-proxy:v1.13.1: output: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+, error: exit status 1
+    [ERROR ImagePull]: failed to pull image k8s.gcr.io/pause:3.1: output: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+, error: exit status 1
+    [ERROR ImagePull]: failed to pull image k8s.gcr.io/etcd:3.2.24: output: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+, error: exit status 1
+    [ERROR ImagePull]: failed to pull image k8s.gcr.io/coredns:1.2.6: output: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+, error: exit status 1
+[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+: Process exited with status 1
+================================================================================
+An error has occurred. Would you like to opt in to sending anonymized crash
+information to minikube to help prevent future errors?
+To opt out of these messages, run the command:
+    minikube config set WantReportErrorPrompt false
+================================================================================
+Please enter your response [Y/n]: n
+```
 
 ## 说明
 本文是按照[三小时学会Kubernetes：容器编排详细指南](http://dockone.io/article/5132)实际上手操作的，`代码`和`图片`出处均是这篇博客。
