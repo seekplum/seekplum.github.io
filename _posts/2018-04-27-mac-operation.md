@@ -6,7 +6,14 @@ thread: operation
 ---
 
 ## 安装brew
+
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"   
+
+## 安装ftp
+
+brew search --desc ftp
+
+brew install tnftp tnftpd
 
 ## 信任任何来源
 
@@ -68,7 +75,7 @@ source $HOME/pythonenv/python27env/bin/activate
 
 解决办法就是修改~/.zshrc文件，在其中添加：
 
-```
+```bash
 source ~/.bash_profile
 source ~/.bashrc
 ```
@@ -76,9 +83,10 @@ source ~/.bashrc
 ## 安装JAVA
 
 ### 版本
+
 * java -version
 
-```
+```text
 java version "1.8.0_162"
 Java(TM) SE Runtime Environment (build 1.8.0_162-b12)
 Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode)
@@ -90,7 +98,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode)
 
 HelloWorld.java
 
-```
+```java
 public class HelloWorld{
     public static void main (String []argv){
         System.out.println("JAVA");
@@ -106,6 +114,7 @@ public class HelloWorld{
 > javaws *.jnlp  //运行.jnlp文件
 
 ## 安装Maven
+
 * 1.[下载Maven的`bin包`](http://maven.apache.org/download.cgi)
 * 2.把包解压到指定目录
 * 3.设置环境变量
@@ -144,7 +153,6 @@ export PATH=$PATH:$M2
 
 > plugins=(zsh-autosuggestions git)
 
-
 3.重新打开终端窗口。
 
 PS：当你重新打开终端的时候可能看不到变化，可能你的字体颜色太淡了，我们把其改亮一些：
@@ -159,18 +167,16 @@ PS：当你重新打开终端的时候可能看不到变化，可能你的字体
 
 > brew install zsh-syntax-highlighting
 
-
 2.配置.zshrc文件，插入一行。
 
 > source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 
 3.输入命令。
 
 > source ~/.zshrc
 
-
 ## 安装软件列表
+
 * 企业微信
 * 微信
 * QQ

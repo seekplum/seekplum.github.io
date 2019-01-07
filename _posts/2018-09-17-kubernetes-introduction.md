@@ -14,7 +14,7 @@ thread: docker
 ### 安装kubectl
 * 安装
 
-> brew install kubernetes-cli
+> brew install kubectl kubernetes-cli kubernetes-helm
 
 * 查看版本
 
@@ -27,16 +27,13 @@ thread: docker
 
 `v0.25.2` 最新的 kubernetes-version 为 `v1.10.0`
 
-* 拷贝目录
-
 ```bash
-sudo mv ~/Downloads/minikube-darwin-amd64 /usr/local/bin/minikube
-sudo chmod 755 /usr/local/bin/minikube
+minikube_version=v0.32.0 && curl -Lo minikube https://storage.googleapis.com/minikube/releases/$minikube_version/minikube-darwin-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
 ```
 
 * 查看版本
 
-> /usr/local/bin/minikube version
+> minikube version
 
 * 关闭报告错误提示
 
@@ -50,17 +47,22 @@ sudo chmod 755 /usr/local/bin/minikube
 
 ### 卸载
 
+#### 卸载Kubernetes
+
 停止集群，删除镜像，[issues详情](https://github.com/kubernetes/minikube/issues/1043)
 
-> minikube stop; minikube delete; sudo trash ~/.minikube; sudo trash ~/.kube
-
-> docker stop $(docker ps -aq) \| xargs docker rm -v
+> minikube stop; minikube delete; trash ~/.minikube; trash ~/.kube
 
 > sudo trash /usr/local/bin/minikube
 
+> brew uninstall kubectl kubernetes-cli kubernetes-helm
+
+#### 卸载Docker
+
+> docker stop $(docker ps -aq) \| xargs docker rm -v
+
 > docker system prune -af --volumes  # 会删除所有的镜像
 
-> brew uninstall kubernetes-cli kubernetes-helm
 
 trash是个回收站功能工具，用于代替`rm`，防止误删除，以 `pip install trash-cli` 命令安装
 
