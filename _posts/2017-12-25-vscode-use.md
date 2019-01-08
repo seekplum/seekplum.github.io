@@ -33,7 +33,29 @@ Preferences -> Settings -> Window: Open Files In New Window 设置为 `on`
     "editor.minimap.enabled": false,
     "window.openWithoutArgumentsInNewWindow": "on",
     "window.openFilesInNewWindow": "on",
-    "workbench.editor.enablePreview": false
+    "workbench.editor.enablePreview": false,
+    "workbench.activityBar.visible": true,
+    "editor.formatOnSave": true,
+
+    "editor.wordWrap": "on",
+    "editor.minimap.renderCharacters": false,
+    "terminal.external.osxExec": "iTerm.app",
+    //"go.useLanguageServer": true,
+    "go.docsTool": "gogetdoc",
+    "go.buildOnSave": "workspace",
+    "go.lintOnSave": "workspace",
+    "go.vetOnSave": "workspace",
+    "go.buildTags": "",
+    "go.buildFlags": [],
+    "go.lintFlags": [],
+    "go.vetFlags": [],
+    "go.coverOnSave": false,
+    "go.useCodeSnippetsOnFunctionSuggest": false,
+    "go.formatTool": "goreturns",
+    "go.goroot": "/usr/local/go",
+    "go.gopath": "/Users/seekplum/GolangProjects",
+    "go.gocodeAutoBuild": false,
+    "window.zoomLevel": 0
 }
 ```
 
@@ -155,6 +177,11 @@ Preferences -> Keyboard Shortcuts
     {
         "key": "shift+cmd+n",
         "command": "workbench.action.quickOpen"
+    },
+    // 打开终端
+    {
+        "key": "cmd+t",
+        "command": "workbench.action.terminal.toggleTerminal"
     }
 ]
 ```
@@ -185,6 +212,25 @@ Preferences -> Keyboard Shortcuts
 ### GO
 
 * GO
+
+#### go get 安装
+
+```bash
+go get -u -v github.com/nsf/gocode
+go get -u -v github.com/rogpeppe/godef
+go get -u -v github.com/lukehoban/go-outline
+go get -u -v github.com/tpng/gopkgs
+go get -u -v github.com/golang/tools
+
+mkdir -p $GOPATH/src/golang.org/x/
+test -d $GOPATH/src/golang.org/x/tools || ln -s $GOPATH/src/github.com/golang/tools $GOPATH/src/golang.org/x
+
+go get -u -v github.com/golang/lint
+test -d $GOPATH/src/golang.org/x/lint || ln -s $GOPATH/src/github.com/golang/lint $GOPATH/src/golang.org/x
+
+go get -u -v github.com/sqs/goreturns
+go get -u -v github.com/newhook/go-symbols
+```
 
 ### Docker
 
