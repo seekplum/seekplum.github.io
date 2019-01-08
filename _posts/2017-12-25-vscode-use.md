@@ -22,6 +22,21 @@ thread: plugin
 
 Preferences -> Settings -> Window: Open Files In New Window 设置为 `on` 
 
+## 修改配置
+
+```json
+{
+    "editor.fontSize": 15,
+    "python.jediEnabled": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "workbench.iconTheme": "vscode-icons",
+    "editor.minimap.enabled": false,
+    "window.openWithoutArgumentsInNewWindow": "on",
+    "window.openFilesInNewWindow": "on",
+    "workbench.editor.enablePreview": false
+}
+```
+
 ## 修改默认快捷键
 
 * 打开默认键盘快捷方式设置
