@@ -232,6 +232,37 @@ go get -u -v github.com/sqs/goreturns
 go get -u -v github.com/newhook/go-symbols
 ```
 
+#### debug配置
+
+```json
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "remotePath": "",
+            "port": 2345,
+            "host": "127.0.0.1",
+            // "program": "${fileDirname}",
+            "program": "${workspaceRoot}/test.go",
+            "env": {
+                "DYLD_LIBRARY_PATH": "/Users/seekplum/packages/oracle",
+                "CGO_CFLAGS": "-I/Users/seekplum/packages/oracle",
+                "PKG_CONFIG_PATH": "${workspaceRoot}"
+            },
+            "args": [],
+            "showLog": true
+        }
+    ]
+}
+```
+
 ### Docker
 
 * docker

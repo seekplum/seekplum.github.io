@@ -175,6 +175,10 @@ PS：当你重新打开终端的时候可能看不到变化，可能你的字体
 
 > source ~/.zshrc
 
+## 复制文件路径快捷键
+
+> option + command + C
+
 ## 安装软件列表
 
 * 企业微信
@@ -185,6 +189,8 @@ PS：当你重新打开终端的时候可能看不到变化，可能你的字体
 * Google Chrome
 * Postman
 * Pycharm
+* Goland
+* Vscode
 * xcode
 * SSLVPN Client
 * xnip
