@@ -209,6 +209,93 @@ Preferences -> Keyboard Shortcuts
 
 > pip install yapf autopep8
 
+#### debug配置
+
+```json
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File (Integrated Terminal)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "DYLD_LIBRARY_PATH": "/Users/seekplum/packages/oracle:/Users/seekplum/packages/mysql/lib",
+                "PYTHONUNBUFFERED": 1,
+                "PIP_INDEX_URL": "https://pypi.douban.com/simple/",
+                "PIP_TRUSTED_HOST": "x.x.x.x",
+                "PIP_EXTRA_INDEX_URL": "http://x.x.x.x:8080",
+                "QDATA_MYSQL_HOST": "127.0.0.1",
+                "QDATA_MYSQL_PORT": "9307",
+                "QDATA_MYSQL_USERNAME": "xxx",
+                "QDATA_MYSQL_PASSWORD": "xxx",
+                "QDATA_MYSQL_DATABASE_NAME": "qdata_cloud",
+                "QDATA_REDIS_HOST": "127.0.0.1",
+                "QDATA_REDIS_PORT": "6379",
+                "QDATA_PROMETHEUS_HOST": "127.0.0.1",
+                "QDATA_PROMETHEUS_PORT": "10011",
+                "QDATA_ALERTMANAGER_PORT": "10012",
+                "QDATA_LOGGING_PATH": "/tmp/logs/ci/",
+            }
+        },
+        {
+            "name": "Python: Attach",
+            "type": "python",
+            "request": "attach",
+            "port": 5678,
+            "host": "localhost"
+        },
+        {
+            "name": "Python: Module",
+            "type": "python",
+            "request": "launch",
+            "module": "enter-your-module-name-here",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Django",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "console": "integratedTerminal",
+            "args": [
+                "runserver",
+                "--noreload",
+                "--nothreading"
+            ],
+            "django": true
+        },
+        {
+            "name": "Python: Flask",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "app.py"
+            },
+            "args": [
+                "run",
+                "--no-debugger",
+                "--no-reload"
+            ],
+            "jinja": true
+        },
+        {
+            "name": "Python: Current File (External Terminal)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "externalTerminal"
+        }
+    ]
+}
+```
+
 ### GO
 
 * GO
@@ -250,11 +337,11 @@ go get -u -v github.com/newhook/go-symbols
             "port": 2345,
             "host": "127.0.0.1",
             // "program": "${fileDirname}",
-            "program": "${workspaceRoot}/test.go",
+            "program": "${workspaceRoot}",
             "env": {
                 "DYLD_LIBRARY_PATH": "/Users/seekplum/packages/oracle",
                 "CGO_CFLAGS": "-I/Users/seekplum/packages/oracle",
-                "PKG_CONFIG_PATH": "${workspaceRoot}"
+                "PKG_CONFIG_PATH": "/Users/seekplum/GolangProjects/pkg"
             },
             "args": [],
             "showLog": true
