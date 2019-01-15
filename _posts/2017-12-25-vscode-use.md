@@ -36,7 +36,6 @@ Preferences -> Settings -> Window: Open Files In New Window 设置为 `on`
     "workbench.editor.enablePreview": false,
     "workbench.activityBar.visible": true,
     "editor.formatOnSave": true,
-
     "editor.wordWrap": "on",
     "editor.minimap.renderCharacters": false,
     "terminal.external.osxExec": "iTerm.app",
@@ -55,7 +54,14 @@ Preferences -> Settings -> Window: Open Files In New Window 设置为 `on`
     "go.goroot": "/usr/local/go",
     "go.gopath": "/Users/seekplum/GolangProjects",
     "go.gocodeAutoBuild": false,
-    "window.zoomLevel": 0
+    "window.zoomLevel": 0,
+    // 标识行长度
+    "editor.rulers": [
+        79,
+        119
+    ],
+    // tab等于的空格数
+    "editor.tabSize": 4
 }
 ```
 
@@ -182,7 +188,31 @@ Preferences -> Keyboard Shortcuts
     {
         "key": "cmd+t",
         "command": "workbench.action.terminal.toggleTerminal"
-    }
+    },
+    // 全部折叠
+    {
+        "key": "cmd+-",
+        "command": "editor.foldAll",
+        "when": "editorTextFocus"
+    },
+    // 全部展开
+    {
+        "key": "cmd+=",
+        "command": "editor.unfoldAll",
+        "when": "editorTextFocus"
+    },
+    // 折叠当前所在代码块
+    {
+        "key": "cmd+[",
+        "command": "editor.fold",
+        "when": "editorTextFocus"
+    },
+    // 打开当前所在代码块
+    {
+        "key": "cmd+]",
+        "command": "editor.unfold",
+        "when": "editorTextFocus"
+    },
 ]
 ```
 
