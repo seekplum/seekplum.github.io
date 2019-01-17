@@ -20,7 +20,7 @@ thread: plugin
 
 * 在新窗口打开文件
 
-Preferences -> Settings -> Window: Open Files In New Window 设置为 `on` 
+Preferences -> Settings -> Window: Open Files In New Window 设置为 `on`
 
 ## 修改配置
 
@@ -79,9 +79,9 @@ Preferences -> Keyboard Shortcuts
 
 以切换为中文为例
 
-* 1.使用快捷键组合`shift + command + P `，在搜索框中输入`configure display language`，点击确定后
-* 2.修改`locale.json`文件下的属性`locale`为`zh-CN`, 即设置为`"locale":"zh-CN"`
-* 3.安装`Chinese (Simplified) Language Pack for Visual Studio Code`插件
+* 1.使用快捷键组合 `shift + command + P`，在搜索框中输入 `configure display language`，点击确定后
+* 2.修改 `locale.json` 文件下的属性 `locale` 为 `zh-CN`, 即设置为`"locale":"zh-CN"`
+* 3.安装 `Chinese (Simplified) Language Pack for Visual Studio Code` 插件
 * 4.重启vscode
 
 ## 默认快捷键
@@ -224,14 +224,17 @@ Preferences -> Keyboard Shortcuts
 * Markdown Preview Enhanced
 * markdownlint
 * Visual Studio IntelliCode - Preview
+* Git History
+* Git Project Manager
+* GitLens — Git supercharged
+* vscode-icons: 资源管理器图标
+* Shell launcher
 
 ### Python
 
 * MagicPython
 * python
 * Python Extension Pack
-* Shell launcher
-* vscode-icons: 资源管理器图标
 
 #### pip安装
 
@@ -243,7 +246,7 @@ Preferences -> Keyboard Shortcuts
 
 ```json
 {
-    // 使用 IntelliSense 了解相关属性。 
+    // 使用 IntelliSense 了解相关属性。
     // 悬停以查看现有属性的描述。
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
@@ -328,7 +331,8 @@ Preferences -> Keyboard Shortcuts
 
 ### GO
 
-* GO
+* Go
+* Go to Spec
 
 #### go get 安装
 
@@ -349,11 +353,11 @@ go get -u -v github.com/sqs/goreturns
 go get -u -v github.com/newhook/go-symbols
 ```
 
-#### debug配置
+#### debug 配置
 
 ```json
 {
-    // 使用 IntelliSense 了解相关属性。 
+    // 使用 IntelliSense 了解相关属性。
     // 悬停以查看现有属性的描述。
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
