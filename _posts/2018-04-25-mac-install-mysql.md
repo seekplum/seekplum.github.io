@@ -6,9 +6,10 @@ thread: mysql
 ---
 
 ## 下载
-从mysql官网下载相应版本的二进制包即可。本文以mysql-5.7.22为例f／
+从mysql官网下载相应版本的二进制包即可。本文以mysql-5.7.22为例，在[官网下载页](https://dev.mysql.com/downloads/file/?id=476955)确认版本后下载即可。
 
 ## 非默认路径安装
+
 * 修改mysql.server
 
 mysql默认的安装路径都会`/usr/local/mysql`下,若想安装到其他路径，则需要对 support-files/mysql.server 文件进行修改,总共有 4 处需要修改。
@@ -64,7 +65,7 @@ mysql默认的安装路径都会`/usr/local/mysql`下,若想安装到其他路�
 # overwritten by settings in the MySQL configuration files.
 
 basedir=/Users/seekplum/packages/mysql
-datadir=$basedir/data
+datadir=${basedir}/data
 
 # Default value, in seconds, afterwhich the script should timeout waiting
 # for server start.
@@ -74,7 +75,7 @@ datadir=$basedir/data
 service_startup_timeout=900
 
 # Lock directory for RedHat / SuSE.
-lockdir='/var/lock/subsys'
+lockdir=${basedir}/lock
 lock_file_path="$lockdir/mysql"
 
 # The following variables are only set for letting mysql.server find things.
@@ -83,14 +84,14 @@ lock_file_path="$lockdir/mysql"
 mysqld_pid_file_path=$datadir/mydata/mysql.pid
 if test -z "$basedir"
 then
-  basedir=/usr/local/mysql
-  bindir=/usr/local/mysql/bin
+  basedir=$basedir
+  bindir=$basedir/bin
   if test -z "$datadir"
   then
-    datadir=/usr/local/mysql/data
+    datadir=$basedir/data
   fi
-  sbindir=/usr/local/mysql/bin
-  libexecdir=/usr/local/mysql/bin
+  sbindir=$basedir/bin
+  libexecdir=$basedir/bin
 else
   bindir="$basedir/bin"
   if test -z "$datadir"
@@ -398,9 +399,9 @@ exit 0
 ```
 
 
-## 脚本自动化安装
+## 自动化安装脚本
 
-* 脚本内容
+* install_mysql.sh 脚本内容
 
 ```bash
 #!/bin/bash
@@ -464,7 +465,7 @@ install_mysql() {
     echo -e "create mysql error.log"
 
     # mysql.server 会和conf配置有关，需要手动修改
-    cp $new_mysql_server $source_mysql_dir/support-files/
+    scp $new_mysql_server $source_mysql_dir/support-files/
 
     # 设置开机自启动
     # rm -f /etc/init.d/mysql
@@ -687,14 +688,33 @@ else
 fi
 ```
 
+## 安装
+
+* 安装前准备目录如下
+
+```text
+.
+├── install_mysql.sh
+├── mysql-5.7.22-macos10.13-x86_64
+├── mysql.server
+```
+
+* 执行安装操作
+
+> bash install_mysql.sh
+
 ## 解决连接报错
 > ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
 
 1.首先在设置中关闭mysql服务
 
+> /Users/seekplum/packages/mysql/support-files/mysql.server stop
+
+> ps axu \| grep mysql \| grep -v \"grep\" \| awk \'{print $2}\' \| xargs kill -9
+
 2.进入安全模式
 
-> /Users/seekplum/packages/mysql/bin/mysqld_safe --defaults-file=/Users/seekplum/packages/mysql/data/conf/my.cnf --skip-grant-tables &
+> /Users/seekplum/packages/mysql/bin/mysqld_safe \-\-defaults-file=/Users/seekplum/packages/mysql/data/conf/my.cnf \-\-skip-grant-tables &
 
 3.进入mysql,执行以下命令
 
@@ -704,7 +724,7 @@ root连接时无密码
 
 设置新密码
 
-> update mysql.user set authentication_string=PASSWORD('root') where user='root';
+> update mysql.user set authentication_string=PASSWORD(\'root\') where user=\'root\';
 
 > flush privileges;
 
@@ -712,7 +732,7 @@ root连接时无密码
 
 4.关闭第二步起的mysql
 
-> ps axu \| grep mysql \| grep -v grep \| awk '{print $2}' \| xargs kill -9
+> ps axu \| grep mysql \| grep -v grep \| awk \'{print $2}\' \| xargs kill -9
 
 5.重启服务后重置密码
 
