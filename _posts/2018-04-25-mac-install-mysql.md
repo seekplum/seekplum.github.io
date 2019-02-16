@@ -742,4 +742,4 @@ root连接时无密码
 
 重置密码
 
-> set password = password('root');
+> set password = password(\'root\');

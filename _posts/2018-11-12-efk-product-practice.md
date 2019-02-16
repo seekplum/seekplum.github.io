@@ -10,9 +10,11 @@ thread: efk
 上一篇讲到了[EFK的安装和简单使用](/efk)，这种使用只是了解阶段的，没有真正的应用到产品中，本篇就重点来讲述下如何让EFK在产品中落地。
 
 ## 架构
+
 ![EFK架构](/static/images/efk/fluentd-elasticsearch-kibana.png)
 
 ## 目标
+
 * [x] 1.Fluentd可以动态的重载配置，支持修改采集日志路径替换和Elastaic主机服务端替换
 * [x] 2.Fluentd中需要包含自身节点信息，用于查询时进行过滤
 * [x] 3.Kibana或Elasticsearch支持精确查询、模糊查询和组合查询等方式，方便产品聚合整个集群日志
@@ -22,6 +24,7 @@ thread: efk
 ## Fluentd
 
 ### 离线安装插件
+
 以安装 `fluent-plugin-elasticsearch-2.12.0.gem` 为例，[fluent-plugin-elasticsearch插件下载地址](https://rubygems.org/gems/fluent-plugin-elasticsearch)，在官网下载gem包。
 
 * 安装
@@ -376,6 +379,12 @@ EOF
 
 ## Kibana
 
+### 配置索引
+
+```bash
+curl -H "Content-Type: application/json" -H "kbn-xsrf: kbn-version: 6.4.1" -H "kbn-version: 6.4.1" -X POST -d '{"attributes":{"title":".*","timeFieldName":"log_time"}}' http://127.0.0.1:10016/api/saved_objects/index-pattern
+```
+
 ### 项（Term）
 一条搜索语句被拆分为一些项（term）和操作符（operator）。项有两种类型：单独项和短语。
 
@@ -384,7 +393,7 @@ EOF
 短语是一组被双引号包围的单词，例如 "hello dolly"。
 
 多个项可以用布尔操作符连接起来形成复杂的查询语句（AND OR ）。
- 
+
  
 ### 域（Field）
 Lucene支持域。您可以指定在某一个域中搜索，或者就使用默认域。域名及默认域是具体索引器实现决定的。kibana的默认域就是message …. message会包含你所有日志，包括你grok过滤之后的。 
