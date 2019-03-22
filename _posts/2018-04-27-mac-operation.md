@@ -179,6 +179,10 @@ PS：当你重新打开终端的时候可能看不到变化，可能你的字体
 
 > option + command + C
 
+## 安装sshpass
+
+> brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
+
 ## 安装软件列表
 
 * 企业微信
