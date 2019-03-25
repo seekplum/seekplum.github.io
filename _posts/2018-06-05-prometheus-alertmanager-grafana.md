@@ -251,7 +251,7 @@ path = ./dashboards
 3.在`Dashbords`中创建新的`dashbords`,通过`view json`复制内容后存入文件中进行传递迁移
 
 ### 展示注意
-dashbord中的查询参数会从url参数中使用`var-`开头的变量
+dashbord中的查询参数会从url参数中使用`var-`开头的变量(若需要变量生效，则需要在 `Templating` 中先进行配置，否则会导致变量无法识别)
 
 ## 总结
 * prometheus
