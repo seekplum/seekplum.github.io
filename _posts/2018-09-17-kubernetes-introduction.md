@@ -82,11 +82,16 @@ cp -r sa-frontend/build/* ~/packages/nginx/html/
 ### 配置python应用程序
 
 ```bash
-cd sa-logic
-cd sa
+cd sa-logic/sa
 
-pip install -r requirements.txt
-python -m textblob.download_corpora
+pip install -r requirements.txt         # 安装项目依赖包
+python -m textblob.download_corpora     # 下载 nltk 包到 /usr/local/share/nltk_data/
+```
+
+* 启动应用
+
+```bash
+python sentiment_analysis.py
 ```
 
 #### 解决`python -m textblob.download_corpora`报错
@@ -96,10 +101,28 @@ python -m textblob.download_corpora
 ```text
 [nltk_data] Error loading brown: <urlopen error [SSL:
 [nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
-[nltk_data]     (_ssl.c:841)>
+[nltk_data]     (_ssl.c:727)>
+[nltk_data] Error loading punkt: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:727)>
+[nltk_data] Error loading wordnet: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:727)>
+[nltk_data] Error loading averaged_perceptron_tagger: <urlopen error
+[nltk_data]     [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify
+[nltk_data]     failed (_ssl.c:727)>
+[nltk_data] Error loading conll2000: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:727)>
+[nltk_data] Error loading movie_reviews: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:727)>
+Finished.
 ```
 
-* 安装certifi
+说明nltk包无法下载，尝试其它下载方案。**建议使用脚本自动下载**
+
+* 先安装certifi
 
 > pip install certifi
 
@@ -107,10 +130,10 @@ python -m textblob.download_corpora
 
 * 手动[下载nltk包](http://www.nltk.org/nltk_data/)
 
-```text
-(python27env) ➜ pwd
+```bash
+➜ pwd
 /usr/local/share/nltk_data
-(python27env) ➜ tree -L 2
+➜ tree -L 2
 |-- corpora
 |   |-- brown
 |   |-- brown.zip
@@ -130,7 +153,7 @@ python -m textblob.download_corpora
 9 directories, 6 files
 ```
 
-**手动下载到指定目录后成功.**
+**下载后需要把文件按照上述目录进行移动.**
 
 * 脚本下载
 
@@ -148,13 +171,13 @@ else:
 nltk.download()
 ```
 
-**脚本下载成功.**
+**下载过程会有点慢，需要耐心等待.**
 
 ### 配置Spring web app
 
 ```bash
 cd sa-webapp
-maven install
+mvn install  # mac 下 maven 软件名叫 mvn
 
 cd target
 java -jar sentiment-analysis-web-0.0.1-SNAPSHOT.jar --sa.logic.api.url=http://localhost:5000
