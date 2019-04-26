@@ -327,6 +327,12 @@ kubectl get pods
 
 > kubectl delete pod sa-frontend
 
+* 删除所有pod
+
+```bash
+kubectl delete pods --all
+```
+
 ### 向上扩展的错误方法
 
 * sa-frontend-pod2.yaml

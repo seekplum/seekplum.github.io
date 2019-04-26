@@ -6,19 +6,27 @@ tags: yum repo
 thread: yum
 ---
 ## 下载rpm插件
+
+```bash
 yum install -y yum-plugin-downloadonly
+```
 
 ## 安装createrepo包
+
+```bash
 yum install -y createrepo
+```
 
 ## 下载rpm包
-**注意:此种方式需要要求未安装过改软件才能下载，比如之前未安装过wget**
+
+**注意:此种方式需要要求未安装过改软件才能下载，比如之前未安装过wget.**
 
 * 指定要安装的包,比如 `wget`
 
+```bash
 mkdir -p /root/rpms/data/admin/files/repo/rhel74-x86_64
-
-yum -y install \-\-downloadonly \-\-downloaddir=/root/rpms/data/admin/files/repo/rhel74-x86_64 wget
+yum -y install --downloadonly --downloaddir=/root/rpms/data/admin/files/repo/rhel74-x86_64 wget
+```
 
 * 其中安装`td-agent`需要指定yum源，所以需要执行以下脚本内容
 
@@ -64,21 +72,29 @@ echo ""
 ```
 
 ## 初始化repodata索引文件
+
+```bash
 createrepo -pdo /root/rpms/data/admin/files/repo/rhel74-x86_64 /root/rpms/data/admin/files/repo/rhel74-x86_64
+```
 
 * 若rpm包有更新，则执行以下命令更新yum仓库
 
-createrepo \-\-update /root/rpms/data/admin/files/repo/rhel74-x86_64
-
+```bash
+createrepo --update /root/rpms/data/admin/files/repo/rhel74-x86_64
+```
 
 ## 提供yum服务
+
 以 `http server` 的方式提供服务
 
+```bash
 cd /root/rpms/data/admin/files/repo/rhel74-x86_64
 
 python -m SimpleHTTPServer 8080 &>/dev/null &
+```
 
 ## 客户端配置
+
 ```bash
 cat >/etc/yum.repos.d/td.repo <<EOF
 [td-agent]
@@ -90,4 +106,7 @@ EOF
 ```
 
 ## 客户端安装
+
+```bash
 yum install td-agent
+```
