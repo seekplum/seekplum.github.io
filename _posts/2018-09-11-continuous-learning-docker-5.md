@@ -37,6 +37,8 @@ Network 包含一组 Endpoint，同一 Network 的 Endpoint 可以直接通信�
 
 为支持容器跨主机通信，Docker 提供了 overlay driver，使用户可以创建基于 VxLAN 的 overlay 网络。VxLAN 可将二层数据封装到 UDP 进行传输，VxLAN 提供与 VLAN 相同的以太网二层服务，但是拥有更强的扩展性和灵活性。
 
+Docerk overlay 网络需要一个 key-value 数据库用于保存网络状态信息，包括 Network、Endpoint、IP 等。`Consul`、`Etcd` 和 `ZooKeeper` 都是 Docker 支持的 key-vlaue 软件，我们这里使用 `Consul`。
+
 ### 环境信息
 
 * 宿主机(ubuntu)
@@ -529,6 +531,22 @@ echo "--bip=$(cat /run/flannel/subnet.env | grep 'SUBNET' | cut -f2 -d'=') --mtu
 
 ```bash
 systemctl daemon-reload && systemctl restart docker
+```
+
+#### 将容器连接到flannel网络
+
+* 在 `ubuntu1` 中启动容器 `bbox1`，并查看IP
+
+```bash
+docker run -itd --name bbox1 busybox
+docker exec bbox1 ip r
+```
+
+* 在 `ubuntu2` 中启动容器 `bbox2`
+
+```bash
+docker run -itd --name bbox2 busybox
+docker exec bbox2 ip r
 ```
 
 ## 参考
