@@ -549,6 +549,28 @@ docker run -itd --name bbox2 busybox
 docker exec bbox2 ip r
 ```
 
+### flannel网络连通性
+
+测试 bbox1 和 bbox2 的连通性
+
+```bash
+docker exec bbox1 ping -c 2 10.2.99.1
+
+docker exec bbox1 traceroute 10.2.99.1
+```
+
+* flannel 网络隔离
+
+flannel 为每个主机分配了独立的 subnet，但 flannel.1 将这些 subnet 连接起来了，相互之间可以路由。本质上，flannel 将各主机上相互独立的 docker0 容器网络组成了一个互通的大网络，实现了容器跨主机通信。flannel 没有提供隔离。
+
+* flannel 与外网连通性
+
+因为 flannel 网络利用的是默认的 bridge 网络，所以容器与外网的连通方式与 bridge 网络一样，即：
+
+    1.容器通过 docker0 NAT 访问外网
+
+    2.通过主机端口映射，外网可以访问容器
+
 ## 参考
 
 * [跨主机网络概述](https://www.cnblogs.com/CloudMan6/p/7259266.html)

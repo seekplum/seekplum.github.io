@@ -7,7 +7,9 @@ thread: operation
 
 ## 安装brew
 
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"   
+```bash
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
 
 ## 安装ftp
 
@@ -17,7 +19,9 @@ brew install tnftp tnftpd
 
 ## 信任任何来源
 
-> sudo spctl \-\-master-disable
+```bash
+sudo spctl --master-disable
+```
 
 ## bashrc配置
 
@@ -107,11 +111,13 @@ public class HelloWorld{
 }
 ```
 
-> javac HelloWorld.java    //编译.java文件
+```bash
+javac HelloWorld.java    //编译.java文件
 
-> java HelloWorld //运行java
+java HelloWorld //运行java
 
-> javaws *.jnlp  //运行.jnlp文件
+javaws *.jnlp  //运行.jnlp文件
+```
 
 ## 安装Maven
 
@@ -131,11 +137,15 @@ export PATH=$PATH:$M2
 
 * 使用 crul 安装：
 
-> sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```bash
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
 
-* 或使用wget：
+* 或使用wget
 
-> sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+```bash
+sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+```
 
 ### 配置
 
@@ -147,17 +157,23 @@ export PATH=$PATH:$M2
 
 1.克隆仓库到本地 ~/.oh-my-zsh/custom/plugins 路径下
 
-> git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+```bash
+git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+```
 
 2.用 vim 打开 .zshrc 文件，找到插件设置命令，默认是 plugins=(git) ，我们把它修改为
 
-> plugins=(zsh-autosuggestions git)
+```bash
+plugins=(zsh-autosuggestions git)
+```
 
 3.重新打开终端窗口。
 
 PS：当你重新打开终端的时候可能看不到变化，可能你的字体颜色太淡了，我们把其改亮一些：
 
-> cd ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+```bash
+cd ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+```
 
 用 vim 打开 zsh-autosuggestions.zsh 文件，修改 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10' （ fg=10 在我电脑上显示良好）。
 
@@ -165,23 +181,39 @@ PS：当你重新打开终端的时候可能看不到变化，可能你的字体
 
 1.使用homebrew安装 zsh-syntax-highlighting 插件。
 
-> brew install zsh-syntax-highlighting
+```bash
+brew install zsh-syntax-highlighting
+```
 
 2.配置.zshrc文件，插入一行。
 
-> source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+```bash
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+```
 
 3.输入命令。
 
-> source ~/.zshrc
+```bash
+source ~/.zshrc
+```
 
 ## 复制文件路径快捷键
 
-> option + command + C
+```bash
+option + command + C
+```
 
 ## 安装sshpass
 
-> brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
+```bash
+brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
+```
+
+## 安装命令行查询工具
+
+```bash
+curl https://cht.sh/:cht.sh | tee /usr/local/bin/cht.sh && chmod +x /usr/local/bin/cht.sh
+```
 
 ## 安装软件列表
 
