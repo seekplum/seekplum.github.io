@@ -103,6 +103,10 @@ Preferences -> Keyboard Shortcuts
 |跳转到指定行号| control + G |
 |自动化格式代码| option + shift + F |
 |关键字搜索文件名| command + P |
+|创建新文件| command + N |
+|关闭当前文件所在窗口| command + W |
+|恢复刚刚关闭的窗口| shift + command + T |
+|打开/关闭左侧边栏| command + B |
 
 ## 修改快捷键
 
