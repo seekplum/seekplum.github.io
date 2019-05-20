@@ -50,6 +50,7 @@ hexo server
 
 ```bash
 sudo gem install jekyll
+sudo gem install jekyll-paginate
 ```
 
 ### 代码高亮
@@ -71,7 +72,7 @@ kramdown:
 * 首先安装rouge，然后生成对应主题的css文件
 
 ```bash
-gem install rouge
+sudo gem install rouge
 rougify style monokai.sublime > static/css/syntax.css
 ```
 
