@@ -5,10 +5,14 @@ categories: centos
 tags: centos yum repo
 thread: centos
 ---
+
 ## Centos6换源
+
 * 1.首先备份/etc/yum.repos.d/CentOS-Base.repo
 
-> mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+```bash
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+```
 
 * 2.替换对应版本repo文件, 放入/etc/yum.repos.d/(操作前请做好相应备份)
 
@@ -31,13 +35,18 @@ yum makecache
 ```
 
 ## Centos7换源
+
 * 1.首先备份/etc/yum.repos.d/CentOS-Base.repo
 
-> mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+```bash
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+```
 
 * 2.下载对应版本repo文件, 放入/etc/yum.repos.d/(操作前请做好相应备份)
 
-> wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+```bash
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+```
 
 若无法下载则直接运行下面命令写入
 
@@ -110,7 +119,9 @@ EOF
 
 * 3.替换版本信息
 
-> sed -i \'s/$releasever/7/g\' /etc/yum.repos.d/CentOS-Base.repo
+```bash
+sed -i 's/$releasever/7/g' /etc/yum.repos.d/CentOS-Base.repo
+```
 
 * 4.运行以下命令生成缓存
 

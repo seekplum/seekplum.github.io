@@ -6,6 +6,8 @@ tags: 网络 共享 shar
 thread: compute-share
 ---
 
+## 共享网络
+
 1.以管理员身份运行命令提示符。
 
 2.netsh wlan set hostednetwork mode=allow
