@@ -26,51 +26,68 @@ sudo spctl --master-disable
 ## bashrc配置
 
 ```bash
-alias senv='source $HOME/pythonenv/python27env/bin/activate'
-alias mymysql='$HOME/packages/mysql/bin/mysql -uroot -proot -S $HOME/packages/mysql/data/sock/mysql.sock'
-alias clouddoc="trash /tmp/doc;apidoc -i $HOME/PythonProjects/qdata-cloud -o /tmp/doc/ -e $HOME/PythonProjects/qdata-cloud/qflame && scp -r /tmp/doc/ qdata:/root/ && ssh qdata /home/sendoh/sendoh-web-env/bin/supervisorctl -c /home/sendoh/sendoh-web-env/packages/conf/supervisor/supervisord.conf restart nginx"
-alias deploydoc="trash /tmp/doc/; apidoc -i $HOME/PythonProjects/qdeploy -o /tmp/doc/ && scp -r /tmp/doc/ cloud:/root/ && ssh cloud  /home/sendoh/qdata-cloud/packages/python/bin/supervisorctl -c /home/sendoh/qdata-cloud/conf/supervisor/supervisord.conf restart nginx"
+export MYSQL_HOME="${HOME}/packages/mysql"
+export ORACLE_HOME="${HOME}/packages/oracle"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ORACLE_HOME}"
+export DYLD_LIBRARY_PATH="${DYLD_LIBRARY_PATH}:${ORACLE_HOME}:${MYSQL_HOME}/lib"
+
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home"
+export CLASS_PATH="${JAVA_HOME}/lib"
+
+export M2_HOME="${HOME}/packages/apache-maven-3.5.4"
+
+export GOROOT="/usr/local/go"
+export GOPATH="${HOME}/GolangProjects"
+
+export PYTHONSTARTUP="${HOME}/.pythonrc"
+export PYTHONPROJECTSPATH="${HOME}/PythonProjects"
+export WEBPROJECTSPATH="${HOME}/WebProjects"
+
+export LDFLAGS="-L/usr/local/opt/ncurses/lib"
+export CPPFLAGS="-I/usr/local/opt/ncurses/include"
+
+export PS1='%n ${ret_status} %{$fg[cyan]%}%c%{$reset_color%}$(__docker_machine_ps1) $(git_prompt_info)'
+export PIP_INDEX_URL=https://pypi.douban.com/simple/
+
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="${PATH}:/usr/local/opt/ncurses/bin"
+export PATH="${PATH}:${HOME}/.nvm/versions/node/v10.0.0/bin"
+export PATH="${PATH}:${GOPATH}/src/github.com/kardianos/govendor"
+export PATH="${PATH}:${GOPATH}/src/github.com/golang/dep/cmd/dep/dep"
+export PATH="${PATH}:${GOPATH}/src/github.com/jteeuwen/go-bindata/go-bindata"
+export PATH="${PATH}:${GOROOT}/bin:${GOPATH}/bin"
+export PATH="${PATH}:${HOME}/pythonenv/python27env/bin"
+export PATH="${PATH}:${HOME}/pythonenv/python36env/bin"
+export PATH="${PATH}:${MYSQL_HOME}/bin:${JAVA_HOME}/bin"
+export PATH="${PATH}:${M2_HOME}/bin"
+export PATH="${PATH}:${HOME}/istio-0.8.0/bin"
+export PATH="${PATH}:${HOME}/packages/redis/src/"
+export PATH="${PATH}:${HOME}/packages/mongodb/bin/"
+export PATH="${PATH}:/usr/local/Cellar/rabbitmq/3.7.14/sbin/"
+export PATH="${PATH}:${HOME}/packages/apache-maven-3.5.4/bin"
+
+alias senv2='source ${HOME}/pythonenv/python27env/bin/activate'
+alias senv3='source ${HOME}/pythonenv/python36env/bin/activate'
+alias senv="senv2"
+
+alias mystart="${HOME}/pythonenv/python27env/bin/supervisord -c ${HOME}/packages/supervisor/supervisord.conf"
+alias mysuper="${HOME}/pythonenv/python27env/bin/supervisorctl -c ${HOME}/packages/supervisor/supervisord.conf"
+alias mymysql='${HOME}/packages/mysql/bin/mysql -uroot -proot -S ${HOME}/packages/mysql/data/sock/mysql.sock'
+alias myredis='/Users/seekplum/packages/redis/src/redis-cli'
 
 alias ll='ls -l'
-alias cdp='cd $HOME/PythonProjects/'
-alias cds='cd $HOME/PythonProjects/seekplum'
-alias cdi='cd $HOME/PythonProjects/seekplum.github.io'
-alias cdc='cd $HOME/PythonProjects/qdata-cloud'
-alias cdm='cd $HOME/PythonProjects/qdata-mgr/src'
-alias cdd='cd $HOME/PythonProjects/qdeploy'
-
-
-export MYSQL_HOME=$HOME/packages/mysql
-
-export ORACLE_HOME=$HOME/packages/oracle
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME
-export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$ORACLE_HOME:$MYSQL_HOME/lib
-
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home
-export CLASS_PATH=$JAVA_HOME/lib
-
-export M2_HOME=$HOME/packages/apache-maven-3.5.4
-export M2=$M2_HOME/bin
-
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/GolangProjects
-
-alias cdg='cd $GOPATH/src'
-
-export PATH=$PATH:$HOME/.nvm/versions/node/v10.0.0/bin
-export PATH=$PATH:$GOPATH/src/github.com/kardianos/govendor
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-export PATH=$PATH:$HOME/bin:$HOME/pythonenv/python27env/bin
-export PATH=$PATH:$MYSQL_HOME/bin:$JAVA_HOME/bin
-export PATH=$PATH:$M2
-
-# alias rm='trash-put'
 alias rm='echo -e "\033[33mThis is not the command you are looking for.\033[0m"; false'
 
-source '/usr/local/etc/bash_completion.d/docker-machine-prompt.bash'
-export PS1='${ret_status} %{$fg[cyan]%}%c%{$reset_color%}$(__docker_machine_ps1) $(git_prompt_info)'
 
-source $HOME/pythonenv/python27env/bin/activate
+alias cdg='cd ${GOPATH}/src'
+alias cdp="cd ${PYTHONPROJECTSPATH}"
+alias cdw="cd ${WEBPROJECTSPATH}"
+
+alias cds="cd ${PYTHONPROJECTSPATH}/github.com/seekplum/seekplum"
+alias cdi="cd ${PYTHONPROJECTSPATH}/github.com/seekplum/seekplum.github.io"
+alias cdm="cd ${PYTHONPROJECTSPATH}/meideng.net/meizhe2012"
+
+source '/usr/local/etc/bash_completion.d/docker-machine-prompt.bash'
 ```
 
 ## omyzsh 未执行 ~/.bash_profile、~/.bashrc等脚本
