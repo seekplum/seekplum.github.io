@@ -6,25 +6,34 @@ tags: go-sqlite3 build
 thread: go
 ---
 ## 环境
+
 * OS: Red Hat Enterprise Linux Server release 7.4 (Maipo)
 * GO: go version go1.10.3 linux/amd64
 * kernel: Linux 10-10-100-38 3.10.0-693.el7.x86_64 #1 SMP Thu Jul 6 19:56:57 EDT 2017 x86_64 x86_64 x86_64 GNU/Linux
 
 ## 编译命令
-> CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-extldflags "-static"' -o .build/midgard ./cmd/main.go
+
+```bash
+CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-extldflags "-static"' -o .build/midgard ./cmd/main.go
+```
 
 ## 报错信息
+
 ```text
 Binary was compiled with 'CGO_ENABLED=0', go-sqlite3 requires cgo to work. This is a stub
 ```
 
 ## 原因
+
 go-sqlite3必须要启用CGO编译，即需要设置 `CGO_ENABLED=1`，需要安装 `glibc-static`， 可使用下面的脚本 `build.sh` 进行编译。
 
 ## 可用的编译脚本
+
 * 使用前安装依赖软件
 
-> yum -y install make gcc wget git glibc-static
+```bash
+yum -y install make gcc wget git glibc-static
+```
 
 * vi build.sh
 
@@ -58,4 +67,6 @@ unset PLATFORM
 
 * 使用
 
-> bash build.sh linux
+```bash
+bash build.sh linux
+```

@@ -6,14 +6,17 @@ tags: python tornado
 thread: pyhton
 ---
 ## 前言
+
 本文主要是对Tornado框架的目录结构进行一个梳理和一个简单的说明，同时补充异步、阻塞等相关概念。不涉及到具体代码。
 
 ## 版本信息
+
 * 分支: branch5.1
 * tag: v5.1.1
 * commit id: cc2cf078a39abec6f8d181f76a4e5ba9432364f3
 
 ## 目录结构
+
 ```text
 ➜  tornado git:(branch5.1) ✗ tree -L 1
 .
@@ -123,23 +126,27 @@ tornado
 
 缓存IO，也被称为标准IO，大多数文件系统默认IO操作都是缓存IO，在Linux的缓存IO机制中，操作系统会将IO的数据缓存在文件系统的页缓存（page cache）中，也就是说，数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的缓冲区拷贝到应用程序的地址空间
 
-**缓存IO的缺点：**
+* 缓存IO的缺点
 
 数据在传输过程中需要在应用程序地址空间和内核进行多次数据拷贝操作，这些数据拷贝操作所带来的CPU以及内存开销是非常大的
 
 ## 阻塞式IO
+
 耗时型任务一般分为两类：CPU耗时型任务和IO耗时型任务。CPU指一般的代码运算执行过程，IO一般分为两大类，计算型IO和阻塞式IO。如果仅有一个线程，那么同一时刻只能有一个任务在计算，但如果是阻塞式IO，它可以让它先阻塞掉，然后去计算其他的任务，等到内核告诉程序那边没有被阻塞了就、再回到之前的地方进行之后的运算。
 
 linux下，可以通过设置socket使其变为non-blocking。nonblocking IO的特点是用户进程需要不断的主动询问kernel数据好了没有。
 
 ## Tornado异步原理
+
 Tornado的异步实现就是将当前请求的协程暂停，等待其返回结果，在等待的过程中当前请求不能继续往下执行，但是如果有其他请求(同样是一个协程)，只要不也是阻塞式IO，那么就会直接去处理其他的请求了。
 
 ## 部署
+
 ![多实例部署](/static/images/tornado/deploy.jpg)
 
 如上图所示，nginx + 多实例结合，nginx作为反向代理，后台以不同端口启动多个Tornado web服务。
 
 ## 参考
+
 * [从Tornado谈异步与非阻塞](https://haofly.net/tornado-asynchronous/)
 * [大概了解Tornado框架的设计模型](https://blog.csdn.net/weiwangchao_/article/details/79972379)

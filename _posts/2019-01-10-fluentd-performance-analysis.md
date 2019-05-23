@@ -122,6 +122,7 @@ thread: Fluentd
 紧接着就是在[github](https://github.com/fluent/fluentd)中搜索相关issue，找到一个关于[td-agnet内存疯长的issue](https://github.com/fluent/fluentd/issues/1414)。根据issue提示，**增加了buffer等相关配置，内存增加问题得到了解决**。
 
 ## CPU问题排查方向
+
 * 设置enable_watch_timer
 * 修改buffer配置参数是否能生效
 * 检查tail相同文件是否会有竟态条件repeat
@@ -129,6 +130,7 @@ thread: Fluentd
 * 检查正则是否合理
 
 ## 结论
+
 在修改各种参数和配置后，发现只有把在配置文件中去除`@type dio`部分配置后才不会再出现。
 
 在查阅大量资料后推测，因为`fluent-plugin-dio-1.0.1.gem`插件会把日志中的不同格式时间转成时间戳，在这个过程中导致了CPU使用率较高。
@@ -136,6 +138,7 @@ thread: Fluentd
 由于`@timestamp`时间和日志时间非常接近，完全可以替代日志中的时间作为筛选条件进行查询。所以把`fluent-plugin-dio-1.0.1.gem`插件移除即可。
 
 ## 参考
+
 * [td-agent内存使用率逐渐上升 #1414](https://github.com/fluent/fluentd/issues/1414)
 * [fluentd has very high cpu usage #2027](https://github.com/fluent/fluentd/issues/2027)
 * [fluentd consuming high CPU at idle, restart PID fixes it #1845](https://github.com/fluent/fluentd/issues/1845)

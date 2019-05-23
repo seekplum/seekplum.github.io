@@ -6,20 +6,24 @@ tags: python tornado
 thread: pyhton
 ---
 ## 前言
+
 上一篇我们对Tornado的源码已经有了初版的了解，接下来重点分析和理解下tornado异步的实现。
 
 tornado 优秀的大并发处理能力得益于它的 web server 从底层开始就自己实现了一整套基于 epoll 的单线程异步架构(其他 python web 框架的自带 server 基本是基于 wsgi 写的简单服务器，并没有自己实现底层结构)。那么 tornado.ioloop 就是 tornado web server 最底层的实现。
 
 ## 环境
+
 * Python: Python 2.7.14
 * 系统: macOS 10.13.4
 
 ## 分析依赖
+
 ![IO模块依赖](/static/images/tornado/ioloop.jpg)
 
 `platform`模块比较容易引起关注，自身实现了`selete`, `epoll` Io多路复用。
 
 ## 准备知识
+
 之前有整理过一篇[IO多路复用机制](/io-multipath/)的笔记，我们可以先不用了解这多，先记住以下几个核心点
 
 * 1.epoll对文件描述符的操作有两种模式：水平触发 LT（level trigger）和边缘触发 ET（edge trigger）,其中LT模式是默认模式。
@@ -40,6 +44,7 @@ tornado 优秀的大并发处理能力得益于它的 web server 从底层开始
     - close
 
 ## 官方hello world
+
 ```python
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -76,18 +81,22 @@ if __name__ == "__main__":
 ```
 
 ### 疑问
+
 前面的代码都好理解，最后的 `tornado.ioloop.IOLoop.current().start()` 为什么要加呢，启动端口监听后不就可以了吗？app和iolopp之间是如何关联的呢？
 
 ### 实践
+
 * 1.先不改动代码，直接运行，命令行通过 `curl http://127.0.0.1:8888` 可以看到返回了`Hello, world`
 * 2.去除最后一行 `tornado.ioloop.IOLoop.current().start()` ,发现web server直接退出了。
 
 ### 小结
+
 可见daemon服务是由最后一行实现的，可是还是无法解释前面的疑问，那我们继续分析。
 
 ## 查看源码
 
 ### 查看 current 返回值
+
 ```python
 
     @staticmethod
@@ -142,6 +151,7 @@ if __name__ == "__main__":
 由此可知， `tornado.ioloop.IOLoop.current()`  最终返回的就是 `tornado.platform.kqueue.KQueueIOLoop` 类的实例化对象。
 
 ### 查看 KQueueIOLoop
+
 ```python
 
 class KQueueIOLoop(PollIOLoop):
@@ -157,6 +167,7 @@ class KQueueIOLoop(PollIOLoop):
 由图可知，实例化操作是由基类 `Configurable`中的 `__new__` 方法完成的，初始化是由 `initialize` 方法完成的。
 
 ### 查看 Configurable 的 \__new__ 方法
+
 ```python
 class Configurable(object):
     """Base class for configurable interfaces.
@@ -280,6 +291,7 @@ class PollIOLoop(IOLoop):
 ![ioloop实例化](/static/images/tornado/ioloop-flow.png)
 
 ### 小结
+
 根据上述流程图我们可以梳理出ioloop的实例化流程了。
 
 * 1.tornado.ioloop.IOLoop.current() 方法返回 tornado.platform.kqueue._KQueue类实例化对象
@@ -290,6 +302,7 @@ class PollIOLoop(IOLoop):
 接下来重点看下 `PollIOLoop` 类中 `initialize` ， `start` 两个方法做了什么。
 
 ## PollIOLoop initialize方法
+
 首先要看的是关于 epoll 操作的方法，还记得前文说过的 epoll 只需要四个 api 就能完全操作嘛？ 
 
 我们来看 PollIOLoop 的实现：
@@ -373,6 +386,7 @@ class PollIOLoop(IOLoop):
 **通过`__new__`, `initialize`, `make_current` 等方式初始化目的是为了让 `PollIOLoop` 类是一个单例**
 
 ## PollIOLoop start方法
+
 ```python
     def start(self):
         # 检查是否已经运行
@@ -612,6 +626,7 @@ class Waker(interface.Waker):
 可以看到 waker 把 pipe 分为读、 写两个管道并都设置了非阻塞和 close_exec。 注意wake(self)方法中：self.writer.write(b"x") 直接向管道中写入随意字符从而释放管道。
 
 ## 总结
+
 * 1.`tornado.ioloop.IOLoop.current().start()` 为什么要加呢，启动端口监听后不就可以了吗？
     - Application 主要是实现路由功能，启动监听端口后还需要轮询监听事件
 * 2.app和iolopp之间是如何关联的呢？
@@ -649,9 +664,11 @@ class Waker(interface.Waker):
 ```
 
 ## 后续
+
 阅读了ioloop的实现源码，有了初步的理解和印象，还需要学习tornado中异步是如何使用ioloop来加深印象和验证理解。
 
 各位看官下篇见！
 
 ## 致谢
+
 * [深入理解 tornado 之底层 ioloop 实现](http://python.jobbole.com/85365/)
