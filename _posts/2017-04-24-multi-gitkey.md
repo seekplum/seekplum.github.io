@@ -17,22 +17,28 @@ ssh-keygen -t rsa -C "youremail@email.com" -f ~/.ssh/<密钥对名>
 
 在~/.ssh/目录下新建config文件，用于配置各个公私钥对应的主机
 
-```config
-Host xxx.github.com  // 主机名字，不能重名
-HostName github.com   // 主机所在域名或IP
-User git  // 用户名称
-IdentityFile C:/Users/username/.ssh/id_rsa_second  // 私钥路径
+```conf
+Host seekplum.github.com # 主机名字，不能重名
+    HostName github.com # 主机所在域名或IP
+    User seekplum # 用户名称
+    Port 22
+    PreferredAuthentications publickey
+    IdentityFile ~/.ssh/id_rsa  # 私钥路径
 ```
 
 ## 修改项目的远程主机地址
 
 * 查看远程主机地址
 
-> git remote -v
+```bash
+git remote -v
+```
 
 * 修改远程主机地址
 
-> git remote set-url origin git@xxx.github.com:xx/xx.git
+```bash
+git remote set-url origin git@seekplum.github.com:seekplum/seekplum.github.io.git
+```
 
 ## 添加公钥进行使用
 
