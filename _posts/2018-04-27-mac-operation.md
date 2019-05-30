@@ -241,6 +241,12 @@ brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Librar
 curl https://cht.sh/:cht.sh | tee /usr/local/bin/cht.sh && chmod +x /usr/local/bin/cht.sh
 ```
 
+## 检查端口占用
+
+```bash
+lsof -i tcp:8000 | awk '{if(NR>1)print}'  | awk '{print $2}' | uniq | xargs kill -9
+```
+
 ## 安装软件列表
 
 * 企业微信
