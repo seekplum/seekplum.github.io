@@ -253,7 +253,7 @@ lsof -i tcp:8000 | awk '{if(NR>1)print}'  | awk '{print $2}' | uniq | xargs kill
 * 微信
 * QQ
 * 百度网盘
-* ShadowsocksX
+* [ShadowsocksX](https://github.com/shadowsocks/ShadowsocksX-NG/releases)
 * Google Chrome
 * Postman
 * Pycharm
