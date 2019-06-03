@@ -189,6 +189,31 @@ chmod 600 /Users/seekplum/.ssh/authorized_keys
 
 系统偏好设置 -> 共享 -> 远程登录
 
+## 自定义锁屏键
+
+Mac的默认锁屏键为 `control + command + Q`，我们可以进行修改
+
+* 1.定义锁屏程序
+
+打开 `自动操作` -> 选择 `应用程序` -> 选择 `实用工具` -> 双击 `允许Shell脚本` -> 在右侧编写如下内容 -> `command + S` 进行保存
+
+Lock My Screen
+
+```bash
+/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend
+echo $(date +"%F %T" >> ${HOME}/lock-my-screen.log)
+```
+
+* 2.定义锁屏服务
+
+打开 `自动操作` -> 选择 `服务` 或者叫 `快速操作` -> 选择 `实用工具` -> 双击 `开启应用程序` -> 在右侧选择第一步保存的程序 `Lock My Screen` -> `command + S` 进行保存
+
+* 3.定义快捷键
+
+打开 `系统偏好设置` -> 选择 `键盘` -> 选择 `快捷键` -> 选择 `服务` -> 找到 `Lock My Screen` 为其定义快捷键即可。
+
+其它应用程序的快捷键也是类似的，只不过第一步定义应用程序是可以省略的。
+
 ## 安装软件列表
 
 * 企业微信
