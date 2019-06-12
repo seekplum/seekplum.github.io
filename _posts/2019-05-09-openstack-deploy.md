@@ -5,35 +5,71 @@ tags: python,OpenStack
 thread: python
 ---
 
+## 结论
+
+未安装成功
+
 ## 系统版本信息
 
 ```text
-cat /etc/redhat-release
-Red Hat Enterprise Linux Server release 7.4 (Maipo)
+cat /etc/issue
+Ubuntu 16.04.5 LTS \n \l
 ```
 
-## 安装依赖包(root用户下操作)
+## 更新apt源为阿里源(root用户下操作)
 
 ```bash
-yum install -y bridge-utils nss-devel libvirt-devel redhat-lsb
+test -f /etc/apt/sources.list && mv /etc/apt/sources.list /etc/apt/sources.list.$(date +%s).bak
+cat >/etc/apt/sources.list <<EOF
+deb http://mirrors.aliyun.com/ubuntu/ xenial main
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial main
+
+deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+
+deb http://mirrors.aliyun.com/ubuntu/ xenial universe
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial universe
+deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+
+deb http://mirrors.aliyun.com/ubuntu/ xenial-security main
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main
+deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+EOF
 ```
 
-## 更新pip到最新(root用户下操作)
+## 更新软件(root用户下操作)
 
 ```bash
-pip install --upgrade pip
-pip install setuptools --upgrade
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get install -y python-systemd
+sudo apt-get -y dist-upgrade
+```
+
+## 设定时间同步(root用户下操作)
+
+* 设定时区
+
+```bash
+dpkg-reconfigure tzdata
+```
+
+在弹出框中选择 `Asia` -> 再选择 `Shanghai` -> `OK`
+
+* 同步时间
+
+```bash
+sudo apt-get install -y ntpdate
+sudo ntpdate cn.pool.ntp.org
+date +"%F %T"
 ```
 
 ## 创建用户(root用户下操作)
 
 ```bash
 sudo useradd -s /bin/bash -d /opt/stack -m stack
-```
-
-## 设置sudo权限(root用户下操作)
-
-```bash
 echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
 ```
 
@@ -43,30 +79,26 @@ echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
 sudo su - stack
 ```
 
-无特殊说明的情况下，后续的相关操作都是在 `stack` 用户下进行的
+**注: 无特殊说明的情况下，后续的相关操作都是在 `stack` 用户下进行的.**
 
 ## 下载DevStack
 
 ```bash
-git clone -b master --depth=1 https://git.openstack.org/openstack-dev/devstack
+git clone -b stable/queens --depth=1 https://git.openstack.org/openstack-dev/devstack
 ```
 
 ## 创建 local.conf
 
 ```bash
-cat >/opt/stack/devstack/local.conf<<EOF
-[[local|localrc]]
-ADMIN_PASSWORD=secret
-DATABASE_PASSWORD=$ADMIN_PASSWORD
-RABBIT_PASSWORD=$ADMIN_PASSWORD
-SERVICE_PASSWORD=$ADMIN_PASSWORD
+cp /opt/stack/devstack/samples/local.conf /opt/stack/devstack/local.conf
+cat >>/opt/stack/devstack/local.conf<<EOF
+
+# GIT mirror
+GIT_BASE=http://git.trystack.cn
+NOVNC_REPO=http://git.trystack.cn/kanaka/noVNC.git
+SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
 EOF
-```
-
-## 创建日志目录
-
-```bash
-mkdir -p /opt/stack/logs/
+cp /opt/stack/devstack/samples/local.sh /opt/stack/devstack/
 ```
 
 ## 检查系统版本
@@ -75,25 +107,31 @@ mkdir -p /opt/stack/logs/
 lsb_release -i -s
 ```
 
-**输出结果可能是有问题的，那么就需要手动修改 `functions-common` 脚本，修改第 `354行`， `os_VENDOR=$(lsb_release -i -s)`为`os_VENDOR="Red Hat"`.**
+**输出结果可能是有问题的，那么就需要手动修改 `functions-common` 脚本，修改第 `354行`， `os_VENDOR=$(lsb_release -i -s)`为`os_VENDOR="Ubuntu"`.**
 
 ## 执行安装脚本
 
-**脚本运行中会安装pip，而默认安装的pip版本又会很低，导致后续安装包失败，需要把 `tools/install_pip.sh:install_get_pip:92` 安装pip步骤注释掉.**
-
 ```bash
-export FORCE=yes && /opt/stack/devstack/stack.sh
+/opt/stack/devstack/stack.sh
 ```
 
-## python包 pyeclib 无法安装
+## 安装失败进行回退
 
-待解决
+```bash
+rm -rf ~/.pip
+/opt/stack/devstack/unstack.sh
+/opt/stack/devstack/clean.sh
+```
 
 ## 感受
 
 OpenStack发展也这么多年了，提供的官方文档还无法傻瓜式的进行部署，可见做的确实是不够好的。
 
-通过阅读部分shell安装脚本也可知，缺少考虑各种异常，也未增加命令行参数等接口。整体安装体验非常不好。
+通过阅读部分shell安装脚本也可知，缺少考虑各种异常，也未增加命令行参数等接口。也较难通过日志内容进行修复，导致未安装成功，整体安装体验非常不好。
+
+## 访问Dashboard
+
+[http://IP/dashboard](http://IP/dashboard)
 
 ## 参考
 
