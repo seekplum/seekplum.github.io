@@ -80,8 +80,10 @@ export PS1='${ret_status} %{$fg[cyan]%}%c%{$reset_color%}$(__docker_machine_ps1)
 
 ## 创建Machine
 
+创建前需要先准备安装好机器，建议是虚拟机，可以用VirtualBox进行安装，并打通免密，本例中使用的是ubuntu系统，IP是192.168.1.4
+
 ```bash
-docker-machine --debug create --driver generic --generic-ip-address=192.168.1.78 --generic-ssh-key ~/.ssh/seekplum  --generic-ssh-user=root --generic-ssh-port=22 host78
+docker-machine --debug create --driver generic --generic-ip-address=192.168.1.4 --generic-ssh-key ~/.ssh/id_rsa  --generic-ssh-user=root --generic-ssh-port=22 ubuntu1
 ```
 
 docker-machine详细命令参见: [https://docs.docker.com/machine/](https://docs.docker.com/machine/)

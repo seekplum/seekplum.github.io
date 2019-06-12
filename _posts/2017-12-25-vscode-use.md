@@ -24,6 +24,8 @@ Preferences -> Settings -> Window: Open Files In New Window 设置为 `on`
 
 ## 修改配置
 
+Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settings.json` 文件
+
 ```json
 {
     "editor.fontSize": 15,
@@ -61,7 +63,11 @@ Preferences -> Settings -> Window: Open Files In New Window 设置为 `on`
         119
     ],
     // tab等于的空格数
-    "editor.tabSize": 4
+    "editor.tabSize": 4,
+
+    // plantuml 导出图片位置
+    "plantuml.diagramsRoot": "wsd",
+    "plantuml.exportOutDir": "images/docs"
 }
 ```
 
