@@ -184,7 +184,9 @@ Docker Macheine，显示访问`host98`需要的所有环境变量
 
 * 退出host98主机的docker
 
-> eval $(docker-machine env -u
+```bash
+eval $(docker-machine env -u)
+```
 
 `-u`: unset
 

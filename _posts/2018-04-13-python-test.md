@@ -412,7 +412,7 @@ class TestClass(object):
 
 #### 需求分析
 
-```
+```text
 根据[3A](http://www.testclass.net/interface/3a/)原则，我们可以设计如下的用例
 测试数据: 节点的名称:python/java/go/nodejs
 接口地址: https://www.v2ex.com/api/nodes/show.json
@@ -453,18 +453,20 @@ class TestV2exApiWithExpectation(object):
         assert 0
 ```
 
-
 ### 生成xml格式的测试报告
-> pytest test_quick_start.py --junit-xml=report.xml
+
+```bash
+pytest test_quick_start.py --junit-xml=report.xml
+```
 
 ## Selenium
 
-### 安装[驱动](http://npm.taobao.org/mirrors/chromedriver/2.32/)
+* 1.根据chrome浏览器版本下载对应版本的[chromedirver驱动](http://npm.taobao.org/mirrors/chromedriver/),[版本对应](https://blog.csdn.net/ywj_486/article/details/80940087)
+* 2.解压chromedriver后移动到 `$PATH` 中(比如: `/usr/local/bin` 下)
 
-#### Linux
-
-> 解压压缩包
-> sudo cp ~/Share/chromedriver /usr/local/bin/  # 拷贝到 $PATH 中
+```bash
+sudo mv ~/Downloads/chromedriver /usr/local/bin
+```
 
 ## avocado
 

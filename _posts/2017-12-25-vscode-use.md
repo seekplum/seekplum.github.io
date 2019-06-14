@@ -30,6 +30,7 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
 {
     "editor.fontSize": 15,
     "python.jediEnabled": false,
+    "python.pythonPath": "${HOME}/pythonenv/python27env/bin/python",
     "diffEditor.ignoreTrimWhitespace": false,
     "workbench.iconTheme": "vscode-icons",
     "editor.minimap.enabled": false,
