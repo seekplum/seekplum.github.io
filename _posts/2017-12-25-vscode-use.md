@@ -68,7 +68,19 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
 
     // plantuml 导出图片位置
     "plantuml.diagramsRoot": "wsd",
-    "plantuml.exportOutDir": "images/docs"
+    "plantuml.exportOutDir": "images/docs",
+
+    // 识别文件类型
+    "files.associations": {
+        "Dockerfile-*": "dockerfile"
+    },
+
+    // 自动保存
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 500,
+
+    // 拖动文件时取消确认
+    "explorer.confirmDragAndDrop": false,
 }
 ```
 
