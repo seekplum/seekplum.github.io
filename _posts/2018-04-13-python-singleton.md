@@ -32,8 +32,8 @@ class MyClass(object):
 
 > 通过装饰器判断`某个类`是否在字典instaces中,如果不存在,则将`cls`作为key,cls(*args, **kwargs)作为value存到instances中,否则直接返回instances[cls]
 
-
 ## 使用`metaclass`元类
+
 ```python
 class Singleton(type):
     _instances = {}
@@ -57,6 +57,7 @@ class MyClass(object):
     * 放回修改后的类
 
 ## 使用 `__new__`
+
 ```python
 class Singleton(object):
     _instance = None
@@ -76,8 +77,8 @@ class MyClass(Singleton):
 
 > 通过将`类的实例`和一个`类变量`_instance关联起来,如果类变量为None,则创建实例,否则直接返回类变量
 
-
 ## 使用模块
+
 ```python
 # my_singleton.py
 class My_Singleton(object):
@@ -103,6 +104,7 @@ b = MyClass()
     * 无法对类进一步升级处理,比如按参数组成指定key进行实例化
 
 ## 通过共享属性
+
 ```python
 class Singleton(object):
     _state = {}

@@ -1,11 +1,12 @@
 ---
 layout: post
-title:  对实例方法使用装饰器
+title:  装饰器基本使用使用
 tags: python decorator
 thread: decorator
 ---
 
-## 代码
+## 实例方法使用装饰器
+
 ```python
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -109,5 +110,62 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+```
+
+## 带参数的多层装饰器
+
+```python
+# -*- coding: utf-8 -*-
+
+from functools import wraps
+
+
+def decorator1(name):
+    print("decorator1: %s" % name)
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            print("1 func name: %s" % func.__name__)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
+def decorator2(name):
+    print("decorator2: %s" % name)
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            print("2 func name: %s" % func.__name__)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
+@decorator1("11111")
+@decorator2("22222")
+def test(x, y):
+    return _test(x, y)
+
+
+def _test(x, y):
+    r = x + y
+    print("%s + %s = %s" % (x, y, r))
+    return r
+
+
+print(test(1, 2))
+
+# 下面的表达式和 test(1, 2) 等价
+# decorator1共返回了两层函数，第一次返回的是 decorator 函数，第二次返回的是 wrapper 函数
+r2 = decorator1("11111")(decorator2("22222")(_test))(1, 2)
+print(r2)
 
 ```
