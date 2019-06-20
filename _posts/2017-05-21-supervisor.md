@@ -7,14 +7,20 @@ thread: supervisor
 ---
 
 ## 安装
-> pip install supervisor
 
+```bash
+pip install supervisor
+```bash
 
 ## 创建配置文件
-> echo_supervisord_conf > /etc/supervisord.conf # 若提示没有权限，则使用sudo su - root -c "echo_supervisord_conf > /etc/supervisord.conf" 命令创建
+
+```bash
+echo_supervisord_conf > /etc/supervisord.conf # 若提示没有权限，则使用sudo su - root -c "echo_supervisord_conf > /etc/supervisord.conf" 命令创建
+```
 
 ## 配置文件描述
-```
+
+```conf
 [program:web_server]
 directory = /home/woqu/PycharmProjects/qdata-web ; 程序的启动目录
 command = python server.py --port=11099  ; 启动命令，可以看出与手动在命令行启动的命令是一样的
@@ -29,9 +35,10 @@ stdout_logfile = /etc/supervisor/log/log.log
 ```
 
 ### 使用浏览器来管理
-> 使用浏览器来管理，只需要注释掉如下几行就可以了。
 
-```
+使用浏览器来管理，只需要注释掉如下几行就可以了。
+
+```conf
 ;[inet_http_server]         ; inet (TCP) server disabled by default
 ;port=127.0.0.1:9001        ; (ip_address:port specifier, *:port for ;all iface)
 ;username=user              ; (default is no username (open server))
@@ -39,10 +46,14 @@ stdout_logfile = /etc/supervisor/log/log.log
 ```
 
 ## 启动supervisor
-> supervisord -c /etc/supervisord.conf # 默认的配置文件路径就是`/etc/supervisord.conf`,如果是默认路径 -c 可以忽略
+
+```bash
+supervisord -c /etc/supervisord.conf # 默认的配置文件路径就是`/etc/supervisord.conf`,如果是默认路径 -c 可以忽略
+```
 
 ## 使用supervisorctl
-```
+
+```bash
 supervisorctl -c /etc/supervisord.conf
 > status    # 查看程序状态
 > stop usercenter   # 关闭 usercenter 程序
@@ -52,9 +63,9 @@ supervisorctl -c /etc/supervisord.conf
 > update    ＃ 重启配置文件修改过的程序
 ```
 
-
 ## supervisorctl 命令介绍
-```
+
+```text
 # 停止某一个进程，program_name 为 [program:x] 里的 x
 supervisorctl stop program_name
 # 启动某个进程
@@ -76,7 +87,8 @@ supervisorctl update
 ## 开机自启动
 
 ### 编辑脚本
-```
+
+```bash
 #!/bin/sh
 #
 # /etc/rc.d/init.d/supervisord
@@ -131,11 +143,17 @@ esac
 ```
 
 ### 增加可执行权限
-> chmod +x /etc/rc.d/init.d/supervisord
+
+```bash
+chmod +x /etc/rc.d/init.d/supervisord
+```
 
 ### 添加到开机启动项
-> chkconfig --add supervisord
-> chkconfig supervisord on
+
+```bash
+chkconfig --add supervisord
+chkconfig supervisord on
+```
 
 ## 过程中碰到的错误
 

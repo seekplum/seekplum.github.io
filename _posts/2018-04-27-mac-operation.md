@@ -214,11 +214,9 @@ echo $(date +"%F %T" >> ${HOME}/lock-my-screen.log)
 
 其它应用程序的快捷键也是类似的，只不过第一步定义应用程序是可以省略的。
 
-## 安装redis客户端
+## item2按单词跳转
 
-```bash
-brew cask install rdm
-```
+Preferences -> Profiles -> Keys -> Load Preset.. -> Natural Text Editing
 
 ## 安装软件列表
 
