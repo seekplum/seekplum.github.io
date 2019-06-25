@@ -240,3 +240,4 @@ Preferences -> Profiles -> Keys -> Load Preset.. -> Natural Text Editing
 * Java JDK
 * [Robo 3T](https://download-test.robomongo.org/mac/robo3t-1.3.1-darwin-x86_64-7419c40.dmg)
 * [AnotherRedisDesktopManager](https://github.com/qishibo/AnotherRedisDesktopManager/releases)
+* [BeyondCompare](https://www.scootersoftware.com/download.php)文本对比工具
