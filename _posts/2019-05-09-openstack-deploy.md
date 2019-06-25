@@ -43,9 +43,6 @@ EOF
 
 ```bash
 sudo apt-get -y update
-sudo apt-get -y upgrade
-sudo apt-get install -y python-systemd
-sudo apt-get -y dist-upgrade
 ```
 
 ## 设定时间同步(root用户下操作)
@@ -93,6 +90,8 @@ git clone -b stable/queens --depth=1 https://git.openstack.org/openstack-dev/dev
 cp /opt/stack/devstack/samples/local.conf /opt/stack/devstack/local.conf
 cat >>/opt/stack/devstack/local.conf<<EOF
 
+HOST_IP=127.0.0.1
+
 # GIT mirror
 GIT_BASE=http://git.trystack.cn
 NOVNC_REPO=http://git.trystack.cn/kanaka/noVNC.git
@@ -112,15 +111,16 @@ lsb_release -i -s
 ## 执行安装脚本
 
 ```bash
-/opt/stack/devstack/stack.sh
+cd /opt/stack/devstack
+./stack.sh
 ```
 
 ## 安装失败进行回退
 
 ```bash
-rm -rf ~/.pip
-/opt/stack/devstack/unstack.sh
-/opt/stack/devstack/clean.sh
+cd /opt/stack/devstack
+./unstack.sh
+./clean.sh
 ```
 
 ## 感受
