@@ -18,20 +18,34 @@ pip install supervisor
 echo_supervisord_conf > /etc/supervisord.conf # 若提示没有权限，则使用sudo su - root -c "echo_supervisord_conf > /etc/supervisord.conf" 命令创建
 ```
 
+## 配置导入
+
+```conf
+[include]
+files = conf.d/*.conf
+```
+
 ## 配置文件描述
 
 ```conf
-[program:web_server]
-directory = /home/woqu/PycharmProjects/qdata-web ; 程序的启动目录
-command = python server.py --port=11099  ; 启动命令，可以看出与手动在命令行启动的命令是一样的
-autostart = true     ; 在 supervisord 启动的时候也自动启动
+[program:flask-service]
+command=xxx ; 启动命令，可以看出与手动在命令行启动的命令是一样的
+directory=xxx ; 执行启动命令时的目录
+process_name=%(program_name)s
+numprocs=1
+startretries = 3     ; 启动失败自动重试次数，默认是 3
 startsecs = 5        ; 启动 5 秒后没有异常退出，就当作已经正常启动了
-autorestart = true   ; 程序异常退出后自动重启
-startretries = 3     ; 启动失败自动重试次数，默认是 3user = woqu          ; 用哪个用户启动
-redirect_stderr = true  ; 把 stderr 重定向到 stdout，默认 falsestdout_logfile_maxbytes = 20MB  ; stdout 日志文件大小，默认 50MB
-stdout_logfile_backups = 20     ; stdout 日志文件备份数
-; stdout 日志文件
-stdout_logfile = /etc/supervisor/log/log.log
+redirect_stderr=true ; 把 stderr 重定向到 stdout，默认 falsestdout_logfile_maxbytes = 20MB  ; stdout 日志文件大小，默认 50MB
+stdout_logfile=/xxx/logs/%(program_name)s.log
+stdout_logfile_maxbytes=1MB
+stdout_logfile_backups=10
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+stopasgroup=true
+autostart = true     ; 在 supervisord 启动的时候也自动启动
+autorestart=true ; 程序异常退出后自动重启
+environment=
+    PATH="/xxx/packages/pythonenv/python27env/bin:/usr/local/opt/ncurses/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 ```
 
 ### 使用浏览器来管理
