@@ -81,6 +81,13 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
 
     // 拖动文件时取消确认
     "explorer.confirmDragAndDrop": false,
+
+    "vsicons.dontShowNewVersionMessage": true,
+
+    // Java开发配置
+    "java.home": "/Library/Java/JavaVirtualMachines/jdk-12.0.1.jdk/Contents/Home",
+    "java.errors.incompleteClasspath.severity": "ignore",
+    "java.configuration.checkProjectSettingsExclusions": false,
 }
 ```
 
@@ -402,6 +409,56 @@ go get -u -v github.com/newhook/go-symbols
             },
             "args": [],
             "showLog": true
+        }
+    ]
+}
+```
+
+### Java
+
+* Java Extension Pack
+* Java Test Runner
+* Maven for java
+
+#### 测试类
+
+* Test.java
+
+```java
+package test;
+
+public class Test{
+    public static void main(String[] args){
+        System.out.println("Hello test");
+    }
+}
+```
+
+#### debug 配置
+
+```json
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch)",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "test.Test",
+            "args": "",
+        },
+        {
+            "type": "java",
+            "name": "Debug (Attach)",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 0
         }
     ]
 }
