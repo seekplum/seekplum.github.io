@@ -248,6 +248,13 @@ Kubernetes是一个容器编排器，它对底层基础设施（容器运行的�
 * Kubelet：监控节点内的容器（误，实为Pod），并与主节点进行通信。
 * Pod：一开始可以将Pod当作容器看待。
 
+### zsh配置命令补齐
+
+```bash
+echo "source <(kubectl completion zsh)" >> ~/.zshrc
+source ~/.zshrc
+```
+
 ### Kubernetes实践——Pod
 
 把微服务运行在容器中，虽然行得通，但是设置过程相当繁琐。我们还提到这个解决方案不具有可扩展性和弹性，而Kubernetes则可解决这些问题。本文后续部分，我们会把服务迁移成图13所示的最终结果，由Kubernetes来编排容器。
@@ -434,6 +441,20 @@ spec:
 
 ```bash
 kubectl create -f service-sa-frontend-lb.yaml
+```
+
+若创建过程报错如下
+
+```text
+error: SchemaError(io.k8s.api.core.v1.ResourceQuotaList): invalid object doesn't have additional properties
+```
+
+可以通过以下方法解决
+
+```bash
+trash /usr/local/bin/kubectl
+
+brew link --overwrite kubernetes-cli
 ```
 
 * 查询Service状态
@@ -776,3 +797,4 @@ kubectl apply -f sa-frontend-deployment.yaml
 * [通过Minikube快速搭建一个本地的Kubernetes单节点环境](https://zhuanlan.zhihu.com/p/34487833)
 * [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [Install Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
+* [手把手教你打造高效的 Kubernetes 命令行终端](https://mp.weixin.qq.com/s?__biz=MzI3MTI2NzkxMA==&mid=2247486254&idx=1&sn=c78b509e84a64cb921280a5e1e111bb7&chksm=eac52a07ddb2a311c2a21a3decf26c8ab5d9b0d6c9ff8701a8db3e369d76fe9c6045e34808f1&token=1191616896&lang=zh_CN#rd)
