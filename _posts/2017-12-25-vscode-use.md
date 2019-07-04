@@ -246,6 +246,10 @@ Preferences -> Keyboard Shortcuts
 ]
 ```
 
+## 配置终端启动vscode 打开文件
+
+* 1.使用快捷键组合 `shift + command + P`，在搜索框中输入 `Shell Command: Install`，点击安装
+
 ## 常用插件
 
 ### 通用型
