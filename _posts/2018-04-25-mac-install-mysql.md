@@ -6,6 +6,7 @@ thread: mysql
 ---
 
 ## 下载
+
 从mysql官网下载相应版本的二进制包即可。本文以mysql-5.7.22为例，在[官网下载页](https://dev.mysql.com/downloads/file/?id=476955)确认版本后下载即可。
 
 ## 非默认路径安装
@@ -692,54 +693,72 @@ fi
 
 * 安装前准备目录如下
 
-```text
-.
+```bash
+tree ~/packages -L 1
+/Users/seekplum/packages
 ├── install_mysql.sh
 ├── mysql-5.7.22-macos10.13-x86_64
-├── mysql.server
+└── mysql.server
 ```
 
 * 执行安装操作
 
-> bash install_mysql.sh
+```bash
+bash install_mysql.sh
+```
 
 ## 解决连接报错
-> ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
+
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
 
 1.首先在设置中关闭mysql服务
 
-> /Users/seekplum/packages/mysql/support-files/mysql.server stop
+```bash
+/Users/seekplum/packages/mysql/support-files/mysql.server stop
 
-> ps axu \| grep mysql \| grep -v \"grep\" \| awk \'{print $2}\' \| xargs kill -9
+ps axu | grep mysql | grep -v "grep" | awk '{print $2}' | xargs kill -9
+```
 
 2.进入安全模式
 
-> /Users/seekplum/packages/mysql/bin/mysqld_safe \-\-defaults-file=/Users/seekplum/packages/mysql/data/conf/my.cnf \-\-skip-grant-tables &
+```bash
+/Users/seekplum/packages/mysql/bin/mysqld_safe --defaults-file=/Users/seekplum/packages/mysql/data/conf/my.cnf --skip-grant-tables &
+```
 
 3.进入mysql,执行以下命令
 
 root连接时无密码
 
-> /Users/seekplum/packages/mysql/bin/mysql -uroot -S /Users/seekplum/packages/mysql/data/sock/mysql.sock
+```bash
+/Users/seekplum/packages/mysql/bin/mysql -uroot -S /Users/seekplum/packages/mysql/data/sock/mysql.sock
+```
 
 设置新密码
 
-> update mysql.user set authentication_string=PASSWORD(\'root\') where user=\'root\';
+```sql
+update mysql.user set authentication_string=PASSWORD('root') where user='root';
 
-> flush privileges;
+flush privileges;
 
-> quit
+quit
+```
 
 4.关闭第二步起的mysql
 
-> ps axu \| grep mysql \| grep -v grep \| awk \'{print $2}\' \| xargs kill -9
+```bash
+ps axu | grep mysql | grep -v grep | awk '{print $2}' | xargs kill -9
+```
 
 5.重启服务后重置密码
 
-> /Users/seekplum/packages/mysql/support-files/mysql.server start
+```bash
+/Users/seekplum/packages/mysql/support-files/mysql.server start
 
-> /Users/seekplum/packages/mysql/bin/mysql -uroot -proot -S /Users/seekplum/packages/mysql/data/sock/mysql.sock
+/Users/seekplum/packages/mysql/bin/mysql -uroot -proot -S /Users/seekplum/packages/mysql/data/sock/mysql.sock
+```
 
 重置密码
 
-> set password = password(\'root\');
+```sql
+set password = password('root');
+```

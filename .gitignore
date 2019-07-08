@@ -5,3 +5,4 @@ _site/*
 test.py
 tests/*
 .pytest_cache/*
+2019-07-07-stock*.md
