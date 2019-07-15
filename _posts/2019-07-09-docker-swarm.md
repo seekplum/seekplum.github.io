@@ -26,7 +26,7 @@ ip a | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}' | cut -d "/" -f1 | 
 docker swarm init --advertise-addr 192.168.1.7
 ```
 
---advertise-addr: 指定与其他node通信的地址
+`--advertise-addr`: 指定与其他node通信的地址
 
 * 查看当前swarm的node
 
@@ -91,3 +91,68 @@ docker node update --availability drain ubuntu1
 ```bash
 docker service scale web_server=3
 ```
+
+## failover特性
+
+对ubuntu2进行关机重启，关机后副本会被调度到其它节点
+
+```bash
+shutdown -r now
+```
+
+## 访问Service
+
+恢复干净的环境，重新部署 web_server
+
+* 删除web_server
+
+```bash
+docker service rm web_server
+```
+
+* 创建两个副本
+
+```bash
+docker service create --name web_server --replicas=2 httpd
+```
+
+* 查看服务情况
+
+```bash
+docker service ps web_server
+```
+
+* 查询副本1所在主机(ubuntu2)上容器IP
+
+```bash
+docker inspect web_server.1.2gt7qa7zwu1nx3y5km368cg4u | grep '"IPAddress"'
+
+curl 172.17.0.2
+```
+
+说明在同一主机内是可以正常访问的
+
+### 外部访问
+
+* 将 service 暴露外部访问
+
+```bash
+docker service update --publish-add 8080:80 web_server
+```
+
+在创建时可以直接指定 `--publish-add` 参数进行暴露
+
+```bash
+docker service create --name web_server --publish 8080:80 --replicas=2 httpd
+```
+
+* 测试
+
+```bash
+curl 192.168.1.7:8080
+curl 192.168.1.8:8080
+curl 192.168.1.9:8080
+curl 127.0.0.1:8080
+```
+
+**测试发现，即使是没有运行副本的节点，其service也是能正常访问的。这个功能叫做 `routing mesh`.**
