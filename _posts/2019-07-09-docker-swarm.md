@@ -23,7 +23,7 @@ ip a | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}' | cut -d "/" -f1 | 
 * 创建
 
 ```bash
-docker swarm init --advertise-addr 192.168.1.7
+docker swarm init --advertise-addr $(ip a | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}' | cut -d "/" -f1 | head -n 1)
 ```
 
 `--advertise-addr`: 指定与其他node通信的地址
@@ -46,6 +46,12 @@ docker swarm join --token SWMTKN-1-4ma185sbk9umfk9ju0qnt88yrj8wxidk24ap9wf689xnx
 
 ```bash
 docker swarm join-token worker
+```
+
+* 把swarm-work1从swarm中删除
+
+```bash
+docker swarm leave
 ```
 
 ## 运行service
@@ -81,7 +87,7 @@ docker service scale web_server=5
 默认配置下manager node 也是 worker node,所以swarm-manager上也会运行副本。如果不希望在manager上运行service，可以执行以下命令
 
 ```bash
-docker node update --availability drain ubuntu1
+docker node update --availability drain $(hostname)
 ```
 
 `Drain` 表示 swarm-manager 已经不负责运行 service
@@ -125,6 +131,7 @@ docker service ps web_server
 * 查询副本1所在主机(ubuntu2)上容器IP
 
 ```bash
+docker ps
 docker inspect web_server.1.2gt7qa7zwu1nx3y5km368cg4u | grep '"IPAddress"'
 
 curl 172.17.0.2
@@ -156,3 +163,133 @@ curl 127.0.0.1:8080
 ```
 
 **测试发现，即使是没有运行副本的节点，其service也是能正常访问的。这个功能叫做 `routing mesh`.**
+
+## routing mesh
+
+* ingress 网络
+
+当我们应用 `--publish-add 8080:80` 时，swarm会重新配置service
+
+```bash
+docker network ls
+```
+
+`ingress` 网络是 `swarm` 创建时 Docker 为自动我们创建的，swarm 中的每个 node 都能使用 `ingress`。
+
+## 服务发现
+
+一种实现方法是将所有 service 都 publish 出去，然后通过 routing mesh 访问。但明显的缺点是把 memcached 和 mysql 等暴露到外网，增加了安全隐患。
+
+如果不 publish，那么 swarm 就要提供一种机制，能够：
+
+* 1.让 service 通过简单的方法访问到其他 service。
+* 2.当 service 副本的 IP 发生变化时，不会影响访问该 service 的其他 service。
+* 3.当 service 的副本数发生变化时，不会影响访问该 service 的其他 service。
+
+* 准备镜像
+
+需要在所有work节点都执行,管理节点不需要，因为已经不分配service
+
+```bash
+docker pull busybox:1.28.3
+docker pull httpd:2.4.34
+```
+
+* 创建 overlay 网络
+
+要使用服务发现，需要相互通信的 service 必须属于同一个 overlay 网络，所以我们先得创建一个新的 overlay 网络。
+
+```bash
+docker network create --driver overlay myapp_net
+```
+
+* 部署service到overlay
+
+```bash
+docker service create --name my_web --replicas=3 --network myapp_net httpd:2.4.34
+```
+
+* 部署个busybox进行测试，挂载到同一个overlay网络
+
+```bash
+docker service create --name test --network myapp_net busybox:1.28.3 sleep 10000000
+```
+
+* 验证
+
+查看 test 所在节点
+
+```bash
+docker service ps test
+```
+
+登录test所在节点，在容器test中ping `my_web`
+
+```bash
+docker exec $(docker ps -aq -f name=test.1) ping -c 3 my_web
+```
+
+查看每个副本的IP
+
+```bash
+docker exec $(docker ps -aq -f name=test.1) nslookup tasks.my_web
+```
+
+## 滚动更新
+
+滚动更新降低了应用更新的风险，如果某个副本更新失败，整个更新将暂停，其他副本则可以继续提供服务。同时，在更新的过程中，总是有副本在运行的，因此也保证了业务的连续性。
+
+```bash
+docker service update --image httpd:2.4.35 my_web
+```
+
+`--image`: 指定新的镜像
+
+更新步骤如下:
+
+* 1.停止第一个副本
+* 2.调度任务，选择worker node
+* 3.在worker上用新的镜像启动副本
+* 4.如果副本(容器)运行成功，则继续更新下一个副本，如果失败，暂停整个更新过程。
+
+新开终端查看更新过程
+
+```bash
+watch -n 1 'docker service ps my_web'
+```
+
+默认配置下，Swarm 一次只更新一个副本，并且两个副本之间没有等待时间。我们可以通过 `--update-parallelism` 设置并行更新的副本数目，通过 `--update-delay` 指定滚动更新的间隔时间。
+
+```bash
+docker service update --replicas 6 --update-parallelism 2 --update-delay 1m30s my_web
+```
+
+service 增加到六个副本，每次更新两个副本，间隔时间一分半钟。
+
+查看service配置
+
+```bash
+docker service inspect --pretty my_web
+```
+
+更新效果不理想，可以进行回滚
+
+```bash
+docker service update --rollback my_web
+```
+
+注意，`--rollback` 只能回滚到上一次执行 `docker service update` 之前的状态，**并不能无限制地回滚**。
+
+## swarm存储数据
+
+* 1.打包在容器里。
+
+显然不行。除非数据不会发生变化，否则，如何在多个副本直接保持同步呢？
+
+* 2.数据放在 Docker 主机的本地目录中，通过 volume 映射到容器里。
+
+位于同一个主机的副本倒是能够共享这个 volume，但不同主机中的副本如何同步呢？
+
+* 3.*利用 Docker 的 volume driver，由外部 storage provider 管理和提供 volume，所有 Docker 主机 volume 将挂载到各个副本。
+
+这是目前最佳的方案。volume 不依赖 Docker 主机和容器，生命周期由 storage provider 管理，volume 的高可用和数据有效性也全权由 provider 负责，Docker 只管使用。

@@ -41,9 +41,9 @@ Docerk overlay 网络需要一个 key-value 数据库用于保存网络状态信
 
 ### 环境信息
 
-* 宿主机(ubuntu)
 * ubuntu1
 * ubuntu2
+* ubuntu3
 
 ### 准备环境
 
@@ -53,7 +53,7 @@ Docerk overlay 网络需要一个 key-value 数据库用于保存网络状态信
 docker run -d -p 8500:8500 -h consul --name consul progrium/consul -server -bootstrap
 ```
 
-在 `ubuntu1` 和 `ubuntu2` 中都修改 docker daemon 的配置文件 `/lib/systemd/system/docker.service`，在 `ExecStart` 最后增加`--cluster-store=consul://<ubuntu-ip>:8500 --cluster-advertise=enp0s3:2376`
+在 `ubuntu2` 和 `ubuntu3` 中都修改 docker daemon 的配置文件 `/lib/systemd/system/docker.service`，在 `ExecStart` 最后增加`--cluster-store=consul://<ubuntu1-ip>:8500 --cluster-advertise=enp0s3:2376`
 
 * `--cluster-store`: 指定 consul 的地址。
 * `--cluster-advertise`: 告知 consul 自己的连接地址。
@@ -67,11 +67,11 @@ systemctl restart docker.service
 
 查询是否注册成功
 
-访问 `http://<ubuntu-ip>:8500/ui/#/dc1/kv/docker/nodes/` 页面进行观察。
+访问 `http://<ubuntu1-ip>:8500/ui/#/dc1/kv/docker/nodes/` 页面进行观察。
 
 ### 创建overlay网络
 
-在 `ubuntu1` 中创建overlay网络 ov_net1
+在 `ubuntu2` 中创建overlay网络 ov_net1
 
 ```bash
 docker network create -d overlay ov_net1
@@ -81,16 +81,16 @@ docker network create -d overlay ov_net1
 
 > docker network ls
 
-我们新创建的 `ov_net1` 的 `SCOPE` 为 `global`，在 `ubuntu2` 中也可以直接看到了。
+我们新创建的 `ov_net1` 的 `SCOPE` 为 `global`，在 `ubuntu3` 中也可以直接看到了。
 
-这是因为创建 `ov_net1` 时 `ubuntu1` 将 overlay 网络信息存入了 consul, `ubuntu2` 读取到了新网络的数据，之后 `ov_net1` 的任何变化都会同步到 `ubuntu1` 和 `ubuntu2`
+这是因为创建 `ov_net1` 时 `ubuntu2` 将 overlay 网络信息存入了 consul, `ubuntu3` 读取到了新网络的数据，之后 `ov_net1` 的任何变化都会同步到 `ubuntu2` 和 `ubuntu3`
 
 > docker network inspect ov_net1  # 查看详细信息，其中 IPAM 是指 IP Address Management
 
-* 在 `ubuntu1` 中创建 busybox 容器并连接到ov_net1
+* 在 `ubuntu2` 中创建 busybox 容器并连接到ov_net1
 
 ```bash
-docker run -itd --name bbox1 --network ov_net1 busybox
+docker run -itd --name bbox1 --network ov_net1 busybox:1.28.3
 ```
 
 * 查看容器网络配置
@@ -99,10 +99,10 @@ docker run -itd --name bbox1 --network ov_net1 busybox
 docker exec bbox1 ip r
 ```
 
-* 在 `ubuntu2` 中创建 busybox 容器并连接到ov_net1
+* 在 `ubuntu3` 中创建 busybox 容器并连接到ov_net1
 
 ```bash
-docker run -itd --name bbox2 --network ov_net1 busybox
+docker run -itd --name bbox2 --network ov_net1 busybox:1.28.3
 ```
 
 * 在bbox2中 ping bbox1
@@ -122,23 +122,23 @@ br0 除了连接所有的 endpoint，还会连接一个 vxlan 设备，用于与
 
 ![网络拓扑结构图](/static/images/docker/overlay-top.jpg)
 
-要查看 overlay 网络的 namespace 可以在 `ubuntu1` 和 `ubuntu2` 上执行 `ip netns`（请确保在此之前执行过 `ln -s /var/run/docker/netns /var/run/netns`）
+要查看 overlay 网络的 namespace 可以在 `ubuntu2` 和 `ubuntu3` 上执行 `ip netns`（请确保在此之前执行过 `ln -s /var/run/docker/netns /var/run/netns`）
 
 * 查看 namespace 中的 br0 上的设备
 
 ```bash
-ip netns exec 1-5e2f2ef16a brctl show
+ip netns exec $(ip netns | grep "(id: 0)" | cut -d" " -f1) brctl show
 ```
 
 * 查看 vxlan0 设备的具体配置信息
 
 ```bash
-ip netns exec 1-5e2f2ef16a ip -d l show vxlan0
+ip netns exec $(ip netns | grep "(id: 0)" | cut -d" " -f1) ip -d l show vxlan0
 ```
 
 ### overlay隔离
 
-* 在 `ubuntu1` 上创建第二个overlay网络ov_net2
+* 在 `ubuntu2` 上创建第二个overlay网络ov_net2
 
 ```bash
 docker network create -d overlay ov_net2
@@ -175,20 +175,20 @@ macvlan 的最大优点是性能极好，相比其他实现，macvlan 不需要�
 
 ### 准备实验环境
 
-在 `ubuntu1`和 `ubuntu2`上创建macvlan。为保证多个 MAC 地址的网络包都可以从 enp0s3 通过，我们需要打开网卡的混杂模式。
+在 `ubuntu2`和 `ubuntu3`上创建macvlan。为保证多个 MAC 地址的网络包都可以从 enp0s3 通过，我们需要打开网卡的混杂模式。
 
 ```bash
 ip link set enp0s3 promisc on
 ip link show enp0s3
 ```
 
-因为 `ubuntu1` 和 `ubuntu2` 是 VirtualBox 虚拟机，还需要在网卡配置选项页中设置混杂模式。
+因为 `ubuntu2` 和 `ubuntu3` 是 VirtualBox 虚拟机，还需要在网卡配置选项页中设置混杂模式。
 
 ![VirtualBox设置网络混杂模式](/static/images/docker/virtualbox-network.jpg)
 
 ### 创建macvlan网络
 
-在 `ubuntu1` 和 `ubuntu2` 中都创建macvlan网络 mac_net1
+在 `ubuntu2` 和 `ubuntu3` 中都创建macvlan网络 mac_net1
 
 ```bash
 docker network create -d macvlan --subnet=172.16.86.0/24 --gateway=172.16.86.1 -o parent=enp0s3 mac_net1
@@ -199,19 +199,19 @@ docker network create -d macvlan --subnet=172.16.86.0/24 --gateway=172.16.86.1 -
 * 与其他网络不同，docker 不会为 macvlan 创建网关，这里的网关应该是真实存在的，否则容器无法路由。
 * -o parent 指定使用的网络 interface。
 
-* 在 `ubuntu1` 中创建 `bbox4` 并连接到 `mac_net1`
+* 在 `ubuntu2` 中创建 `bbox4` 并连接到 `mac_net1`
 
 ```bash
 docker run -itd --name bbox4 --ip=172.16.86.10 --network mac_net1 busybox
 ```
 
-* 在 `ubuntu2` 中创建 `bbox5` 并连接到 `mac_net1`
+* 在 `ubuntu3` 中创建 `bbox5` 并连接到 `mac_net1`
 
 ```bash
 docker run -itd --name bbox5 --ip=172.16.86.11 --network mac_net1 busybox
 ```
 
-* 在 `ubuntu2` 验证 `bbox4` 和 `bbox5` 的连通性
+* 在 `ubuntu3` 验证 `bbox4` 和 `bbox5` 的连通性
 
 ```bash
 docker exec bbox5 ping -c 2 172.16.86.10
@@ -255,7 +255,7 @@ Linux 的网卡也能支持 VLAN（apt-get install vlan），同一个 interface
 
 enp0s3 要接在交换机的 trunk 口上。不过我们用的是 VirtualBox 虚拟机，则不需要额外配置了。
 
-* 在 `ubuntu1` 和 `ubuntu2` 中都修改配置文件
+* 在 `ubuntu2` 和 `ubuntu3` 中都修改配置文件
 
 ```bash
 cat >>/etc/network/interfaces<<EOF
@@ -280,28 +280,28 @@ ifup enp0s3.10
 ifup enp0s3.20
 ```
 
-* 分别在 `ubuntu1` 和 `ubuntu2` 中创建macvlan网络
+* 分别在 `ubuntu2` 和 `ubuntu3` 中创建macvlan网络
 
 ```bash
 docker network create -d macvlan --subnet=172.16.10.0/24 --gateway=172.16.10.1 -o parent=enp0s3.10 mac_net10
 docker network create -d macvlan --subnet=172.16.20.0/24 --gateway=172.16.20.1 -o parent=enp0s3.20 mac_net20
 ```
 
-* 在 `ubuntu1` 中运行容器
+* 在 `ubuntu2` 中运行容器
 
 ```bash
 docker run -itd --name bbox1 --ip=172.16.10.10 --network mac_net10 busybox
 docker run -itd --name bbox2 --ip=172.16.20.10 --network mac_net20 busybox
 ```
 
-* 在 `ubuntu2` 中运行容器
+* 在 `ubuntu3` 中运行容器
 
 ```bash
 docker run -itd --name bbox3 --ip=172.16.10.11 --network mac_net10 busybox
 docker run -itd --name bbox4 --ip=172.16.20.11 --network mac_net20 busybox
 ```
 
-* 在 `ubuntu1` 验证macvlan之间的连通性
+* 在 `ubuntu2` 验证macvlan之间的连通性
 
 ```bash
 docker exec bbox1 ping -c 2 172.16.10.11
@@ -309,7 +309,7 @@ docker exec bbox1 ping -c 2 172.16.10.11
 
 **同一 macvlan 网络能通信,不同 macvlan 网络之间不能通信。但更准确的说法应该是：不同 macvlan 网络不能 在二层上 通信。在三层上可以通过网关将 macvlan 连通.**
 
-* 启用宿主机的 IP Forwarding
+* 启用ubuntu1的 IP Forwarding
 
 ```bash
 sysctl net.ipv4.ip_forward
@@ -321,7 +321,7 @@ sysctl net.ipv4.ip_forward
 sysctl -w net.ipv4.ip_forward=1
 ```
 
-* 在宿主机中配置网络
+* 在ubuntu1中配置网络
 
 ```bash
 cat >>/etc/network/interfaces<<EOF
@@ -339,14 +339,14 @@ vlan-raw-device enp0s3
 EOF
 ```
 
-* 在宿主机中将网关 IP 配置到 sub-interface
+* 在ubuntu1中将网关 IP 配置到 sub-interface
 
 ```bash
 ifconfig enp0s3.10 172.16.10.1 netmask 255.255.255.0 up
 ifconfig enp0s3.20 172.16.20.1 netmask 255.255.255.0 up
 ```
 
-* 在宿主机中添加 iptables 规则，转发不同 VLAN 的数据包。
+* 在ubuntu1中添加 iptables 规则，转发不同 VLAN 的数据包。
 
 ```bash
 iptables -t nat -A POSTROUTING -o enp0s3.10 -j MASQUERADE
@@ -360,7 +360,7 @@ iptables -A FORWARD -i enp0s3.10 -o enp0s3.20 -j ACCEPT
 iptables -A FORWARD -i enp0s3.20 -o enp0s3.10 -j ACCEPT
 ```
 
-* 在 `ubuntu1` 上 测试 `ubuntu1` 上 `mac_net10` 和 `ubuntu2` 上 `mac_net20`通过
+* 在 `ubuntu2` 上 测试 `ubuntu2` 上 `mac_net10` 和 `ubuntu3` 上 `mac_net20`通过
 
 ```bash
 docker exec bbox1 ping -c 2 172.16.20.11
@@ -371,7 +371,7 @@ docker exec bbox1 ping -c 2 172.16.20.11
 * 1.因为 bbox1 与 bbox4 在不同的 IP 网段，跟据 bbox1 的路由表
 
 ```bash
-ubuntu1@root➜  ~ docker exec bbox1 ip route
+ubuntu2@root➜  ~ docker exec bbox1 ip route
 default via 172.16.10.1 dev eth0
 172.16.10.0/24 dev eth0 scope link  src 172.16.10.10
 ```
@@ -392,8 +392,8 @@ default via 10.10.110.254 dev enp0s3
 
 于是将数据包从 `enp0s3.20` 转发出去
 
-* 3.通过 ARP 记录的信息，路由器能够得知 `172.16.20.11` 在 `ubuntu2` 上，于是将数据包发送给 `ubuntu2`
-* 4.`ubuntu2` 根据目的地址和 VLAN 信息将数据包发送给 bbox4。
+* 3.通过 ARP 记录的信息，路由器能够得知 `172.16.20.11` 在 `ubuntu3` 上，于是将数据包发送给 `ubuntu3`
+* 4.`ubuntu3` 根据目的地址和 VLAN 信息将数据包发送给 bbox4。
 
 **macvlan 网络的连通和隔离完全依赖 VLAN、IP subnet 和路由，docker 本身不做任何限制，用户可以像管理传统 VLAN 网络那样管理 macvlan.**
 
@@ -407,9 +407,9 @@ flannerl是 `CoreOS` 开发的容器网络解决方案、flannel为每个 host �
 
 ### 环境准备
 
-etcd 部署在 `宿主机(ubuntu)`，`ubuntu1` 和 `ubuntu2` 上运行 flanneld，首先安装配置 etcd。
+etcd 部署在 `ubuntu1`上，`ubuntu2` 和 `ubuntu3` 上运行 flanneld，首先安装配置 etcd。
 
-### 安装配置etcd，在宿主机(ubuntu)中操作
+### 安装配置etcd，在ubuntu1中操作
 
 ```bash
 ETCD_VER=v2.3.7
@@ -425,7 +425,7 @@ cp /tmp/test-etcd/etcd* /usr/local/bin/
 * 启动etcd并打开270监听端口
 
 ```bash
-etcd -listen-client-urls http://0.0.0.0:2379 -advertise-client-urls http://127.0.0.1:2379
+screen -S etcd etcd -listen-client-urls http://0.0.0.0:2379 -advertise-client-urls http://127.0.0.1:2379
 ```
 
 * 测试 etcd
@@ -437,7 +437,7 @@ etcdctl --endpoints=127.0.0.1:2379 get foo
 
 ### 安装配置 flannel
 
-#### build flannel，在宿主机(ubuntu)中操作
+#### build flannel，在ubuntu1中操作
 
 * 1.下载并重名image
 
@@ -450,29 +450,30 @@ docker tag cloudman6/kube-cross:v1.6.2-2 gcr.io/google_containers/kube-cross:v1.
 
 ```bash
 git clone https://github.com/coreos/flannel.git
+cd flannel
 ```
 
 小文件较多, clone会比较慢，可以下载zip包
 
 ```bash
 curl -L https://github.com/coreos/flannel/archive/master.zip -o /tmp/flannel.zip
+cd /tmp && unzip flannel.zip && cd flannel-master
 ```
 
 * 3.开始构建
 
 ```bash
-cd flannel
 make dist/flanneld-amd64
 ```
 
-* 4.将 flanneld 执行文件拷贝到 ubuntu1 和 ubuntu2
+* 4.将 flanneld 执行文件拷贝到 ubuntu2 和 ubuntu3
 
 ```bash
-scp dist/flanneld-amd64 ubuntu1:/usr/local/bin/flanneld
 scp dist/flanneld-amd64 ubuntu2:/usr/local/bin/flanneld
+scp dist/flanneld-amd64 ubuntu3:/usr/local/bin/flanneld
 ```
 
-#### 将 flannel 网络的配置信息保存到 etcd，在宿主机(ubuntu)中操作
+#### 将 flannel 网络的配置信息保存到 etcd，在ubuntu1中操作
 
 * 1.先将配置信息写到文件 flannel-config.json 中，内容为：
     - 1.Network 定义该网络的 IP 池为 10.2.0.0/16。
@@ -494,7 +495,7 @@ EOF
 * 2.将配置存入etcd
 
 ```bash
-etcdctl --endpoints=127.0.0.1:2379 set /docker-test/network/config < flannel-config.json
+etcdctl --endpoints=$(ip a | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}' | cut -d "/" -f1 | head -n 1):2379 set /docker-test/network/config < flannel-config.json
 ```
 
 `/docker-test/network/config` 是此 etcd 数据项的 key，其 value 为 `flannel-config.json` 的内容。key 可以任意指定，这个 key 后面会作为 flanneld 的一个启动参数。执行 etcdctl get 确保设置成功。
@@ -502,24 +503,24 @@ etcdctl --endpoints=127.0.0.1:2379 set /docker-test/network/config < flannel-con
 * 检查是否保存成功
 
 ```bash
-etcdctl --endpoints=127.0.0.1:2379 get /docker-test/network/config
+etcdctl --endpoints=$(ip a | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}' | cut -d "/" -f1 | head -n 1):2379 get /docker-test/network/config
 ```
 
 #### 启动flannel
 
-分别在 `ubuntu1`, `ubuntu2`中执行以下命令进行启动
+分别在 `ubuntu2`, `ubuntu3`中执行以下命令进行启动
 
 ```bash
-flanneld -etcd-endpoints=http://<ubuntu-ip>:2379 -iface=enp0s3 -etcd-prefix=/docker-test/network
+screen -S flannel flanneld -etcd-endpoints=http://${UBUNTU1_IP}:2379 -iface=$(ip a | grep "inet " | grep -v -E " lo$| docker" | awk '{print $7}' | uniq | head -n 1) -etcd-prefix=/docker-test/network
 ```
 
-* -etcd-endpoints 指定 etcd url
-* -iface 指定主机间数据传输使用的 interface
-* -etcd-prefix 指定 etcd 存放 flannel 网络配置信息的 key
+* `-etcd-endpoints`: 指定 etcd url
+* `-iface`: 指定主机间数据传输使用的 interface
+* `-etcd-prefix`: 指定 etcd 存放 flannel 网络配置信息的 key
 
 #### 配置Docker连接flannel
 
-编辑 `ubuntu1` 的Docker配置文件 `/lib/systemd/system/docker.service`，在 `ExecStart` 最后加上
+编辑 `ubuntu2` 的Docker配置文件 `/lib/systemd/system/docker.service`，在 `ExecStart` 最后加上
 
 ```bash
 echo "--bip=$(cat /run/flannel/subnet.env | grep 'SUBNET' | cut -f2 -d'=') --mtu=$(cat /run/flannel/subnet.env | grep 'MTU' | cut -f2 -d'=')"
@@ -535,14 +536,14 @@ systemctl daemon-reload && systemctl restart docker
 
 #### 将容器连接到flannel网络
 
-* 在 `ubuntu1` 中启动容器 `bbox1`，并查看IP
+* 在 `ubuntu2` 中启动容器 `bbox1`，并查看IP
 
 ```bash
 docker run -itd --name bbox1 busybox
 docker exec bbox1 ip r
 ```
 
-* 在 `ubuntu2` 中启动容器 `bbox2`
+* 在 `ubuntu3` 中启动容器 `bbox2`
 
 ```bash
 docker run -itd --name bbox2 busybox
@@ -559,6 +560,8 @@ docker exec bbox1 ping -c 2 10.2.99.1
 docker exec bbox1 traceroute 10.2.99.1
 ```
 
+**flannel 是没有 DNS 服务的，容器无法通过 hostname 通信。**
+
 * flannel 网络隔离
 
 flannel 为每个主机分配了独立的 subnet，但 flannel.1 将这些 subnet 连接起来了，相互之间可以路由。本质上，flannel 将各主机上相互独立的 docker0 容器网络组成了一个互通的大网络，实现了容器跨主机通信。flannel 没有提供隔离。
@@ -570,6 +573,8 @@ flannel 为每个主机分配了独立的 subnet，但 flannel.1 将这些 subne
     1.容器通过 docker0 NAT 访问外网
 
     2.通过主机端口映射，外网可以访问容器
+
+## flanner host-gw backend
 
 ## 参考
 
