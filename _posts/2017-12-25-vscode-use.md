@@ -88,6 +88,27 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
     "java.home": "/Library/Java/JavaVirtualMachines/jdk-12.0.1.jdk/Contents/Home",
     "java.errors.incompleteClasspath.severity": "ignore",
     "java.configuration.checkProjectSettingsExclusions": false,
+
+    editor.fontFamily": "Monaco", // 字体
+    "workbench.colorTheme": "Monokai", // 颜色主题
+    "files.exclude": { // 忽略文件类型
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.pyc": true
+    },
+    "path-intellisense.mappings": {
+        "~": "${workspaceRoot}/acorn/js"
+    },
+    "eslint.validate": [
+        "javascriptreact"
+    ],
+    "css.fileExtensions": [
+        "scss",
+        "less"
+    ]
 }
 ```
 
@@ -297,17 +318,6 @@ Preferences -> Keyboard Shortcuts
                 "PIP_INDEX_URL": "https://pypi.douban.com/simple/",
                 "PIP_TRUSTED_HOST": "x.x.x.x",
                 "PIP_EXTRA_INDEX_URL": "http://x.x.x.x:8080",
-                "QDATA_MYSQL_HOST": "127.0.0.1",
-                "QDATA_MYSQL_PORT": "9307",
-                "QDATA_MYSQL_USERNAME": "xxx",
-                "QDATA_MYSQL_PASSWORD": "xxx",
-                "QDATA_MYSQL_DATABASE_NAME": "qdata_cloud",
-                "QDATA_REDIS_HOST": "127.0.0.1",
-                "QDATA_REDIS_PORT": "6379",
-                "QDATA_PROMETHEUS_HOST": "127.0.0.1",
-                "QDATA_PROMETHEUS_PORT": "10011",
-                "QDATA_ALERTMANAGER_PORT": "10012",
-                "QDATA_LOGGING_PATH": "/tmp/logs/ci/",
             }
         },
         {
