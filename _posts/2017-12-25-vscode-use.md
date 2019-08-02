@@ -89,8 +89,8 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
     "java.errors.incompleteClasspath.severity": "ignore",
     "java.configuration.checkProjectSettingsExclusions": false,
 
-    editor.fontFamily": "Monaco", // 字体
-    "workbench.colorTheme": "Monokai", // 颜色主题
+    "editor.fontFamily": "Monaco", // 字体
+    "workbench.colorTheme": "Darcula Pycharm Theme (dimmed)", // Pycharm 颜色主题
     "files.exclude": { // 忽略文件类型
         "**/.git": true,
         "**/.svn": true,
@@ -307,18 +307,63 @@ Preferences -> Keyboard Shortcuts
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File (Integrated Terminal)",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "env": {
+            "name": "Python: Current File (Integrated Terminal)", // 在下拉列表中显示的名字
+            "type": "python", // 调试器类型
+            "request": "launch", // 指定开始调试的模式： `launch`：在中指定的文件上启动调试器 program, `attach`：将调试器附加到已经运行的进程。
+            "program": "${file}", // 提供python程序入口模块的完全限定路径
+            "pythonPath": "${config:python.pythonPath}", // Python解释器路径，指向virtualenv
+            "console": "integratedTerminal", // 指定如何显示程序输出。 `none`: VS代码调试控制台, `integratedTerminal` （默认）VS代码集成终端, `externalTerminal`: 独立控制台窗口
+            "cwd": "${workspaceFolder}", // 指定调试器的当前工作目录，它是代码中使用的任何相对路径的基础文件夹。如果省略，默认为${workspaceFolder}（在VS代码中打开的文件夹）。
+            "args": [], // 传递给程序的参数
+            "env": { // 程序环境变量
                 "DYLD_LIBRARY_PATH": "/Users/seekplum/packages/oracle:/Users/seekplum/packages/mysql/lib",
                 "PYTHONUNBUFFERED": 1,
                 "PIP_INDEX_URL": "https://pypi.douban.com/simple/",
                 "PIP_TRUSTED_HOST": "x.x.x.x",
                 "PIP_EXTRA_INDEX_URL": "http://x.x.x.x:8080",
             }
+        },
+        {
+            "name": "Python: Flask (0.11.x or later)", // flask 0.11之后的版本
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "${config:python.pythonPath}",
+            "program": "${file}",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "env": {
+                // "FLASK_APP": "${workspaceRoot}/wsgi.py", // flask启动入口
+                "PYTHONIOENCODING": "UTF-8",
+                "FLASK_DEBUG": false
+            },
+            "args": [
+                "run",
+                "--no-debugger",
+                "--no-reload"
+            ],
+            "jinja": true,
+            "debugOptions": [
+                "RedirectOutput"
+            ]
+        },
+        {
+            "name": "Python: Flask (0.10.x or earlier)", // flask 0.10以前版本
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "/Users/seekplum/packages/pythonenv/staff27env/bin/python",
+            "program": "${file}",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "env": {
+                "FLASK_DEBUG": false
+            },
+            "args": [],
+            "jinja": true,
+            "debugOptions": [
+                "RedirectOutput"
+            ]
         },
         {
             "name": "Python: Attach",
@@ -346,21 +391,6 @@ Preferences -> Keyboard Shortcuts
                 "--nothreading"
             ],
             "django": true
-        },
-        {
-            "name": "Python: Flask",
-            "type": "python",
-            "request": "launch",
-            "module": "flask",
-            "env": {
-                "FLASK_APP": "app.py"
-            },
-            "args": [
-                "run",
-                "--no-debugger",
-                "--no-reload"
-            ],
-            "jinja": true
         },
         {
             "name": "Python: Current File (External Terminal)",
