@@ -786,6 +786,82 @@ kubectl apply -f sa-frontend-deployment.yaml
 
 ![最终项目架构](/static/images/docker/sa-fronntend-logic-webapp.png)
 
+## kubernets删除node
+
+* Master上执行
+
+```bash
+kubectl drain ubuntu3 --delete-local-data --force --ignore-daemonsets
+
+kubectl delete node ubuntu3
+```
+
+* 被删除节点执行
+
+```bash
+kubeadm reset --force
+```
+
+## 查看集群各组件状态
+
+```bash
+kubectl get cs
+```
+
+## 查看集群pod状态
+
+```bash
+kubectl get pod --all-namespaces -o wide
+```
+
+## 查看pod详情
+
+```bash
+kubectl describe -n kube-system pod $(kubectl get pods -n kube-system | grep "coredns-" | head -n 1 | awk '{print $1}')
+```
+
+## 修改POD的coredsn网络
+
+* Master删除coredns网络
+
+```bash
+kubectl delete --namespace=kube-system deployment coredns
+```
+
+* 克隆deployment项目
+
+```bash
+git clone git://github.com/coredns/deployment /tmp/deployment --depth=1
+```
+
+* 配置coredns网络
+
+```bash
+cd /tmp/deployment/kubernetes && sudo ./deploy.sh | kubectl apply -f -
+```
+
+* 修改coredns配置
+
+```bash
+kubectl -n kube-system get deployment coredns -o yaml | \
+  sed 's/allowPrivilegeEscalation: false/allowPrivilegeEscalation: true/g' | \
+  kubectl apply -f -
+```
+
+## Master是否部署Pod
+
+* Master节点允许部署Pod
+
+```bash
+kubectl taint nodes --all node-role.kubernetes.io/master-
+```
+
+* 禁止Master部署Pod
+
+```bash
+kubectl taint nodes <master-name> node-role.kubernetes.io/master=true:NoSchedule
+```
+
 ## 总结
 
 这个入门学习从18年9月开始，到19年4月份，总算是安装教程完整的尝试了一遍。开始对kubernetes有了初步的印象，以及使用带来的好处。kubernetes功能强大，需要好好考虑如何落地到我们传统的项目中。请继续努力。

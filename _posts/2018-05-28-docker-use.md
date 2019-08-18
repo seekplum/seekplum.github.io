@@ -372,3 +372,9 @@ docker rm -v $(docker ps -aq -f status=exited)
   "registry-mirrors": ["https://registry.docker-cn.com"]
 }
 ```
+
+## 删除所有镜像
+
+```bash
+docker images | awk '{if(NR>1)print $3}' | xargs -I {} docker rmi {} --force
+```
