@@ -520,3 +520,123 @@ public class Test{
 ### JS
 
 * Vetur
+
+### C/C++
+
+* 1.配置c_cpp_properties.json文件
+
+`Command + Shift + P` 打开命令行工具窗口,选择 `C/Cpp: Edit Configurations...`
+
+此时会在配置目录会生成一个`c_cpp_properties.json`文件,修改文件内容如下
+
+```json
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/Library/Developer/CommandLineTools/usr/include/c++/v1/",
+                "/usr/local/include",
+                "/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1/include",
+                "/usr/include"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks",
+                "${workspaceFolder}/**"
+            ],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 4
+}
+```
+
+* 2.配置tasks.json文件
+
+`Command + Shift + P` 打开 `Tasks: Configure Tasks`，选择 `Create tasks.json file from templates`，此时会蹦出一个下拉列表，在下拉列表中选择`Others`，此时会在配置目录生成一个tasks.json文件,修改文件内容如下
+
+```json
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "run-c-c++",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-g"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
+```
+
+* 3.配置launch.json文件
+
+```json
+{
+    // 使用 IntelliSense 了解相关属性。
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C/C++ Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "lldb",
+            "preLaunchTask": "run-c-c++"
+        }
+    ]
+}
+```
+
+* 4.编写测试文件
+
+```bash
+cat > test_main.cpp <<EOF
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{
+    printf("hello vs-code!\n");
+    int result;
+    int a = 2;
+    int b = 3;
+    result = a + b;
+    printf("%d + %d = %d\n", a, b, result);
+    return 0;
+}
+EOF
+```
