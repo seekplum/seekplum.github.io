@@ -250,6 +250,8 @@ centos1@root ➜  ~ lvextend -l +100%FREE /dev/mapper/centos-root
 
 ## 调整卷分区大小
 
+### CentOS
+
 ```bash
 centos1@root ➜  ~ xfs_growfs /dev/mapper/centos-root
 meta-data=/dev/mapper/centos-root isize=512    agcount=5, agsize=406016 blks
@@ -262,6 +264,27 @@ log      =internal               bsize=4096   blocks=2560, version=2
          =                       sectsz=512   sunit=0 blks, lazy-count=1
 realtime =none                   extsz=4096   blocks=0, rtextents=0
 data blocks changed from 1726464 to 4645888
+```
+
+### Ubuntu
+
+```bash
+ubuntu2@root ➜  ~ resize2fs /dev/mapper/ubuntu1--vg-root
+resize2fs 1.42.13 (17-May-2015)
+Filesystem at /dev/mapper/ubuntu1--vg-root is mounted on /; on-line resizing required
+old_desc_blocks = 1, new_desc_blocks = 2
+The filesystem on /dev/mapper/ubuntu1--vg-root is now 4680704 (4k) blocks long.
+
+ubuntu2@root ➜  ~ df -hl
+Filesystem                    Size  Used Avail Use% Mounted on
+udev                          3.0G     0  3.0G   0% /dev
+tmpfs                         602M  8.2M  594M   2% /run
+/dev/mapper/ubuntu1--vg-root   18G  5.1G   12G  31% /
+tmpfs                         3.0G     0  3.0G   0% /dev/shm
+tmpfs                         5.0M     0  5.0M   0% /run/lock
+tmpfs                         3.0G     0  3.0G   0% /sys/fs/cgroup
+/dev/sda1                     720M   58M  625M   9% /boot
+tmpfs                         602M     0  602M   0% /run/user/0
 ```
 
 ## 查看磁盘信息

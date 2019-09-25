@@ -131,8 +131,7 @@ docker service ps web_server
 * 查询副本1所在主机(ubuntu2)上容器IP
 
 ```bash
-docker ps
-docker inspect web_server.1.2gt7qa7zwu1nx3y5km368cg4u | grep '"IPAddress"'
+docker inspect $(docker ps | grep -o -E "web_server\.[0-9]+\.\w+") | grep '"IPAddress"' | head -n 1 | grep -o -E "[0-9\.]+"
 
 curl 172.17.0.2
 ```
@@ -290,6 +289,73 @@ docker service update --rollback my_web
 
 位于同一个主机的副本倒是能够共享这个 volume，但不同主机中的副本如何同步呢？
 
-* 3.*利用 Docker 的 volume driver，由外部 storage provider 管理和提供 volume，所有 Docker 主机 volume 将挂载到各个副本。
+* 3.利用 Docker 的 volume driver，由外部 storage provider 管理和提供 volume，所有 Docker 主机 volume 将挂载到各个副本。
 
 这是目前最佳的方案。volume 不依赖 Docker 主机和容器，生命周期由 storage provider 管理，volume 的高可用和数据有效性也全权由 provider 负责，Docker 只管使用。
+
+### 准备环境
+
+参考[选择Rex-Raydriver](/continuous-learning-docker-6/#选择Rex-Raydriver)小结，在所有节点都安装部署Rex-Ray,并使用VirtualBox backend
+
+### 创建service
+
+1.创建service
+
+```bash
+docker service create --name my_web \
+       --publish 8080:80 \
+       --mount "type=volume,volume-driver=rexray,source=web_data,target=/usr/local/apache2/htdocs" \
+       httpd:2.4.34
+```
+
+* `--mount`: 指定数据卷的 volume-driver 为 rexray。
+* `source`: 指定数据卷的名字为 web_data，如果不存在，则会新建。
+* `target`: 指定将数据卷 mount 到每个副本容器的 /usr/local/apache2/htdocs，即存放静态页面的目录。
+
+2.访问service
+
+```bash
+ubuntu2@root  ~ curl http://127.0.0.1:8080
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access /
+on this server.<br />
+</p>
+</body></html>
+```
+
+3.修改文件权限
+
+```bash
+ubuntu2@root  ~ docker exec -it $(docker ps | grep -o -E "my_web\.[0-9]+\.\w+") sh
+# ls -ld /usr/local/apache2/htdocs
+drwxr-xr-x 2 root www-data 4096 Sep 25 05:51 /usr/local/apache2/htdocs
+# chmod 755 /usr/local/apache2/htdocs
+# exit
+ubuntu2@root  ~
+```
+
+4.再次访问
+
+```bash
+ubuntu2@root  ~ curl http://127.0.0.1:8080
+<html><body><h1>It works!</h1></body></html>
+ubuntu2@root  ~
+```
+
+### Scale Up(待继续)
+
+增加一个副本
+
+```bash
+docker service update --replicas 2 my_web
+```
+
+理想的结果应该是：swarm 在 另一个work节点 上启动第二个副本，同时也将挂载 volume `my_web`
+
+## 参考
+
+* [验证 Swarm 数据持久性 - 每天5分钟玩转 Docker 容器技术（104）](https://www.cnblogs.com/CloudMan6/p/8016994.html)
