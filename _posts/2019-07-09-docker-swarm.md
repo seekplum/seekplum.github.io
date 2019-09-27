@@ -346,7 +346,7 @@ ubuntu2@root  ~ curl http://127.0.0.1:8080
 ubuntu2@root  ~
 ```
 
-### Scale Up(待继续)
+### Scale Up
 
 增加一个副本
 
@@ -355,6 +355,53 @@ docker service update --replicas 2 my_web
 ```
 
 理想的结果应该是：swarm 在 另一个work节点 上启动第二个副本，同时也将挂载 volume `my_web`
+
+```bash
+ubuntu2@root  ~ docker service ps my_web
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE             ERROR                              PORTS
+1ybq9i6jmhy6        my_web.1            httpd:2.4.34        ubuntu3             Running             Running 2 minutes ago
+sqdmdijn17a4        my_web.2            httpd:2.4.34        ubuntu3             Running             Running 5 seconds ago
+yg20chlchhyo         \_ my_web.2        httpd:2.4.34        ubuntu2             Shutdown            Rejected 15 seconds ago   "VolumeDriver.Mount: docker-le…"
+ow8i4s24ftpe         \_ my_web.2        httpd:2.4.34        ubuntu2             Shutdown            Rejected 20 seconds ago   "VolumeDriver.Mount: docker-le…"
+ra5sp8eaxz6o         \_ my_web.2        httpd:2.4.34        ubuntu2             Shutdown            Rejected 25 seconds ago   "VolumeDriver.Mount: docker-le…"
+vovdfewjxwct         \_ my_web.2        httpd:2.4.34        ubuntu2             Shutdown            Rejected 30 seconds ago   "VolumeDriver.Mount: docker-le…"
+```
+
+出现了一点复杂的状况：
+
+* 1.swarm 首先尝试在 `ubuntu2` 上启动第二个副本，但在 mount volume 失败。
+* 2.重试了三次都失败了。
+* 3.最后在 `ubuntu3` 成功启动第二个副本。
+
+**mount 失败的原因是：以 VirtualBox 为 backend 的 Rex-Ray volume 不支持同时 attach 到多个 Host。**
+
+**需要注意：这实际上是 VirtualBox 的限制，而非 Rex-Ray。如果 backend 选择 Ceph RBD 就没有这个问题。**
+
+#### 更新Volume
+
+* 需要在my_web运行的节点上执行
+
+```bash
+echo "Hello Rex-Ray $(date +'%F %T')! " > /var/lib/rexray/volumes/web_data/data/index.html
+```
+
+#### Failover
+
+现在模拟故障情况。shutdown 节点 `ubuntu3`，过一会，所有副本都会迁移到 `ubuntu2`。
+
+```bash
+ubuntu2@root  ~ docker service ps my_web
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE             ERROR                              PORTS
+w2pgldrvf398        my_web.1            httpd:2.4.34        ubuntu2             Running             Running 27 seconds ago
+jjrtiy0epbs6         \_ my_web.1        httpd:2.4.34        ubuntu2             Shutdown            Rejected 37 seconds ago   "VolumeDriver.Mount: docker-le…"
+1ybq9i6jmhy6         \_ my_web.1        httpd:2.4.34        ubuntu3             Shutdown            Running 50 seconds ago
+ih3n786q22oz        my_web.2            httpd:2.4.34        ubuntu2             Running             Running 31 seconds ago
+sqdmdijn17a4         \_ my_web.2        httpd:2.4.34        ubuntu3             Shutdown            Running 50 seconds ago
+yg20chlchhyo         \_ my_web.2        httpd:2.4.34        ubuntu2             Shutdown            Rejected 10 minutes ago   "VolumeDriver.Mount: docker-le…"
+ow8i4s24ftpe         \_ my_web.2        httpd:2.4.34        ubuntu2             Shutdown            Rejected 10 minutes ago   "VolumeDriver.Mount: docker-le…"
+ra5sp8eaxz6o         \_ my_web.2        httpd:2.4.34        ubuntu2             Shutdown            Rejected 10 minutes ago   "VolumeDriver.Mount: docker-le…"
+ubuntu2@root  ~
+```
 
 ## 参考
 

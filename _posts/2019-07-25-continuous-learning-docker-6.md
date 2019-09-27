@@ -80,7 +80,7 @@ EOF
 * 在宿主机上启动vboxwebsrv服务
 
 ```bash
-vboxwebsrv -H 0.0.0.0
+screen -S vboxwebsrv vboxwebsrv -H 0.0.0.0
 ```
 
 * 在宿主机上关闭Virtualbox登录认证
