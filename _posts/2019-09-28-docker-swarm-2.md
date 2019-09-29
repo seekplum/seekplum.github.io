@@ -256,8 +256,111 @@ docker service create \
 
 为了保证这个依赖关系，我们控制了 docker secret 和 docker service 命令的执行顺序，只不过这个过程是手工完成的。
 
-## stack
+## stack(功能与docker-compose基本相同，但有所区别))
+
+* 1.准备secret
+
+```bash
+openssl rand -base64 20 > db_password.txt
+
+openssl rand -base64 20 > db_root_password.txt
+```
+
+* 2.编写文件
+
+vi wordpress.yml
+
+```yaml
+version: '3.1'
+
+services:
+  db:
+    image: mysql:latest
+    command:
+      - --default_authentication_plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_root_password
+      - db_password
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WOREPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+
+secrets:
+  db_password:
+    file: db_password.txt
+  db_root_password:
+    file: db_root_password.txt
+
+volumes:
+  db_data: {}
+
+```
+
+YAML 是一种阅读性很强的文本格式，上面这个 stack 中定义了三种资源：service、secret 和 volume。
+
+① services 定义了两个 service：db 和 wordpress。
+
+② secrets 定义了两个 secret：db_password 和 db_root_password，在 service db 和 wordpress 的定义中引用了这两个 secret。
+
+③ volumes 定义了一个 volume：db_data，service db 使用了此 volume。
+
+④ wordpress 通过 depends_on 指定自己依赖 db 这个 service。Docker 会保证当 db 正常运行后再启动 wordpress。
+
+可以在 YAML 中定义的元素远远不止这里看到的这几个，完整列表和使用方法可参考[官方文档](https://docs.docker.com/compose/compose-file/)
+
+* 3.部署应用
+
+```bash
+docker stack deploy -c wordpress.yml wpstack
+```
+
+* 4.查看部署结果
+
+```bash
+ubuntu2@root  ~ docker stack ls
+NAME                SERVICES            ORCHESTRATOR
+wpstack             2                   Swarm
+ubuntu2@root  ~ docker stack services wpstack
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+5gzychnlkzct        wpstack_db          replicated          1/1                 mysql:latest
+iac2l00okp89        wpstack_wordpress   replicated          1/1                 wordpress:latest    *:8080->80/tcp
+ubuntu2@root  ~ docker stack ps wpstack
+ID                  NAME                  IMAGE               NODE                DESIRED STATE       CURRENT STATE                ERROR               PORTS
+l9vpx2ueqto5        wpstack_db.1          mysql:latest        ubuntu1             Running             Running about a minute ago
+coqcmhe2i50h        wpstack_wordpress.1   wordpress:latest    ubuntu2             Running             Running 2 minutes ago
+ubuntu2@root  ~ docker secret ls
+ID                          NAME                       DRIVER              CREATED             UPDATED
+2o5v0mg35ew69tbwun3xj17i9   wpstack_db_password                            2 minutes ago       2 minutes ago
+euqfdtey6n2kr32m694xpn9lj   wpstack_db_root_password                       2 minutes ago       2 minutes ago
+ubuntu2@root  ~ docker stack rm wpstack
+Removing service wpstack_db
+Removing service wpstack_wordpress
+Removing secret wpstack_db_password
+Removing secret wpstack_db_root_password
+Removing network wpstack_default
+```
 
 ## 参考
 
 * [如何配置 Health Check？- 每天5分钟玩转 Docker 容器技术（107）](https://www.cnblogs.com/CloudMan6/p/8053323.html)
+* [Docker Compose和Docker Stack区别](https://www.jianshu.com/p/05be80475bff)
