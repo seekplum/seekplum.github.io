@@ -108,19 +108,19 @@ ubuntu2@root  ~
 
 ```bash
 ubuntu2@root  ~ kubectl get pod --all-namespaces
-NAMESPACE     NAME                              READY   STATUS              RESTARTS   AGE
-kube-system   coredns-5644d7b6d9-ftn85          0/1     Pending             0          9m47s
-kube-system   coredns-5644d7b6d9-vpvgn          0/1     Pending             0          9m47s
-kube-system   etcd-ubuntu2                      1/1     Running             0          8m57s
-kube-system   kube-apiserver-ubuntu2            1/1     Running             0          8m56s
-kube-system   kube-controller-manager-ubuntu2   1/1     Running             0          9m6s
-kube-system   kube-flannel-ds-amd64-bq4jw       1/1     Running             0          4m2s
-kube-system   kube-flannel-ds-amd64-h5btm       1/1     Running             1          3m23s
-kube-system   kube-flannel-ds-amd64-ptdcw       0/1     Evicted             0          72s
-kube-system   kube-proxy-5btv9                  1/1     Running             0          3m23s
-kube-system   kube-proxy-l4j4t                  0/1     ContainerCreating   0          3m21s
-kube-system   kube-proxy-zp2ql                  1/1     Running             0          9m47s
-kube-system   kube-scheduler-ubuntu2            1/1     Running             0          8m58s
+NAMESPACE     NAME                              READY   STATUS                   RESTARTS   AGE
+kube-system   coredns-5644d7b6d9-22g4t          1/1     Running                  0          4m17s
+kube-system   coredns-5644d7b6d9-6csjq          1/1     Running                  0          4m17s
+kube-system   etcd-ubuntu2                      1/1     Running                  0          3m35s
+kube-system   kube-apiserver-ubuntu2            1/1     Running                  0          3m27s
+kube-system   kube-controller-manager-ubuntu2   1/1     Running                  0          3m33s
+kube-system   kube-flannel-ds-amd64-66t28       0/1     Init:ImageInspectError   0          2m28s
+kube-system   kube-flannel-ds-amd64-bw67c       1/1     Running                  0          2m24s
+kube-system   kube-flannel-ds-amd64-pmbv9       1/1     Running                  0          3m19s
+kube-system   kube-proxy-jtnvj                  1/1     Running                  0          2m24s
+kube-system   kube-proxy-w4p5f                  0/1     ImagePullBackOff         0          2m28s
+kube-system   kube-proxy-wzk2m                  1/1     Running                  0          4m17s
+kube-system   kube-scheduler-ubuntu2            1/1     Running                  0          3m18s
 ubuntu2@root  ~
 ```
 
@@ -129,10 +129,18 @@ ubuntu2@root  ~
 Pending、ContainerCreating、ImagePullBackOff 都表明 Pod 没有就绪，Running 才是就绪状态。
 
 ```bash
-kubectl describe pod coredns-5644d7b6d9-ftn85 --namespace=kube-system
+kubectl describe pod kube-flannel-ds-amd64-66t28 --namespace=kube-system
 ```
 
-根据输出结果判断原因进行解决，一般都是网络原因，等待一会就好了。
+根据输出结果判断原因进行解决，一般都是网络原因导致image pull失败，等待一会就好了。
+
+或者手动进行Pull
+
+```bash
+docker pull quay.io/coreos/flannel:v0.11.0-amd64
+
+docker pull k8s.gcr.io/kube-proxy:v1.16.2
+```
 
 ## 总结
 
