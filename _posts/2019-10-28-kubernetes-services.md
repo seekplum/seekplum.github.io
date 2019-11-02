@@ -57,6 +57,8 @@ kubectl apply -f nginx.yml
 
 `apiVersion` 的字段可以再官网对应版本查看,比如 [v16.2版本](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#daemonset-v1-apps) 的版本为 `v1`
 
+`kubectl api-versions` 可以查看支持的所有版本
+
 ### 基于命令的方式
 
 * 1.简单直观快捷，上手快。
