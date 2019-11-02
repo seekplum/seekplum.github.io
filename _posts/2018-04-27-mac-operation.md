@@ -214,6 +214,14 @@ echo $(date +"%F %T" >> ${HOME}/lock-my-screen.log)
 
 其它应用程序的快捷键也是类似的，只不过第一步定义应用程序是可以省略的。
 
+### rar解压
+
+```bash
+brew install unrar
+
+unrar x filename.rar
+```
+
 ## item2按单词跳转
 
 Preferences -> Profiles -> Keys -> Load Preset.. -> Natural Text Editing
