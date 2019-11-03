@@ -1,8 +1,8 @@
 ---
 layout: post
-title: kubernetes资源
+title: kubernetes基本配置
 categories: kubernetes
-tags: docker kubernetes
+tags: docker kubernetes configure
 thread: kubernetes
 ---
 
