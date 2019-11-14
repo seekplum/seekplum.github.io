@@ -238,7 +238,7 @@ Preferences -> Profiles -> Keys -> Load Preset.. -> Natural Text Editing
 * Pycharm
 * Goland
 * Vscode
-* xcode
+* [xcode](https://developer.apple.com/download/more/)注意和系统版本兼容
 * SSLVPN Client
 * xnip
 * vnc viewer

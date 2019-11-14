@@ -5,3 +5,4 @@ _site/*
 test.py
 tests/*
 .pytest_cache/*
+.jekyll-cache/*
