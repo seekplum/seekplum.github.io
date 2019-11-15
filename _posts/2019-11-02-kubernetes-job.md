@@ -227,7 +227,7 @@ Events:
 
 * 为什么 kubectl get pod 会看到这么多个失败的 Pod？
 
-当第一个 Pod 启动时，容器失败退出，根据 `restartPolicy: Never`，此失败容器不会被重启，但 `Job DESIRED` 的 Pod 是 `1`，目前 `SUCCESSFUL` 为 `0`，不满足，所以 `Job controller` 会启动新的 Pod，直到 SUCCESSFUL 为 `1`。对于我们这个例子，SUCCESSFUL 永远也到不了 1，所以 Job controller 会一直创建新的 Pod。为了终止这个行为，**只能删除 Job**。
+当第一个 Pod 启动时，容器失败退出，根据 `restartPolicy: Never`，此失败容器不会被重启，但 `Job DESIRED` 的 Pod 是 `1`，目前 `SUCCESSFUL`为 `0`，不满足，所以 `Job controller` 会启动新的 Pod，直到 SUCCESSFUL为 `1`。对于我们这个例子，SUCCESSFUL 永远也到不了 1，所以 Job controller 会一直创建新的 Pod。为了终止这个行为，**只能删除 Job**。
 
 * 把 `restartPolicy` 设置为 `OnFailure`
 
