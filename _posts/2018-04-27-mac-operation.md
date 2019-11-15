@@ -250,3 +250,10 @@ Preferences -> Profiles -> Keys -> Load Preset.. -> Natural Text Editing
 * [AnotherRedisDesktopManager](https://github.com/qishibo/AnotherRedisDesktopManager/releases)
 * [BeyondCompare](https://www.scootersoftware.com/download.php)文本对比工具
 * [Gifox](https://gifox.io/)GIF录制
+
+## 操作系统
+
+* [如何升级到 macOS Catalina](https://support.apple.com/zh-cn/HT201475)
+* [如何升级至 macOS Mojave](https://support.apple.com/zh-cn/macos/mojave)
+* [如何升级到 macOS High Sierra](https://support.apple.com/zh-cn/HT208969)
+* [如何通过 macOS 恢复功能重新安装 macOS](https://support.apple.com/zh-cn/HT204904)
