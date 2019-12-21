@@ -8,29 +8,40 @@ thread: docker
 
 1.添加 docker group
 
-> sudo groupadd docker
-
+```bash
+sudo groupadd docker
+```
 
 2.将用户加入该 group 内
 
-> sudo usermod -aG docker $USER
+```bash
+sudo usermod -aG docker $USER
+```
 
 或者使用下面命令
 
-> sudo gpasswd -a ${USER} docker
+```bash
+sudo gpasswd -a ${USER} docker
+```
 
 3.重启服务
 
-> sudo service docker restart  # centos
+```bash
+sudo service docker restart  # centos6
 
-> sudo systemctl restart docker  # ubuntu
+sudo systemctl restart docker  # centos7 / ubuntu
+```
 
 或者
 
-> sudo /etc/init.d/docker restart
+```bash
+sudo /etc/init.d/docker restart
+```
 
-4.切换当前会话到新 group 或者重启 X 会话 
+4.切换当前会话到新 group 或者重启 X 会话
 
 注意:这一步是必须的，否则因为 groups 命令获取到的是缓存的组信息，刚添加的组信息未能生效，所以 docker images 执行时同样有错。
 
-> newgrp - docker
+```bash
+newgrp - docker
+```
