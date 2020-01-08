@@ -7,19 +7,58 @@ thread: development
 
 ## LDAP
 
+* 启动容器
+
 ```bash
 docker run -d  \
     -p 389:389  \
     -p 636:636  \
-    --network bridge  \
-    --hostname openldap-host  \
     -v /tmp/data/slapd/database:/var/lib/ldap  \
     -v /tmp/data/slapd/config:/etc/ldap/slapd.d  \
-    -e LDAP_ORGANISATION="seekplum.io"  \
-    -e LDAP_DOMAIN="seekplum.io"  \
-    -e LDAP_ADMIN_PASSWORD="seekplum"  \
+    -e LDAP_ORGANISATION='seekplum.io'  \
+    -e LDAP_DOMAIN='seekplum.io'  \
+    -e LDAP_ADMIN_PASSWORD='seekplum'  \
+    -e LDAP_TLS='false'  \
+    -e LDAP_READONLY_USER='true'  \
+    -e LDAP_READONLY_USER_USERNAME='guest'  \
+    -e LDAP_READONLY_USER_PASSWORD='123456'  \
     --name ldap  \
-    osixia/openldap
+    osixia/openldap:1.3.0 \
+    --copy-service
+```
+
+* 备份导出数据
+
+```bash
+ldapsearch -x -h 127.0.0.1 -p 389 -w seekplum -D "cn=admin,dc=seekplum,dc=io" -b "dc=seekplum,dc=io" -LLL > conf/ldap/bootstrap.ldif
+```
+
+* 或者
+
+```bash
+ldapsearch -x -H ldap://127.0.0.1 -b dc=seekplum,dc=io -D "cn=admin,dc=seekplum,dc=io" -w seekplum > conf/ldap/bootstrap.ldif
+```
+
+* 导入数据
+
+```bash
+ldapmodify -c -x -h 127.0.0.1 -p 389 -w seekplum -D "cn=admin,dc=seekplum,dc=io" -a -f conf/ldap/bootstrap.ldif
+```
+
+* 查询用户列表
+
+```bash
+ldapsearch -H ldap://127.0.0.1 -x -b "ou=users,dc=seekplum,dc=io"
+```
+
+* 检查用户名密码是否正确
+
+```bash
+ldapwhoami -h 127.0.0.1 -p 389 -D 'cn=admin,dc=seekplum,dc=io' -w seekplum
+ldapwhoami -h 127.0.0.1 -p 389 -D 'cn=guest,dc=seekplum,dc=io' -w 123456
+ldapwhoami -h 127.0.0.1 -p 389 -D 'cn=hjd,ou=users,dc=seekplum,dc=io' -w 123456
+ldapwhoami -h 127.0.0.1 -p 389 -D 'cn=zhangsan,ou=users,dc=seekplum,dc=io' -w 123456
+ldapwhoami -h 127.0.0.1 -p 389 -D 'cn=lisi,ou=users,dc=seekplum,dc=io' -w 123456
 ```
 
 ### LDAP配置
@@ -32,7 +71,7 @@ docker run -d  \
     -e PHPLDAPADMIN_LDAP_HOSTS=ldap  \
     -e PHPLDAPADMIN_HTTPS=false  \
     --name ldapadmin  \
-    osixia/phpldapadmin
+    osixia/phpldapadmin:0.9.0
 ```
 
 浏览器访问: [http://127.0.0.1:8089](http://127.0.0.1:8089)
@@ -44,19 +83,29 @@ docker run -d  \
 参考：[phpldapadmin操作指导](https://www.cnblogs.com/xiaomifeng0510/p/9564688.html)
 
 1.点击展示左侧 `dc=seekplum,dc=io (1)` 节点，点击 `Create new entry here`
+
 2.选择 `Generic: Posix Group`
+
 3.输入 `Group`，比如 `gerrit`
+
 4.点击 `Create Object`
+
 5.点击 `Commit`
 
 ### 新建一个用户
 
 1.左侧点击刚刚创建的组 `cn=gerrit`
+
 2.右侧点击 `Create a child entry`
+
 3.右侧选择 `Generic: User Account`
+
 4.只需要输入 `Last name` 和 `Password`，比如 `test` 和 `123456`
+
 5.选择 `GID Number` 为 `gerrit`
+
 6.点击 `Create Object`
+
 7.点击 `Commit`
 
 这样我们就得到了一个dn为 `cn=test,cn=gerrit,dc=seekplum,dc=io` ，密码为 `123456` 的用户，各种系统接入ldap登录时用户名就是 `test`
@@ -102,22 +151,24 @@ for index, entry in enumerate(conn.entries):
 ## Gerrit
 
 ```bash
-docker run -d -v /tmp/dev-data/gerrit:/var/gerrit/review_site -p 8088:8080 -p 29418:29418 --name gerrit openfrontier/gerrit
-
 docker run -d \
     --name gerrit \
     -p 8088:8080 \
+    -p 29418:29418 \
     --link ldap \
-    -v /tmp/dev-data/gerrit:/var/gerrit/review_site \
+    -v /tmp/data/gerrit:/var/gerrit/review_site \
     -e WEBURL=http://127.0.0.1:8088 \
+    -e GITWEB_TYPE=gitiles \
     -e AUTH_TYPE=LDAP \
     -e LDAP_SERVER=ldap://ldap \
-    -e LDAP_ACCOUNTBASE='cn=gerrit,dc=seekplum,dc=io' \
-    -e LDAP_USERNAME='cn=admin,dc=seekplum,dc=io' \
-    -e LDAP_PASSWORD='seekplum' \
-    -e LDAP_ACCOUNTPATTERN='(&(objectClass=person)(uid=${username}))' \
+    -e LDAP_ACCOUNTBASE='dc=seekplum,dc=io' \
+    -e LDAP_ACCOUNTPATTERN='(cn=${username})' \
+    -e LDAP_ACCOUNTSSHUSERNAME='${cn}' \
+    -e LDAP_ACCOUNTFULLNAME='${sn}' \
+    -e LDAP_USERNAME='cn=guest,dc=seekplum,dc=io' \
+    -e LDAP_PASSWORD='123456' \
     -e GERRIT_INIT_ARGS='--install-plugin=download-commands' \
-    openfrontier/gerrit
+    openfrontier/gerrit:3.0.0
 ```
 
 浏览器访问 [http://127.0.0.1:8088](http://127.0.0.1:8088)
