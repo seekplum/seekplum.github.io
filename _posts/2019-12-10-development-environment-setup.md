@@ -182,3 +182,35 @@ docker run -d \
 ```bash
 docker run --name devops-jenkins --user=root -p 8080:8080 -p 50000:50000 -v /tmp/opt/data/jenkins_home:/var/jenkins_home -d jenkins/jenkins:lts
 ```
+
+## Gitea
+
+```bash
+docker stop gitea
+docker rm gitea
+docker run -d --name=gitea -p 10022:22 -p 10080:3000 -v /tmp/test-data/gitea:/data gitea/gitea:latest
+```
+
+## drone
+
+```bash
+docker stop drone
+docker rm drone
+docker run \
+  --link gitea:gitea \
+  --volume=/var/run/docker.sock:/var/run/docker.sock \
+  --volume=/tmp/test-data/drone:/data \
+  --env=DRONE_GITEA_SERVER=http://10.0.2.217:10080/ \
+  --env=DRONE_GIT_ALWAYS_AUTH=false \
+  --env=DRONE_RUNNER_CAPACITY=2 \
+  --env=DRONE_SERVER_HOST=10.0.2.217:10081 \
+  --env=DRONE_SERVER_PROTO=http \
+  --env=DRONE_TLS_AUTOCERT=false \
+  --env=DRONE_GITEA_CLIENT_ID=cd1da0d0-1d3e-4a8e-a17c-0aed97027d74 \
+  --env=DRONE_GITEA_CLIENT_SECRET=RMMnzzlMt22tplUyrBVg7TeHkwoP-5ILVyerXjovdcs= \
+  --publish=10081:80 \
+  --restart=always \
+  --detach=true \
+  --name=drone \
+  drone/drone:latest
+```
