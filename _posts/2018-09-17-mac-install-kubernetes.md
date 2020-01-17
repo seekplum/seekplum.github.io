@@ -46,10 +46,25 @@ Client Version: version.Info{Major:"1", Minor:"14", GitVersion:"v1.14.0", GitCom
 * 启动，参考[issues 3860](https://github.com/kubernetes/minikube/issues/3860)
 
 ```bash
-sudo ifconfig vboxnet0 up && minikube start --registry-mirror=https://registry.docker-cn.com --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers
+sudo ifconfig vboxnet0 up && minikube start --registry-mirror=https://registry.docker-cn.com --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers --vm-driver=virtualbox
 ```
 
 `--kubernetes-version` 可以指定版本，版本信息可以不指定，使用默认对应版本
+
+## 代理docker命令
+
+```bash
+eval $(minikube docker-env)
+
+eval $(minikube docker-env -u)
+```
+
+## 共享文件
+
+* 1.`minikuber ip` 获取IP
+* 2.`minikube ssh` 登录
+* 3.`sudo passwd docker` 修改密码
+* 4.和正常的主机一样scp就可以了
 
 ## 卸载
 
