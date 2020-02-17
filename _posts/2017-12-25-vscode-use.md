@@ -29,10 +29,10 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
 ```json
 {
     "editor.fontSize": 15,
-    "python.jediEnabled": false,
-    "python.pythonPath": "${HOME}/pythonenv/python27env/bin/python",
+    // "python.jediEnabled": false,
+    "python.pythonPath": "${HOME}/packages/pythonenv/python27env/bin/python", // python解释器路径
     "diffEditor.ignoreTrimWhitespace": false,
-    "workbench.iconTheme": "vscode-icons",
+    // "workbench.iconTheme": "vscode-icons",
     "editor.minimap.enabled": false,
     "window.openWithoutArgumentsInNewWindow": "on",
     "window.openFilesInNewWindow": "on",
@@ -70,6 +70,9 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
     "plantuml.diagramsRoot": "wsd",
     "plantuml.exportOutDir": "images/docs",
 
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
     // 识别文件类型
     "files.associations": {
         "Dockerfile-*": "dockerfile"
@@ -90,7 +93,7 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
     "java.configuration.checkProjectSettingsExclusions": false,
 
     "editor.fontFamily": "Monaco", // 字体
-    "workbench.colorTheme": "Darcula Pycharm Theme (dimmed)", // Pycharm 颜色主题
+    "workbench.colorTheme": "Monokai", // 颜色主题
     "files.exclude": { // 忽略文件类型
         "**/.git": true,
         "**/.svn": true,
@@ -108,7 +111,9 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
     "css.fileExtensions": [
         "scss",
         "less"
-    ]
+    ],
+    "explorer.confirmDelete": false,
+    "C_Cpp.updateChannel": "Insiders"
 }
 ```
 
@@ -263,6 +268,16 @@ Preferences -> Keyboard Shortcuts
         "key": "cmd+]",
         "command": "editor.unfold",
         "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+f12",
+        "command": "editor.action.referenceSearch.trigger",
+        "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
+    },
+    {
+        "key": "shift+f12",
+        "command": "-editor.action.referenceSearch.trigger",
+        "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
     },
 ]
 ```
