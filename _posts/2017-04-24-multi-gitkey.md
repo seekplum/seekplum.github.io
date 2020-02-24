@@ -45,5 +45,13 @@ git remote set-url origin git@seekplum.github.com:seekplum/seekplum.github.io.gi
 
 ```bash
 ssh-add -l
-ssh-add 私钥名
+ssh-add 私钥路径
+ssh-add -d 私钥路径
+```
+
+## 测试登录
+
+```bash
+ssh -T git@gitea.seekplum.top
+ssh -vT git@gitea.seekplum.top  # 查看详细信息
 ```
