@@ -56,6 +56,34 @@ kubeadm init --apiserver-advertise-address ${LOCAL_IP} --pod-network-cidr=10.244
 
 `--pod-network-cidr` 指定 Pod 网络的范围。Kubernetes 支持多种网络方案，而且不同网络方案对 `--pod-network-cidr` 有自己的要求，这里设置为 `10.244.0.0/16` 是因为我们将使用 flannel 网络方案，必须设置成这个 CIDR。
 
+### 国内Pull镜像
+
+* 1.获取镜像列表
+
+```bash
+kubeadm config images list
+```
+
+* 2.从阿里云获取
+
+```bash
+images=(
+    kube-apiserver:v1.16.7
+    kube-controller-manager:v1.16.7
+    kube-scheduler:v1.16.7
+    kube-proxy:v1.16.7
+    pause:3.1
+    etcd:3.3.15-0
+    coredns:1.6.2
+)
+
+for imageName in ${images[@]} ; do
+    docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
+    docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName k8s.gcr.io/$imageName
+    docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
+done
+```
+
 ## 配置 kubectl
 
 * 1.为 `root` 用户配置 kubectl
@@ -78,10 +106,59 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 
 Kubernetes 支持多种网络方案，这里我们先使用 flannel，后面还会讨论 Canal。
 
-* 1.执行如下命令部署 flannel
+* 1.执行如下命令部署
+
+flannel
+
+需要在kubeadm init 时设置 `--pod-network-cidr=10.244.0.0/16`
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
+
+CNI bridge
+
+```bash
+mkdir -p /etc/cni/net.d
+cat >/etc/cni/net.d/10-mynet.conf <<-EOF
+{
+    "cniVersion": "0.3.0",
+    "name": "mynet",
+    "type": "bridge",
+    "bridge": "cni0",
+    "isGateway": true,
+    "ipMasq": true,
+    "ipam": {
+        "type": "host-local",
+        "subnet": "10.244.0.0/16",
+        "routes": [
+            {"dst": "0.0.0.0/0"}
+        ]
+    }
+}
+EOF
+cat >/etc/cni/net.d/99-loopback.conf <<-EOF
+{
+    "cniVersion": "0.3.0",
+    "type": "loopback"
+}
+EOF
+```
+
+weave
+
+```bash
+sysctl net.bridge.bridge-nf-call-iptables=1
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+
+calico
+
+需要 kubeadm init 时设置 --pod-network-cidr=192.168.0.0/16
+
+```bash
+kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 ```
 
 * 2.在 `ubuntu1` 和 `ubuntu3` 上执行join命令
