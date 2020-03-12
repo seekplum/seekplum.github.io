@@ -51,6 +51,24 @@ sudo ifconfig vboxnet0 up && minikube start --registry-mirror=https://registry.d
 
 `--kubernetes-version` 可以指定版本，版本信息可以不指定，使用默认对应版本
 
+或者
+
+```bash
+minikube start --vm-driver hyperkit --image-mirror-country cn
+```
+
+## 切换Context
+
+```bash
+seekplum ➜  ~ kubectl config current-context
+minikube
+seekplum ➜  ~ kubectl config set current-context docker-desktop
+Property "current-context" set.
+seekplum ➜  ~ kubectl config current-context
+docker-desktop
+seekplum ➜  ~
+```
+
 ## 代理docker命令
 
 ```bash
