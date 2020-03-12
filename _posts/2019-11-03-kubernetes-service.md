@@ -320,6 +320,10 @@ ubuntu2@root  ~
 
 与 ClusterIP 一样，也是借助了 iptables。
 
+## 总结
+
+Service、Deployment 和 Pod 的关系是解耦的: Service 用于暴露给外部访问、Deployment 用户部署方式、Pod 包装容器，让它们关联起来的唯一纽带是配置文件中的 `labels`，对 Deployment 的修改会影响到 Service 和 Pod。
+
 ## 参考
 
 * [Service IP 原理 - 每天5分钟玩转 Docker 容器技术（137）](https://www.cnblogs.com/CloudMan6/p/8503685.html)
