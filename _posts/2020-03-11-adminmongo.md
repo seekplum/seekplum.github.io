@@ -44,3 +44,27 @@ docker run -d -e HOST=0.0.0.0 -e PORT=1234 -p 12345:1234 --name adminmongo mrvau
 * Connection string: mongodb://x.x.x.x:27017/test
 
 配置后可以在页面进行修改数据和索引，`Add document` 时填写对象则写入单条数据，填写数组则写入多条数据
+
+## 脚本写入数据
+
+```python
+# -*- coding: utf-8 -*-
+import json
+
+import requests
+
+url = "http://adminmongo.dev.net/document/meizhedb/meizhedb/function_used/insert_doc"
+
+doc = {"uid": 123456789}
+data = {"objectData": json.dumps(doc)}
+headers = {
+    "Host": "127.0.0.1:12345"
+}
+proxies = {
+    "http": "http://127.0.0.1:12345",
+    "https": "http://127.0.0.1:12345",
+}
+resp = requests.post(url, data=data, headers=headers, proxies=proxies)
+
+print(resp.json())
+```
