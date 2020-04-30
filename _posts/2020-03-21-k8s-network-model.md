@@ -59,13 +59,7 @@ kubeadm init --apiserver-advertise-address ${LOCAL_IP} --pod-network-cidr=10.244
 - 2.部署 Canal
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/projectcalico/canal/master/k8s-install/1.7/rbac.yaml
-
-wget https://github.com/projectcalico/canal/blob/master/k8s-install/1.7/canal.yaml
-
-sed -i "s/^description/#description/g" canal.yaml
-sed -i "s#extensions/v1beta1#apps/v1#g" canal.yaml
-sed -i "s#quay.io/calico/node:v2.6.2#quay.io/calico/node:v3.13.2#g" canal.yaml
+wget https://docs.projectcalico.org/v3.13/getting-started/kubernetes/installation/hosted/canal/canal.yaml
 
 kubectl apply -f canal.yaml
 ```
