@@ -675,3 +675,35 @@ int main(int argc, char **argv)
 }
 EOF
 ```
+
+### Lua
+
+* 安装Lua
+
+```bash
+brew install lua
+
+brew install luajit
+```
+
+* 安装管理包
+
+```bash
+brew install luarocks
+```
+
+* 代码检查
+
+```bash
+luarocks install luacheck
+
+# 在配置 .luacheckrc 的目录下执行
+
+luacheck [文件名|目录名]
+```
+
+* vscode插件
+
+```text
+vscode-luacheck
+```
