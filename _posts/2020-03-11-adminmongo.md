@@ -35,7 +35,7 @@ brew services start mongodb-community
 详细文档可见 [Github地址](http://github.com/mrvautin/adminmongo)
 
 ```bash
-docker run -d -e HOST=0.0.0.0 -e PORT=1234 -p 12345:1234 --name adminmongo mrvautin/adminmongo
+docker run -d -e HOST=0.0.0.0 -e PORT=1234 -p 12345:1234 -v ~/data/adminmongo:/app/user/config --name adminmongo mrvautin/adminmongo
 ```
 
 ## 配置
