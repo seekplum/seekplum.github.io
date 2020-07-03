@@ -129,12 +129,13 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
   "[yaml]": {
     "editor.tabSize": 2
   },
-  "window.openFoldersInNewWindow": "on",
+  "window.openFoldersInNewWindow": "default",
 
-  "Lua.diagnostics.globals": [
-    "ngx"
-  ],
+  "Lua.diagnostics.globals": ["ngx"],
+  "python.languageServer": "Jedi",
+  "search.followSymlinks": false
 }
+
 ```
 
 ## 修改默认快捷键
