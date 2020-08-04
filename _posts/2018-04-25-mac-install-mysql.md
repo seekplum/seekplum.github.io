@@ -1,23 +1,23 @@
 ---
 layout: post
-title:  mac二进制安装mysql
+title: mac二进制安装mysql
 tags: mac mysql
 thread: mysql
 ---
 
 ## 下载
 
-从mysql官网下载相应版本的二进制包即可。本文以mysql-5.7.22为例，在[官网下载页](https://dev.mysql.com/downloads/file/?id=476955)确认版本后下载即可。
+从 mysql 官网下载相应版本的二进制包即可。本文以 mysql-5.7.22 为例，在[官网下载页](https://dev.mysql.com/downloads/file/?id=476955)确认版本后下载即可。
 
 ## 非默认路径安装
 
-* 修改mysql.server
+- 修改 mysql.server
 
-mysql默认的安装路径都会`/usr/local/mysql`下,若想安装到其他路径，则需要对 support-files/mysql.server 文件进行修改,总共有 4 处需要修改。
+mysql 默认的安装路径都会`/usr/local/mysql`下,若想安装到其他路径，则需要对 support-files/mysql.server 文件进行修改,总共有 4 处需要修改。
 
-修改参考 [制作python虚拟环境包](/virtualenv)
+修改参考 [安装mysql](/mysql-install/#10.修改mysql配置)
 
-* 修改后内容
+- 修改后内容
 
 ```bash
 #!/bin/sh
@@ -399,10 +399,9 @@ esac
 exit 0
 ```
 
-
 ## 自动化安装脚本
 
-* install_mysql.sh 脚本内容
+- install_mysql.sh 脚本内容
 
 ```bash
 #!/bin/bash
@@ -691,7 +690,7 @@ fi
 
 ## 安装
 
-* 安装前准备目录如下
+- 安装前准备目录如下
 
 ```bash
 tree ~/packages -L 1
@@ -701,7 +700,7 @@ tree ~/packages -L 1
 └── mysql.server
 ```
 
-* 执行安装操作
+- 执行安装操作
 
 ```bash
 bash install_mysql.sh
@@ -711,7 +710,7 @@ bash install_mysql.sh
 
 ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
 
-1.首先在设置中关闭mysql服务
+1.首先在设置中关闭 mysql 服务
 
 ```bash
 /Users/seekplum/packages/mysql/support-files/mysql.server stop
@@ -725,9 +724,9 @@ ps axu | grep mysql | grep -v "grep" | awk '{print $2}' | xargs kill -9
 /Users/seekplum/packages/mysql/bin/mysqld_safe --defaults-file=/Users/seekplum/packages/mysql/data/conf/my.cnf --skip-grant-tables &
 ```
 
-3.进入mysql,执行以下命令
+3.进入 mysql,执行以下命令
 
-root连接时无密码
+root 连接时无密码
 
 ```bash
 /Users/seekplum/packages/mysql/bin/mysql -uroot -S /Users/seekplum/packages/mysql/data/sock/mysql.sock
@@ -743,7 +742,7 @@ flush privileges;
 quit
 ```
 
-4.关闭第二步起的mysql
+4.关闭第二步起的 mysql
 
 ```bash
 ps axu | grep mysql | grep -v grep | awk '{print $2}' | xargs kill -9
