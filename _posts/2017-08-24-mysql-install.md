@@ -8,15 +8,30 @@ thread: mysql
 
 ## mysql 自动安装
 
-```text
-sudo apt-get install mysql-server mysql-client-------------安装mysql，中间会让设置密码，用户已经默认是root
-service mysql start---------------------------启动mysql服务
-rpm -q mysql----------------------------------查询mysql是否正常安装
-/etc/rc.d/init.d/mysqld start-----------------直接启动
-chkconfig mysqld on---------------------------设置mysql开机启动
-chmod 755 /etc/rc.d/init.d/mysqld-------------修改mysqld执行权限
-service mysqld start--------------------------启动mysql服务
-service mysqld status-------------------------查看mysql状态
+```bash
+# 安装mysql，中间会让设置密码，用户已经默认是root
+sudo apt-get install mysql-server mysql-client
+
+# 启动mysql服务
+service mysql start
+
+# 查询mysql是否正常安装
+rpm -q mysql
+
+# 直接启动
+/etc/rc.d/init.d/mysqld start
+
+# 设置mysql开机启动
+chkconfig mysqld on
+
+# 修改mysqld执行权限
+chmod 755 /etc/rc.d/init.d/mysqld
+
+# 启动mysql服务
+service mysqld start
+
+# 查看mysql状态
+service mysqld status
 ```
 
 ## mysql tar 包安装方法
@@ -141,4 +156,17 @@ export PATH='$PATH:$MYSQL_HOME/bin'
 ```bash
 chkconfig --add mysql
 chkconfig --level 2345 mysql on
+```
+
+## Docker安装
+
+```bash
+# 安装MySQL
+docker run -d -p 3306:3306 -v ~/packages/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root123456 -e MYSQL_USER=admin -e MYSQL_PASSWORD=admin123456 --name mysql-server mysql:5.7.31
+
+# 执行MySQL命令
+docker exec -it mysql-server sh -c 'exec mysql -uroot -proot123456 -e "show databases;"'
+
+# 安装WebUI，通过 link 方式，也可以通过 -e PMA_HOST=${IP} 指定IP
+docker run -d -p 8088:80 --link mysql-server:db -e PMA_PORT=3306 --name mysql-admin phpmyadmin/phpmyadmin
 ```
