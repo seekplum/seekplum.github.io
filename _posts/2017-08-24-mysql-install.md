@@ -164,6 +164,9 @@ chkconfig --level 2345 mysql on
 # 安装MySQL
 docker run -d -p 3306:3306 -v ~/packages/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root123456 -e MYSQL_USER=admin -e MYSQL_PASSWORD=admin123456 --name mysql-server mysql:5.7.31
 
+# 初始化管理员账户
+docker exec -it mysql-server sh -c "mysql -uroot -proot123456 -e \"GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' IDENTIFIED BY 'admin123456';flush privileges;\""
+
 # 执行MySQL命令
 docker exec -it mysql-server sh -c 'exec mysql -uroot -proot123456 -e "show databases;"'
 
