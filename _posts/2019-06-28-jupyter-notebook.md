@@ -105,6 +105,12 @@ jupyter notebook --generate-config
 
 默认 jupyter 启动时打开的是当前终端所在的目录,可以通过 `c.NotebookApp.notebook_dir = ''`进行配置
 
+## 修改新增单元默认类型
+
+```bash
+sed -i "" "s/default_cell_type: 'code'/default_cell_type: 'markdown'/g" `grep -rl "default_cell_type: 'code'" ~/.virtualenvs/test3/lib/python3.7/site-packages`
+```
+
 ## 参考
 
 - [Jupyter Notebook 介绍、安装及使用教程](https://zhuanlan.zhihu.com/p/33105153)
