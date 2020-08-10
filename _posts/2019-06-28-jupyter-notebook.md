@@ -105,6 +105,21 @@ jupyter notebook --generate-config
 
 默认 jupyter 启动时打开的是当前终端所在的目录,可以通过 `c.NotebookApp.notebook_dir = ''`进行配置
 
+- 单元配置
+
+~/.jupyter/nbconfig/notebook.json
+
+```json
+{
+  "Cell": {
+    "cm_config": {
+      "lineNumbers": true,
+      "lineWrapping": true
+    }
+  }
+}
+```
+
 ## 修改新增单元默认类型
 
 ```bash
