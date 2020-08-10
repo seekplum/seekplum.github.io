@@ -161,11 +161,20 @@ chkconfig --level 2345 mysql on
 ## Docker安装
 
 ```bash
-# 安装MySQL
+# 卸载MySQL
+docker stop mysql-server; docker rm mysql-server; trash ~/packages/data/mysql
+
+# 安装MySQL 5.7
 docker run -d -p 3306:3306 -v ~/packages/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root123456 -e MYSQL_USER=admin -e MYSQL_PASSWORD=admin123456 --name mysql-server mysql:5.7.31
 
-# 初始化管理员账户
+# 5.7 版本 初始化管理员账户
 docker exec -it mysql-server sh -c "mysql -uroot -proot123456 -e \"GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' IDENTIFIED BY 'admin123456';flush privileges;\""
+
+# 安装MySQL 8.0
+docker run -d -p 3306:3306 -v ~/packages/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root123456 -e MYSQL_USER=admin -e MYSQL_PASSWORD=admin123456 --name mysql-server mysql:8 --character-set-server=utf8 --collation-server=utf8_bin
+
+# 8.0 版本 初始化管理员账户
+docker exec -it mysql-server sh -c "mysql -uroot -proot123456 -e \"GRANT ALL ON *.* TO 'admin'@'%' WITH GRANT OPTION;flush privileges;\""
 
 # 执行MySQL命令
 docker exec -it mysql-server sh -c 'exec mysql -uroot -proot123456 -e "show databases;"'
