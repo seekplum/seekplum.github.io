@@ -226,6 +226,12 @@ unrar x filename.rar
 
 Preferences -> Profiles -> Keys -> Load Preset.. -> Natural Text Editing
 
+## 安装Python2
+
+```bash
+brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/86a44a0a552c673a05f11018459c9f5faae3becc/Formula/python@2.rb
+```
+
 ## 安装软件列表
 
 * 企业微信
