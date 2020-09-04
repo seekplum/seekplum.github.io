@@ -28,70 +28,132 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
 
 ```json
 {
-  "editor.fontSize": 15,
+  // Python 开发配置 start
   // "python.jediEnabled": false,
-  "python.pythonPath": "${HOME}/packages/pythonenv/python27env/bin/python", // python解释器路径
-  "diffEditor.ignoreTrimWhitespace": false,
-  // "workbench.iconTheme": "vscode-icons",
-  "editor.minimap.enabled": false,
-  "window.openWithoutArgumentsInNewWindow": "on",
-  "window.openFilesInNewWindow": "on",
-  "workbench.editor.enablePreview": false,
-  "workbench.activityBar.visible": true,
-  "editor.formatOnSave": true,
-  "editor.wordWrap": "on",
-  "editor.minimap.renderCharacters": false,
-  "terminal.external.osxExec": "iTerm.app",
-  //"go.useLanguageServer": true,
-  "go.docsTool": "gogetdoc",
-  "go.buildOnSave": "workspace",
-  "go.lintOnSave": "workspace",
-  "go.vetOnSave": "workspace",
-  "go.buildTags": "",
-  "go.buildFlags": [],
-  "go.lintFlags": [],
-  "go.vetFlags": [],
-  "go.coverOnSave": false,
-  "go.useCodeSnippetsOnFunctionSuggest": false,
-  "go.formatTool": "goreturns",
-  "go.goroot": "/usr/local/go",
-  "go.gopath": "/Users/seekplum/GolangProjects",
-  "go.gocodeAutoBuild": false,
-  "window.zoomLevel": 0,
-  // 标识行长度
-  "editor.rulers": [119],
-  // tab等于的空格数
-  "editor.tabSize": 4,
-  "[Markdown]": {
-    "editor.tabSize": 2
-  },
+  // "python.autoComplete.extraPaths": ["${workspaceFolder}/scratte"],
+  "python.pythonPath": "${HOME}/packages/pythonenv/3.7.5/bin/python", // python解释器路径
+  "python.defaultInterpreterPath": "${HOME}/packages/pythonenv/3.7.5/bin/python",
+  "python.venvPath": "${HOME}/.virtualenvs",
+  "python.languageServer": "Pylance",
+  "python.linting.flake8Enabled": true,
+  "python.linting.pycodestyleEnabled": true,
+  "python.linting.pycodestyleArgs": ["--max-line-length=119"],
+  "python.formatting.provider": "yapf",
+  "python.formatting.yapfArgs": [
+    "--style",
+    "{based_on_style: pep8, column_limit: 119}"
+  ],
+  "python.testing.unittestEnabled": true,
+  "python.analysis.completeFunctionParens": true,
+  "python.autoComplete.addBrackets": true, // 自动添加括号
+  // Python 开发配置 end
+
+  // Golang 开发配置 start
+  // //"go.useLanguageServer": true,
+  // "go.docsTool": "gogetdoc",
+  // "go.buildOnSave": "workspace",
+  // "go.lintOnSave": "workspace",
+  // "go.vetOnSave": "workspace",
+  // "go.buildTags": "",
+  // "go.buildFlags": [],
+  // "go.lintFlags": [],
+  // "go.vetFlags": [],
+  // "go.coverOnSave": false,
+  // "go.useCodeSnippetsOnFunctionSuggest": false,
+  // "go.formatTool": "goreturns",
+  // "go.goroot": "/usr/local/go",
+  // "go.gopath": "${HOME}/GolangProjects",
+  // "go.gocodeAutoBuild": false,
+  // Golang 开发配置 end
+
+  // Java 开发配置 start
+  // "java.home": "/Library/Java/JavaVirtualMachines/jdk-12.0.1.jdk/Contents/Home",
+  // "java.errors.incompleteClasspath.severity": "ignore",
+  // "java.configuration.checkProjectSettingsExclusions": false,
+  // Java 开发配置 end
+
+  // Openresty 开发配置 start
+  "Lua.diagnostics.globals": ["ngx"],
+  // Openresty 开发配置 end
+
   // plantuml 导出图片位置
   "plantuml.diagramsRoot": "wsd",
   "plantuml.exportOutDir": "images/docs",
+
+  // // 自定义颜色
+  // "editor.tokenColorCustomizations": {
+  //   "comments": "#808080", // 注释
+  //   "keywords": "#CC7832", // 关键字
+  //   "variables": "#A9B7C6", // 变量名
+  //   "strings": "#A5C261", // 字符串
+  //   "functions": "#FFC66D", // 函数名
+  //   "numbers": "#6897BB", // 数字
+  //   "types": "#6897BB" // 类型
+  // },
+  // // 未使用变量提示
+  // "editor.showUnused": true,
+  // "workbench.colorCustomizations": {
+  //   "editorUnnecessaryCode.border": "#AEAE80" // 未使用变量
+  // },
+
+  "window.openWithoutArgumentsInNewWindow": "on",
+  "window.openFilesInNewWindow": "on",
+  "window.zoomLevel": 0,
+  "window.openFoldersInNewWindow": "default",
+
+  // "powermode.enabled": true,
+  // "powermode.enableShake": false,
+
+  "autoDocstring.docstringFormat": "google",
+  "terminal.integrated.rendererType": "dom",
+
+  "editor.fontSize": 15,
+  "editor.maxTokenizationLineLength": 1000000,
+  "editor.minimap.showSlider": "always",
+  "editor.minimap.renderCharacters": false,
+  "editor.minimap.enabled": false,
+  "editor.renderControlCharacters": true,
+  "editor.formatOnSave": true,
+  "editor.wordWrap": "on",
+  "editor.rulers": [119], // 标识行长度
+  "editor.tabSize": 4, // tab等于的空格数
   "editor.suggestSelection": "first",
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  // "editor.fontFamily": "Monaco", // 字体
+
+  // "workbench.iconTheme": "vscode-icons",
+  "workbench.editor.enablePreview": false,
+  "workbench.activityBar.visible": true,
+  // "workbench.colorTheme": "Monokai", // 颜色主题
+  "workbench.iconTheme": "vscode-great-icons",
+
+  // "eslint.workingDirectories": ["./acorn"],
+  // "eslint.validate": [
+  //     "javascriptreact"
+  // ],
+
+  "files.trimTrailingWhitespace": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "terminal.external.osxExec": "iTerm.app",
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
   // 识别文件类型
   "files.associations": {
     "Dockerfile-*": "dockerfile",
     "*.sjs": "javascript",
+    "*.jsx": "javascript",
     "*.py": "python",
     "*.axml": "axml",
+    "*.acss": "css",
+    "*.md": "Markdown",
     "*.lua": "lua"
   },
-  // 自动保存
-  "files.autoSave": "afterDelay",
+  "files.autoSave": "afterDelay", // 自动保存
   "files.autoSaveDelay": 500,
-  // 拖动文件时取消确认
-  "explorer.confirmDragAndDrop": false,
-  "vsicons.dontShowNewVersionMessage": true,
-  // Java开发配置
-  "java.home": "/Library/Java/JavaVirtualMachines/jdk-12.0.1.jdk/Contents/Home",
-  "java.errors.incompleteClasspath.severity": "ignore",
-  "java.configuration.checkProjectSettingsExclusions": false,
-  // "editor.fontFamily": "Monaco", // 字体
-  //   "workbench.colorTheme": "Monokai", // 颜色主题
+  "explorer.confirmDragAndDrop": false, // 拖动文件时取消确认
+  // "vsicons.dontShowNewVersionMessage": true,
+  // 忽略文件类型
   "files.exclude": {
-    // 忽略文件类型
+    "**/__pycache__": true,
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
@@ -99,20 +161,33 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
     "**/.DS_Store": true,
     "**/*.pyc": true
   },
+  "jshint.exclude": {
+    "**/*.js": true,
+    "**/*.jsx": true
+  },
   "path-intellisense.mappings": {
     "~": "${workspaceRoot}/acorn/js"
   },
-  "eslint.validate": ["javascriptreact"],
+  "javascript.format.enable": true,
   "css.fileExtensions": ["scss", "less"],
+  "vscode_custom_css.imports": ["file://${HOME}/packages/synthwave84.css"],
+  "vscode_custom_css.policy": true,
   "explorer.confirmDelete": false,
-  "C_Cpp.updateChannel": "Insiders",
+  "markdown-pdf.displayHeaderFooter": false,
+  "search.followSymlinks": false,
+  "tabnine.experimentalAutoImports": true,
+  // "C_Cpp.updateChannel": "Insiders",
+  // "prettier.configPath": "${workspaceRoot}/.prettierrc",
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[scss]": {
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[html]": {
@@ -121,21 +196,91 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features",
     "editor.tabSize": 2
   },
-  "workbench.iconTheme": "vscode-great-icons",
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.quickSuggestions": true,
+    "editor.defaultFormatter": "ms-python.python"
+  },
   "[yaml]": {
     "editor.tabSize": 2
   },
-  "window.openFoldersInNewWindow": "default",
-
-  "Lua.diagnostics.globals": ["ngx"],
-  "python.languageServer": "Jedi",
-  "search.followSymlinks": false
+  "[Markdown]": {
+    "editor.tabSize": 2
+  },
+  "[md]": {
+    "editor.tabSize": 2
+  }
 }
 
+```
+
+### 已安装插件
+
+```text
+auto-close-tag v0.5.8
+auto-rename-tag v0.1.4
+autodocstring v0.5.3
+axml-highlight v0.0.6
+azure-account v0.9.2
+bracket-pair-colorizer v1.0.61
+bracket-pair-colorizer-2 v0.2.0
+code-beautifier v2.3.3
+code-runner v0.11.0
+code-settings-sync v3.0.0
+code-spell-checker v1.9.0
+docs-article-templates v0.2.9
+docs-images v0.0.9
+docs-linting v0.0.5
+docs-markdown v0.2.80
+docs-metadata v1.0.5
+docs-preview v0.3.55
+docs-yaml v0.2.5
+dotenv v1.0.1
+git-graph v1.25.0
+githistory v0.6.9
+gitlens v10.2.2
+jinja v0.0.8
+jslint v1.2.1
+LinkCheckMD v0.3.1
+LiveServer v5.6.1
+lua v0.20.5
+Lua-Nginx-Snippets v0.0.4
+luacheck v1.0.0
+MagicPython v1.1.0
+markdown-pdf v1.4.4
+markdown-preview-enhanced v0.5.13
+path-intellisense v2.2.1
+plantuml v2.13.13
+plantumlpreviewer v0.6.0
+prettier-vscode v5.5.0
+python v2020.8.106424
+python-extension-pack v1.6.0
+swdc-vscode v2.3.6
+tabnine-vscode v3.0.0
+vscode-axml v0.1.6
+vscode-azureappservice v0.18.0
+vscode-custom-css v3.0.10
+vscode-docker v1.5.0
+vscode-eslint v2.1.8
+vscode-great-icons v2.1.52
+vscode-html-css v0.2.3
+vscode-markdownlint v0.36.3
+vscode-nginx v0.7.2
+vscode-pylance v2020.9.0
+vscode-python-test-adapter v0.4.6
+vscode-test-explorer v2.19.1
+vscode-yaml v0.10.1
+vscodeintellicode v1.2.10
+vsliveshare v1.0.2740
 ```
 
 ## 修改默认快捷键
@@ -518,7 +663,7 @@ public class Test{
 
 ```json
 {
-    // 使用 IntelliSense 了解相关属性。 
+    // 使用 IntelliSense 了解相关属性。
     // 悬停以查看现有属性的描述。
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
