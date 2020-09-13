@@ -117,4 +117,138 @@ spec:
       targetPort: 80
 ```
 
-## 待完成
+- 2.部署应用
+
+```bash
+kubectl apply -f httpd.yaml
+
+kubectl get pod -o wide
+
+kubectl get service httpd-svc
+```
+
+- 3.验证应用访问情况
+
+容器内验证
+
+```bash
+kubectl run busybox --rm -it --image=busybox /bin/sh
+
+wget httpd-svc:8080
+
+ping 10.244.1.3
+```
+
+主机内验证
+
+```bash
+curl http://10.106.51.36:8080
+```
+
+- 4.创建 Network Policy
+
+policy.yaml
+
+```yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: access-httpd
+spec:
+  podSelector:
+    matchLabels:
+      run: httpd
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          access: "true"
+    ports:
+    - protocol: TCP
+      port: 80
+```
+
+1.定义将此 Network Policy 中的访问规则应用于 `label` 为 `run: httpd` 的 Pod，即 httpd 应用的三个副本 Pod。
+
+2.ingress 中定义只有 `label` 为 `access: "true"` 的 Pod 才能访问应用。
+
+3.只能访问 `80` 端口
+
+- 5.创建 Network Policy
+
+```bash
+kubectl apply -f policy.yaml
+
+kubectl get networkpolicy
+```
+
+- 6.验证 Network Policy
+
+1.busybox Pod已经不能访问 Service了
+
+```bash
+kubectl run busybox --rm -it --image=busybox /bin/sh
+
+wget httpd-svc:8080 --timeout=5
+```
+
+2.添加label `access: "true"`后访问
+
+```bash
+kubectl run busybox --rm -it --labels="access=true" --image=busybox /bin/sh
+
+wget httpd-svc:8080 --timeout=5
+
+ping -c 3 10.244.1.3
+```
+
+3.集群节点访问
+
+```bash
+curl 10.106.51.36:8080 --connect-timeout 5
+
+ping -c 3 10.244.1.3
+```
+
+4.集群外访问
+
+```bash
+curl 192.168.1.5:30000 --connect-timeout 5
+```
+
+5.允许集群外访问
+
+policy2.yaml
+
+```yml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: access-httpd
+spec:
+  podSelector:
+    matchLabels:
+      run: httpd
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          access: "true"
+    - ipBlock:
+        cidr: 192.168.1.0/24
+    ports:
+    - protocol: TCP
+      port: 80
+```
+
+```bash
+kubectl apply -f policy2.yaml
+```
+
+- 6.访问测试
+
+```bash
+curl 10.106.51.36:8080 --connect-timeout 5
+
+curl 192.168.1.5:30000 --connect-timeout 5
+```
