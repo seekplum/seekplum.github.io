@@ -144,7 +144,7 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
     "*.py": "python",
     "*.axml": "axml",
     "*.acss": "css",
-    "*.md": "Markdown",
+    "*.md": "markdown",
     "*.lua": "lua"
   },
   "files.autoSave": "afterDelay", // 自动保存
@@ -218,6 +218,12 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
   },
   "[md]": {
     "editor.tabSize": 2
+  },
+  "markdownlint.customRules": [
+    "{docsmsft.docs-linting}/markdownlint-custom-rules/rules.js"
+  ],
+  "markdownlint.config": {
+    "MD028": false
   }
 }
 
