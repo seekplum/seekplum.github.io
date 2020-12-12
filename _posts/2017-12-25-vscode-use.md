@@ -36,6 +36,10 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
   "python.venvPath": "${HOME}/.virtualenvs",
   "python.languageServer": "Pylance",
   "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": [
+    "--max-line-length=119",
+    "--ignore=E402,F841,F401,E302,E305"
+  ],
   "python.linting.pycodestyleEnabled": true,
   "python.linting.pycodestyleArgs": ["--max-line-length=119"],
   "python.formatting.provider": "yapf",
@@ -43,6 +47,7 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
     "--style",
     "{based_on_style: pep8, column_limit: 119}"
   ],
+  "python.sortImports.args": ["-rc", "--atomic"],
   "python.testing.unittestEnabled": true,
   "python.analysis.completeFunctionParens": true,
   "python.autoComplete.addBrackets": true, // 自动添加括号
@@ -140,7 +145,7 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
   "files.associations": {
     "Dockerfile-*": "dockerfile",
     "*.sjs": "javascript",
-    "*.jsx": "javascript",
+    "*.jsx": "javascriptreact",
     "*.py": "python",
     "*.axml": "axml",
     "*.acss": "css",
@@ -213,7 +218,7 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
   "[yaml]": {
     "editor.tabSize": 2
   },
-  "[Markdown]": {
+  "[markdown]": {
     "editor.tabSize": 2
   },
   "[md]": {
@@ -339,118 +344,124 @@ Preferences -> Keyboard Shortcuts
 ```json
 //Placeyourkeybindingsinthisfiletooverwritethedefaults[
 [
-    // 复制当前行到下一行
-    {
-        "key": "cmd+d",
-        "command": "editor.action.copyLinesDownAction",
-        "when": "editorTextFocus && !editorReadonly"
-    },
-    // 复制当前行到上一行
-    {
-        "key": "cmd+u",
-        "command": "editor.action.copyLinesUpAction",
-        "when": "editorTextFocus && !editorReadonly"
-    },
-    // 删除当前行整行
-    {
-        "key": "cmd+y",
-        "command": "editor.action.deleteLines",
-        "when": "textInputFocus && !editorReadonly"
-    },
-    // 删除当前行光标前内容
-    {
-        "key": "ctrl+u",
-        "command": "deleteLeft",
-        "when": "textInputFocus && !editorReadonly"
-    },
-    // 删除当前行光标后内容
-    {
-        "key": "ctrl+k",
-        "command": "deleteRight",
-        "when": "textInputFocus && !editorReadonly"
-    },
-    // 在当前行下一行增加空行
-    {
-        "key": "shift+enter",
-        "command": "editor.action.insertLineAfter",
-        "when": "editorTextFocus && !editorReadonly"
-    },
-    // 在当前行上一行增加空行
-    {
-        "key": "shift+cmd+enter",
-        "command": "editor.action.insertLineBefore",
-        "when": "editorTextFocus && !editorReadonly"
-    },
-    // 整个目录查找字符
-    {
-        "key": "shift+cmd+f",
-        "command": "workbench.action.findInFiles"
-    },
-    // 当前文件替换字符
-    {
-        "key": "cmd+r",
-        "command": "editor.action.startFindReplaceAction"
-    },
-    // 整个目录替换字符
-    {
-        "key": "shift+cmd+r",
-        "command": "workbench.action.replaceInFiles"
-    },
-    // 跳转到指定行号
-    {
-        "key": "cmd+g",
-        "command": "workbench.action.gotoLine"
-    },
-    // 自动化格式代码
-    {
-        "key": "alt+cmd+l",
-        "command": "editor.action.formatDocument",
-        "when": "editorTextFocus && !editorReadonly"
-    },
-    // 关键字搜索文件名
-    {
-        "key": "shift+cmd+n",
-        "command": "workbench.action.quickOpen"
-    },
-    // 打开终端
-    {
-        "key": "cmd+t",
-        "command": "workbench.action.terminal.toggleTerminal"
-    },
-    // 全部折叠
-    {
-        "key": "cmd+-",
-        "command": "editor.foldAll",
-        "when": "editorTextFocus"
-    },
-    // 全部展开
-    {
-        "key": "cmd+=",
-        "command": "editor.unfoldAll",
-        "when": "editorTextFocus"
-    },
-    // 折叠当前所在代码块
-    {
-        "key": "cmd+[",
-        "command": "editor.fold",
-        "when": "editorTextFocus"
-    },
-    // 打开当前所在代码块
-    {
-        "key": "cmd+]",
-        "command": "editor.unfold",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "shift+f12",
-        "command": "editor.action.referenceSearch.trigger",
-        "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
-    },
-    {
-        "key": "shift+f12",
-        "command": "-editor.action.referenceSearch.trigger",
-        "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
-    },
+  // 复制当前行到下一行
+  {
+    "key": "cmd+d",
+    "command": "editor.action.copyLinesDownAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // 复制当前行到上一行
+  {
+    "key": "cmd+u",
+    "command": "editor.action.copyLinesUpAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // 删除当前行整行
+  {
+    "key": "cmd+y",
+    "command": "editor.action.deleteLines",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  // 删除当前行光标前内容
+  {
+    "key": "ctrl+u",
+    "command": "deleteLeft",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  // 删除当前行光标后内容
+  {
+    "key": "ctrl+k",
+    "command": "deleteRight",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  // 在当前行下一行增加空行
+  {
+    "key": "shift+enter",
+    "command": "editor.action.insertLineAfter",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // 在当前行上一行增加空行
+  {
+    "key": "shift+cmd+enter",
+    "command": "editor.action.insertLineBefore",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // 整个目录查找字符
+  {
+    "key": "shift+cmd+f",
+    "command": "workbench.action.findInFiles"
+  },
+  // 当前文件替换字符
+  {
+    "key": "cmd+r",
+    "command": "editor.action.startFindReplaceAction"
+  },
+  // 整个目录替换字符
+  {
+    "key": "shift+cmd+r",
+    "command": "workbench.action.replaceInFiles"
+  },
+  // 跳转到指定行号
+  {
+    "key": "cmd+g",
+    "command": "workbench.action.gotoLine"
+  },
+  // 自动化格式代码
+  {
+    "key": "alt+cmd+l",
+    "command": "editor.action.formatDocument",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // 仅格式化选中代码
+  {
+      "key": "alt+cmd+l",
+      "command": "editor.action.formatSelection",
+      "when": "editorTextFocus && editorHasSelection"
+  },
+  // 关键字搜索文件名
+  {
+    "key": "shift+cmd+n",
+    "command": "workbench.action.quickOpen"
+  },
+  // 打开终端
+  {
+    "key": "cmd+t",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+  // 全部折叠
+  {
+    "key": "cmd+-",
+    "command": "editor.foldAll",
+    "when": "editorTextFocus"
+  },
+  // 全部展开
+  {
+    "key": "cmd+=",
+    "command": "editor.unfoldAll",
+    "when": "editorTextFocus"
+  },
+  // 折叠当前所在代码块
+  {
+    "key": "cmd+[",
+    "command": "editor.fold",
+    "when": "editorTextFocus"
+  },
+  // 打开当前所在代码块
+  {
+    "key": "cmd+]",
+    "command": "editor.unfold",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+f12",
+    "command": "editor.action.referenceSearch.trigger",
+    "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
+  },
+  {
+    "key": "shift+f12",
+    "command": "-editor.action.referenceSearch.trigger",
+    "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
+  }
 ]
 ```
 

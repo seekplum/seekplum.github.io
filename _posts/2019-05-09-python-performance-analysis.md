@@ -90,7 +90,11 @@ python -m memory_profiler example.py
 - 1.安装 perf
 
 ```bash
+# Ubuntu
 sudo apt-get install bindfs linux-tools-common
+
+# Centos
+yum install perf perl
 ```
 
 ### FlameGraph
