@@ -499,105 +499,147 @@ Preferences -> Keyboard Shortcuts
 
 ```json
 {
-    // 使用 IntelliSense 了解相关属性。
-    // 悬停以查看现有属性的描述。
-    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python: Current File (Integrated Terminal)", // 在下拉列表中显示的名字
-            "type": "python", // 调试器类型
-            "request": "launch", // 指定开始调试的模式： `launch`：在中指定的文件上启动调试器 program, `attach`：将调试器附加到已经运行的进程。
-            "program": "${file}", // 提供python程序入口模块的完全限定路径
-            "pythonPath": "${config:python.pythonPath}", // Python解释器路径，指向virtualenv
-            "console": "integratedTerminal", // 指定如何显示程序输出。 `none`: VS代码调试控制台, `integratedTerminal` （默认）VS代码集成终端, `externalTerminal`: 独立控制台窗口
-            "cwd": "${workspaceFolder}", // 指定调试器的当前工作目录，它是代码中使用的任何相对路径的基础文件夹。如果省略，默认为${workspaceFolder}（在VS代码中打开的文件夹）。
-            "args": [], // 传递给程序的参数
-            "env": { // 程序环境变量
-                "DYLD_LIBRARY_PATH": "/Users/seekplum/packages/oracle:/Users/seekplum/packages/mysql/lib",
-                "PYTHONUNBUFFERED": 1,
-                "PIP_INDEX_URL": "https://pypi.douban.com/simple/",
-                "PIP_TRUSTED_HOST": "x.x.x.x",
-                "PIP_EXTRA_INDEX_URL": "http://x.x.x.x:8080",
-            }
-        },
-        {
-            "name": "Python: Flask (0.11.x or later)", // flask 0.11之后的版本
-            "type": "python",
-            "request": "launch",
-            "stopOnEntry": false,
-            "pythonPath": "${config:python.pythonPath}",
-            "program": "${file}",
-            "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal",
-            "env": {
-                // "FLASK_APP": "${workspaceRoot}/wsgi.py", // flask启动入口
-                "PYTHONIOENCODING": "UTF-8",
-                "FLASK_DEBUG": false
-            },
-            "args": [
-                "run",
-                "--no-debugger",
-                "--no-reload"
-            ],
-            "jinja": true,
-            "debugOptions": [
-                "RedirectOutput"
-            ]
-        },
-        {
-            "name": "Python: Flask (0.10.x or earlier)", // flask 0.10以前版本
-            "type": "python",
-            "request": "launch",
-            "stopOnEntry": false,
-            "pythonPath": "/Users/seekplum/packages/pythonenv/staff27env/bin/python",
-            "program": "${file}",
-            "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal",
-            "env": {
-                "FLASK_DEBUG": false
-            },
-            "args": [],
-            "jinja": true,
-            "debugOptions": [
-                "RedirectOutput"
-            ]
-        },
-        {
-            "name": "Python: Attach",
-            "type": "python",
-            "request": "attach",
-            "port": 5678,
-            "host": "localhost"
-        },
-        {
-            "name": "Python: Module",
-            "type": "python",
-            "request": "launch",
-            "module": "enter-your-module-name-here",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Python: Django",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/manage.py",
-            "console": "integratedTerminal",
-            "args": [
-                "runserver",
-                "--noreload",
-                "--nothreading"
-            ],
-            "django": true
-        },
-        {
-            "name": "Python: Current File (External Terminal)",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "externalTerminal"
-        }
-    ]
+  // 使用 IntelliSense 了解相关属性。
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: 当前文件", // 在下拉列表中显示的名字
+      "type": "python", // 调试器类型
+      "request": "launch", // 指定开始调试的模式： `launch`：在中指定的文件上启动调试器 program, `attach`：将调试器附加到已经运行的进程。
+      "program": "${file}", // 提供python程序入口模块的完全限定路径
+      "python": "${command:python.interpreterPath}", // Python解释器路径，指向virtualenv
+      "console": "integratedTerminal", // 指定如何显示程序输出。 `none`: VS代码调试控制台, `integratedTerminal` （默认）VS代码集成终端, `externalTerminal`: 独立控制台窗口
+      "cwd": "${workspaceFolder}", // 指定调试器的当前工作目录，它是代码中使用的任何相对路径的基础文件夹。如果省略，默认为${workspaceFolder}（在VS代码中打开的文件夹）。
+      "args": [], // 传递给程序的参数
+      "env": {
+        // 程序环境变量
+        "DYLD_LIBRARY_PATH": "${HOME}/packages/oracle:${HOME}/packages/mysql/lib",
+        "PYTHONUNBUFFERED": "1",
+        "PIP_INDEX_URL": "https://pypi.douban.com/simple/",
+        "PIP_TRUSTED_HOST": "x.x.x.x",
+        "PIP_EXTRA_INDEX_URL": "http://x.x.x.x:8080"
+      }
+    },
+    {
+      "name": "wsgi",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "`dirname ${command:python.interpreterPath}`/gunicorn",
+      "args": [
+        "-w",
+        "2",
+        "-t",
+        "60",
+        "-b",
+        ":8000",
+        "--log-level=debug",
+        "-k",
+        "gevent",
+        "wsgi:app"
+      ],
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONIOENCODING": "UTF-8",
+        "PYTHONPATH": "${workspaceFolder}",
+        "OBJC_DISABLE_INITIALIZE_FORK_SAFETY": "YES",
+        "GEVENT_SUPPORT": "true"
+      }
+    },
+    {
+      "name": "main",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "module": "uvicorn",
+      "args": [
+        "app.main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8501",
+        "--reload"
+      ],
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONIOENCODING": "UTF-8",
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "pytest",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "module": "pytest",
+      "args": ["-vv", "-rsxS", "-q", "app/tests"],
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONIOENCODING": "UTF-8",
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "pytest: 当前文件",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "module": "pytest",
+      "args": ["-vv", "-rsxS", "-q", "${file}"],
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONIOENCODING": "UTF-8",
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "worker",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "worker.py",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONIOENCODING": "UTF-8",
+        "PYTHONPATH": "${workspaceFolder}",
+        "GEVENT_SUPPORT": "true"
+      }
+    },
+    {
+      "name": "Python: Flask (0.11.x or later)", // flask 0.11之后的版本
+      "type": "python",
+      "request": "launch",
+      "stopOnEntry": false,
+      "python": "${command:python.interpreterPath}",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONIOENCODING": "UTF-8",
+        "FLASK_DEBUG": "false"
+      },
+      "args": ["run", "--no-debugger", "--no-reload"],
+      "jinja": true
+    },
+    {
+      "name": "Python: Flask (0.10.x or earlier)", // flask 0.10以前版本
+      "type": "python",
+      "request": "launch",
+      "stopOnEntry": false,
+      "python": "${command:python.interpreterPath}",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "FLASK_DEBUG": "false",
+        "PYTHONIOENCODING": "UTF-8"
+      },
+      "args": [],
+      "jinja": true
+    }
+  ]
 }
 ```
 
