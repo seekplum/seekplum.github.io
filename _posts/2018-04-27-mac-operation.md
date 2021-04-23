@@ -263,3 +263,39 @@ brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/86a44a0a55
 * [如何升级至 macOS Mojave](https://support.apple.com/zh-cn/macos/mojave)
 * [如何升级到 macOS High Sierra](https://support.apple.com/zh-cn/HT208969)
 * [如何通过 macOS 恢复功能重新安装 macOS](https://support.apple.com/zh-cn/HT204904)
+
+## Pyenv
+
+* 1.安装
+
+```bash
+brew install pyenv
+
+# 或者
+
+git clone git://github.com/pyenv/pyenv ~/.pyenv
+```
+
+* 2.解决无法安装Python问题
+
+```bash
+CFLAGS="-I$(brew --prefix openssl)/include -I$(brew --prefix bzip2)/include -I$(brew --prefix readline)/include -I$(xcrun --show-sdk-path)/usr/include" LDFLAGS="-L$(brew --prefix openssl)/lib -L$(brew --prefix readline)/lib -L$(brew --prefix zlib)/lib -L$(brew --prefix bzip2)/lib" pyenv install --patch 3.7.5 < <(curl -sSL https://github.com/python/cpython/commit/8ea6353.patch\?full_index\=1)
+```
+
+* 3.初始化安装依赖
+
+```bash
+~/.pyenv/versions/3.7.10/bin/pip install virtualenv virtualenvwrapper
+```
+
+* 4.设置当前shell窗口使用的python版本为指定版本
+
+```bash
+pyenv shell 3.7.5
+```
+
+* 5.创建虚拟环境
+
+```bash
+virtualenv --python=/Users/seekplum/.pyenv/versions/3.7.5/bin/python ~/packages/pythonenv/3.7.10
+```
