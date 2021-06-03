@@ -48,7 +48,9 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
     "{based_on_style: pep8, column_limit: 119}"
   ],
   "python.sortImports.args": ["-rc", "--atomic"],
-  "python.testing.unittestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.nosetestsEnabled": false,
+  "python.testing.pytestEnabled": true,
   "python.analysis.completeFunctionParens": true,
   "python.autoComplete.addBrackets": true, // 自动添加括号
   // Python 开发配置 end
@@ -84,6 +86,7 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
   // plantuml 导出图片位置
   "plantuml.diagramsRoot": "wsd",
   "plantuml.exportOutDir": "images/docs",
+  "plantuml.server": "https://www.plantuml.com/plantuml",
 
   // // 自定义颜色
   // "editor.tokenColorCustomizations": {
@@ -103,7 +106,7 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
 
   "window.openWithoutArgumentsInNewWindow": "on",
   "window.openFilesInNewWindow": "on",
-  "window.zoomLevel": 0,
+  // "window.zoomLevel": 0,
   "window.openFoldersInNewWindow": "default",
 
   // "powermode.enabled": true,
@@ -118,7 +121,7 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
   "editor.minimap.renderCharacters": false,
   "editor.minimap.enabled": false,
   "editor.renderControlCharacters": true,
-  "editor.formatOnSave": true,
+  // "editor.formatOnSave": true,
   "editor.wordWrap": "on",
   "editor.rulers": [119], // 标识行长度
   "editor.tabSize": 4, // tab等于的空格数
@@ -229,7 +232,27 @@ Preferences -> Settings -> 点击右上角的 `{}` 按钮，即可编辑 `settin
   ],
   "markdownlint.config": {
     "MD028": false
-  }
+  },
+  "yaml.schemas": {
+    "file:///toc.schema.json": "/toc\\.yml/i"
+  },
+  "eslint.enable": false,
+  "extensions.ignoreRecommendations": false,
+  "workbench.editorAssociations": [
+    {
+      "viewType": "jupyter.notebook.ipynb",
+      "filenamePattern": "*.ipynb"
+    }
+  ],
+  "cSpell.enableFiletypes": [
+    "!python"
+  ],
+  "workbench.welcomePage.hiddenCategories": [
+    "Setup",
+    "Beginner"
+  ],
+  "workbench.editor.untitled.hint": "hidden",
+  "gitlens.views.commits.files.layout": "list"
 }
 
 ```
