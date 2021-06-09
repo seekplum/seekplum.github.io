@@ -299,3 +299,46 @@ pyenv shell 3.7.5
 ```bash
 virtualenv --python=/Users/seekplum/.pyenv/versions/3.7.5/bin/python ~/packages/pythonenv/3.7.10
 ```
+
+## QuickTime 快进
+
+参考[给 QuickTime 播放器添加方向键快进/快退功能](https://blog.csdn.net/libing_zeng/article/details/74938164)
+
+### 快进5秒
+
+```AppleScript
+on run {input, parameters}
+
+	(* Your script goes here *)
+	set step to 5
+	tell application "QuickTime Player"
+		if front document exists then
+			if ((current time of front document) + step) ≤ (duration of front document) then
+				set (current time of front document) to ((current time of front document) + step)
+			else
+				set (current time of front document) to (duration of front document)
+			end if
+		end if
+	end tell
+	return input
+end run
+```
+
+### 推后5秒
+
+```AppleScript
+on run {input, parameters}
+	(* Your script goes here *)
+	set step to 5
+	tell application "QuickTime Player"
+		if front document exists then
+			if ((current time of front document) - step) ≥ 0 then
+				set (current time of front document) to ((current time of front document) - step)
+			else
+				set (current time of front document) to 0
+			end if
+		end if
+	end tell
+	return input
+end run
+```
