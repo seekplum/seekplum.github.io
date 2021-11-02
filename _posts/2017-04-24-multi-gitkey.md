@@ -19,6 +19,16 @@ ssh-keygen -t rsa -b 4096 -C "email@email.com" -m PEM # paramiko 2.4.2 以上版
 在~/.ssh/目录下新建config文件，用于配置各个公私钥对应的主机
 
 ```conf
+Host *
+    ForwardAgent yes
+    ServerAliveInterval 3
+    ServerAliveCountMax 20
+    TCPKeepAlive no
+    ControlMaster auto
+    ControlPath ~/.ssh/connection-%r@%h:%p
+    ControlPersist 4h
+    Compression yes
+
 Host seekplum.github.com # 主机名字，不能重名
     HostName github.com # 主机所在域名或IP
     User seekplum # 用户名称
