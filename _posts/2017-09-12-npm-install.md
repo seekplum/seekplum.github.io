@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  nodejs安装
+title: nodejs安装
 categories: 插件
 tags: nodejs npm
 thread: nodejs
@@ -17,12 +17,16 @@ $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh |
 # or Wget
 # $ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
 ```
-在 ~/.bash_profile中增加如下代码
+
+在 ~/.bash_profile 中增加如下代码
+
 ```bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
 ```
+
 执行
+
 ```bash
 source ~/.bash_profile
 ```
@@ -43,11 +47,17 @@ $ node -v
 # 4.3.2 即表示NodeJs安装完成
 ```
 
+- 切换版本
+
+```bash
+node_version=v16.7.0 && nvm use ${node_version} && nvm alias default ${node_version} && nvm use --delete-prefix ${node_version} --silent && npm config set prefix $NVM_DIR/versions/node/${node_version}
+```
+
 ## 安装 cnpm
 
-[npm](https://www.npmjs.com/) 是 `NodeJs` 的包管理器，但是这个源是国外的，`cnpm`使用的时taobao的镜像源，国内速度很快
+[npm](https://www.npmjs.com/) 是 `NodeJs` 的包管理器，但是这个源是国外的，`cnpm`使用的时 taobao 的镜像源，国内速度很快
 
-**注意:** `npm` 不需要安装，NodeJs安装完成后会自带 `npm` 包
+**注意:** `npm` 不需要安装，NodeJs 安装完成后会自带 `npm` 包
 
 ```bash
 $ npm install -g cnpm --registry=https://registry.npm.taobao.org

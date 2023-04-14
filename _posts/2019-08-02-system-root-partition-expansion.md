@@ -159,6 +159,8 @@ centos1@root ➜  ~ pvcreate /dev/sda3
 
 ## 查看物理卷信息
 
+**当 `vgdisplay` 查询为空时，直接进入 调整卷分区大小**
+
 ```bash
 centos1@root ➜  ~ pvdisplay
   --- Physical volume ---
@@ -207,6 +209,7 @@ centos1@root ➜  ~ vgdisplay
   VG UUID               uE6r1H-Y744-tNjN-9X0K-A8jk-EmwL-vIRLKU
 ```
 
+
 ## 将新增加的空间/dev/sda3加入到根目录分区centos中
 
 ```bash
@@ -251,6 +254,8 @@ centos1@root ➜  ~ lvextend -l +100%FREE /dev/mapper/centos-root
 ## 调整卷分区大小
 
 ### CentOS
+
+**当 `vgdisplay` 查询为空时，直接执行该命令执行**
 
 ```bash
 centos1@root ➜  ~ xfs_growfs /dev/mapper/centos-root

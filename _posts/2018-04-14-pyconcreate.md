@@ -5,42 +5,50 @@ tags: pyconcrete加密
 thread: pyconcrete
 ---
 
-1.解压glibc
+1.解压[glibc](http://ftp.gnu.org/gnu/libc/glibc-2.14.tar.gz)
 
 > tar zxvf glibc-2.14.tar.gz -C /tmp
 
-2.进入glibc目录
-
-> cd /tmp/glibc-2.14/
-
-3.创建glibc`编译`目录
+2.创建glibc`编译`目录
 
 > mkdir /tmp/glibc-2.14/build
 
-4.进入目录并进行编译
+3.进入目录并进行编译
 
-> cd /tmp/glibc-2.14/build
-> ../configure \-\-prefix=/home/sendoh/test-env
+```bash
+env_path="/root/packages/pythonenv/2.7.18"
 
-5.进入编译目录
+mkdir -p ${env_path}/glibc-2.14/etc
+scp /etc/ld.so.conf ${env_path}/glibc-2.14/etc/ld.so.conf
 
-> make -j
-> make install
+cd /tmp/glibc-2.14/build
+../configure --prefix=${env_path}
+```
 
-6.进入env环境
+4.进入编译目录
 
-> source /home/sendoh/test-env/bin/activate
+```bash
+make -j
+make install
+```
 
-7.安装`pyconcrete`包
+5.进入env环境
 
-> pip install pyconcrete \-\-egg \-\-install-option=\"\-\-passphrase=Pokidij/vFxQ=\"
+> source ${env_path}/bin/activate
 
-8.在env/bin/active的最后加入一行(有时不需要手动加,在安装glibc安装后已经存在)
+6.安装`pyconcrete`包
 
-> export LD_LIBRARY_PATH=/home/sendoh/test-env/glibc-2.14/lib:$LD_LIBRARY_PATH
+```bash
+pip install pyconcrete --egg --install-option="--passphrase=Pokidij/vFxQ="
+```
 
-9.替换env中的pyconcrete-admin.py文件,文件在附件中
+7.在env/bin/active的最后加入一行(有时不需要手动加,在安装glibc安装后已经存在)
 
-10.执行加密操作`(加密main.py, server.py 过滤a.py, b.py不加密)`
+> export LD_LIBRARY_PATH=${env_path}/glibc-2.14/lib:$LD_LIBRARY_PATH
 
-> /home/sendoh/test-env/bin/pyconcrete-admin.py compile \-\-source=main.py server.py \-\-pye \-\-remove-pyc \-\-remove-py \-\-ignore-file-list a.py b.py
+8.替换env中的pyconcrete-admin.py文件,文件在附件中
+
+9.执行加密操作`(加密main.py, server.py 过滤a.py, b.py不加密)`
+
+> ${env_path}/bin/pyconcrete-admin.py compile \-\-source=main.py server.py \-\-pye \-\-remove-pyc \-\-remove-py \-\-ignore-file-list a.py b.py
+
