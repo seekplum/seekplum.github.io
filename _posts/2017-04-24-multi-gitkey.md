@@ -12,6 +12,7 @@ thread: gitkey
 ssh-keygen -t rsa -C "youremail@email.com"
 ssh-keygen -t rsa -C "youremail@email.com" -f ~/.ssh/<密钥对名>
 ssh-keygen -t rsa -b 4096 -C "email@email.com" -m PEM # paramiko 2.4.2 以上版本需要以此方式生成
+ssh-keygen -t ecdsa -m PEM -f test -C "email@email.com" # jenkins登录almalinux操作系统的key需要以此方式生成
 ```
 
 ## 配置主机
